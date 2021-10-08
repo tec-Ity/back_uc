@@ -71,6 +71,22 @@ export const postObject = createAsyncThunk(
     }
   }
 );
+// export const postObject = createAsyncThunk(
+//   "objects/postObject",
+//   async ({ flagSlice, api, data }, { getState, rejectWithValue }) => {
+//     // console.log(formdata)
+//     const post_res = await fetch_Prom(api, "POST", data);
+//     if (post_res.status === 200) {
+//       const objs = getState().objects[flagSlice]?.objects || [];
+//       const newObj = post_res.data.object;
+//       const objects = [newObj, ...objs];
+//       objects.sort(sortBy("role"));
+//       return { flagSlice, objects };
+//     } else {
+//       return rejectWithValue("postObject error info");
+//     }
+//   }
+// );
 export const putObject = createAsyncThunk(
   "objects/putObject",
   async ({ flagSlice, api, data }, { rejectWithValue }) => {

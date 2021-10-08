@@ -174,23 +174,45 @@ function CategListItem({ flagSlice, categ, index }) {
         ) : (
           <div className={classes.categUpload}>
             <div>Upload image{" (16:9)"}</div>
-            <input ref={ref} style={{ display: "none" }} type='file' />
+            <input
+              ref={ref}
+              style={{ display: "none" }}
+              type='file'
+              onChange={(e) => {
+                console.log(e.target.files);
+                
+              }}
+            />
           </div>
         )}
         {/* icon groups */}
         <div className={classes.iconGroup}>
           {modifying === true ? (
             <>
-              <div onClick={() => setModifying(false)}>Done</div>
-              <div onClick={() => setModifying(false)}>Cancle</div>
+              <div
+                onClick={(e) => {
+                  setModifying(false);
+                  e.stopPropagation();
+                }}>
+                Done
+              </div>
+              <div
+                onClick={(e) => {
+                  setModifying(false);
+                  e.stopPropagation();
+                }}>
+                Cancle
+              </div>
+
               <div>Del</div>
             </>
           ) : (
             <>
               <div
-                onClick={() => {
+                onClick={(e) => {
                   setModifying(true);
                   setShowChild(false);
+                  e.stopPropagation();
                 }}>
                 edit
               </div>
