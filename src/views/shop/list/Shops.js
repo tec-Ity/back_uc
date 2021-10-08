@@ -1,6 +1,8 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useEffect } from "react";
 import { useHistory } from "react-router";
-import { getObjs_Prom } from "../../../js/api";
+import { useSelector, useDispatch } from 'react-redux';
+
+import {selectObjects, getObjects } from '../../../features/objectsSlice'
 import { getRolePath } from "../../../js/conf/confUser";
 import NavBread from "../../../components/universal/navBread/NavBread";
 
@@ -10,20 +12,19 @@ import ShopRow from "../ui/ShopRow";
 
 export default function Shops(props) {
   const rolePath = getRolePath();
+  const dispatch = useDispatch()
   const hist = useHistory();
+  const flagSlice = "shops";
   const api = "/Shops";
-  const [objects, setObjects] = useState([]);
   const clickEvent = (obj) => (e) => {
     hist.push(`/${rolePath}/shop/${obj._id}`)
   }
-  const shopsCall = useCallback(() => {
-    getObjs_Prom(api, objects, setObjects, true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+
+  const objects = useSelector(selectObjects(flagSlice));
   useEffect(() => {
-    shopsCall();
-    return () => setObjects([]);
-  }, [shopsCall]);
+    dispatch(getObjects({ flagSlice, api, isReload: true }));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>

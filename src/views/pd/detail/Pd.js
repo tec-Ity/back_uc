@@ -1,22 +1,24 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
-import { getObj_Prom } from "../../../js/api";
+import { useSelector, useDispatch } from "react-redux";
+
+import {
+  getObject,
+  selectObject,
+  cleanField,
+} from "../../../features/objectsSlice";
 
 import PdBasic from "./PdBasic";
 import PdProds from "./PdProds";
 export default function Pd(props) {
   const { id } = useParams();
-  const apiPd = `/Pd/${id}`;
-  const [Pd, setPd] = useState({});
+  const dispatch = useDispatch();
+  const flagSlice = "pd";
+  const flagField = "object";
+  const api = `/pd/${id}`;
+  
+  const Pd = useSelector(selectObject(flagSlice));
 
-  const pdCallback = useCallback(() => {
-    getObj_Prom(apiPd, setPd);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  useEffect(() => {
-    pdCallback();
-    return () => setPd({});
-  }, [pdCallback]);
   const [Key, setKey] = useState(1);
   const routeFunc = () => {
     switch (Key) {
@@ -31,6 +33,12 @@ export default function Pd(props) {
     setKey(value);
   };
 
+  useEffect(() => {
+    dispatch(getObject({ flagSlice, api }));
+    return () => {
+      dispatch(cleanField({ flagSlice, flagField }));
+    };
+  }, [api, dispatch]);
   return (
     <div>
       <div className='form-inline my-3'>
