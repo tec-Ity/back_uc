@@ -9,8 +9,8 @@ import { getRolePath } from "../../../js/conf/confUser";
 import NavBread from "../../../components/universal/navBread/NavBread";
 
 import UiVariety from "../../../components/ui/UiVariety";
-import PdCard from "../../../components/ui/pd/PdCard";
-import PdRow from "../../../components/ui/pd/PdRow";
+import PdCard from "../ui/PdCard";
+import PdRow from "../ui/PdRow";
 
 export default function Pds(props) {
   const dispatch = useDispatch()
