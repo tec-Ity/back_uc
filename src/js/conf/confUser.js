@@ -9,7 +9,7 @@ const  confUser  = {
 				{icon:"bx bx-list-ul", 				label: "orders", to: "/ower/orders"},
 				{icon:"bx bx-category",			 label: "categs", to: "/ower/categs"},
 				{icon:"bx bx-purchase-tag-alt", label: "brands", to: "/ower/brands"},
-				{icon:"bx bx-user-circle",		 label: "clients", to: "/ower/binds"},
+				{icon:"bx bx-user-circle",		 label: "clients", to: "/ower/clients"},
 				{icon:"bx bx-cog", 				label: "setting", to: "/ower/setting"},
 			]
 		},
@@ -21,7 +21,7 @@ const  confUser  = {
 				{icon:"bx bx-list-ul", 				label: "orders",	to: "/ower/orders"},
 				{icon:"bx bx-category", 		   label: "categs",		to: "/mger/categs"},
 				{icon:"bx bx-purchase-tag-alt",     label: "brands",	to: "/mger/brands"},
-				{icon:"bx bx-user-circle",		 label: "Client", 		to: "/mger/binds"},
+				{icon:"bx bx-user-circle",		 label: "Client", 		to: "/mger/clients"},
 				{icon:"bx bx-cog", 				label: "setting", 	to: "/mger/setting"},
 			]
 		},

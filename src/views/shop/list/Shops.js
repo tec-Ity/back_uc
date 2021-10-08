@@ -5,8 +5,8 @@ import { getRolePath } from "../../../js/conf/confUser";
 import NavBread from "../../../components/universal/navBread/NavBread";
 
 import UiCards from "../../../components/ui/UiCards";
-import ShopCard from "../../../components/ui/shop/ShopCard";
-import ShopRow from "../../../components/ui/shop/ShopRow";
+import ShopCard from "../ui/ShopCard";
+import ShopRow from "../ui/ShopRow";
 
 export default function Shops(props) {
   const rolePath = getRolePath();

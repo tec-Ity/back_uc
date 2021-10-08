@@ -7,8 +7,8 @@ import { getRolePath } from "../../../js/conf/confUser";
 
 import NavBread from "../../../components/universal/navBread/NavBread";
 import UiVariety from "../../../components/ui/UiVariety";
-import UserRow from "../../../components/ui/user/UserRow";
-import UserCard from "../../../components/ui/user/UserCard";
+import UserRow from "../ui/UserRow";
+import UserCard from "../ui/UserCard";
 
 import {selectObjects, getObjects} from '../../../features/objectsSlice';
 

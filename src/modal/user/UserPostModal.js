@@ -8,7 +8,7 @@ import { role_Arrs} from "../../js/conf/confUser";
 
 import RowIpt from "../../components/basic/RowIpt";
 import UiCards from "../../components/ui/UiCards";
-import ShopCard from "../../components/ui/shop/ShopCard";
+import ShopCard from "../../views/shop/ui/ShopCard";
 import SearchInput from "../../components/universal/query/SearchInput";
 
 import {selectObjects, postObject} from '../../features/objectsSlice';

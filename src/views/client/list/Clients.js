@@ -9,19 +9,19 @@ import { getRolePath } from "../../../js/conf/confUser";
 import NavBread from "../../../components/universal/navBread/NavBread";
 
 import UiVariety from "../../../components/ui/UiVariety";
-import BrandCard from "../ui/BrandCard";
-import BrandRow from "../ui/BrandRow";
+import ClientCard from "../ui/ClientCard";
+import ClientRow from "../ui/ClientRow";
 
-export default function Brands(props) {
+export default function Clients(props) {
   const dispatch = useDispatch()
-  const flagSlice = 'brands';
-  const api = '/Brands';
+  const flagSlice = 'clients';
+  const api = '/Clients';
   const rolePath = getRolePath();
   const hist = useHistory();
   
   const objects = useSelector(selectObjects(flagSlice));
   const clickEvent = (obj) => (e) => {
-    hist.push(`/${rolePath}/brand/${obj._id}`)
+    hist.push(`/${rolePath}/client/${obj._id}`)
   }
 
   useEffect(() => {
@@ -31,10 +31,10 @@ export default function Brands(props) {
 
   return (
     <>
-      <NavBread  activePage={<FormattedMessage id='navLabel-brands' defaultMessage='Products'/>}></NavBread>
+      <NavBread  activePage={<FormattedMessage id='navLabel-clients' defaultMessage='Products'/>}></NavBread>
 
       <div className="mt-4">
-        <UiVariety propsCard={BrandCard} UiRow={BrandRow} objects={objects} clickEvent={clickEvent} />
+        <UiVariety propsCard={ClientCard} UiRow={ClientRow} objects={objects} clickEvent={clickEvent} />
       </div>
     </>
   );
