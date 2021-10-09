@@ -1,7 +1,6 @@
 import { Switch, Route, Redirect} from 'react-router-dom';
 
 import HomeRole from '../views/_index/HomeRole';
-import Setting from '../views/_index/Setting';
 import Center from '../views/_index/Center';	// 个人中心
 
 import Users from '../views/user/list/Users';
@@ -24,6 +23,10 @@ import Categ from '../views/categ/detail/Categ'
 
 import Clients from '../views/client/list/Clients'
 import Client from '../views/client/detail/Client'
+
+import Setting from '../views/setting/Setting';
+import Citas from '../views/setting/city/list/Citas'
+import Cita from '../views/setting/city/detail/Cita'
 
 import Reload from '../views/_index/Reload';	// 重新加载页面
 
@@ -56,6 +59,8 @@ export default function OwerRouter() {
 				<Route path="/ower/client/:id" > <Client /> </Route>
 
 				<Route path="/ower/setting" > <Setting /> </Route>
+				<Route path="/ower/citas" > <Citas /> </Route>
+				<Route path="/ower/cita" > <Cita /> </Route>
 
 				<Route path="/ower/reload" > <Reload/> </Route>
 				<Redirect to="/ower/home" />

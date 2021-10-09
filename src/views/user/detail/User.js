@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { getRolePath } from "../../../js/conf/confUser";
 
-import UserPutModal from "../../../modal/user/UserPutModal";
+import UserPutModal from "../modal/UserPutModal";
 import NavBread from "../../../components/universal/navBread/NavBread";
 
 import { selectUser } from "../../../features/authSlice";

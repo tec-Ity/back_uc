@@ -3,15 +3,15 @@ import { Modal, Button } from "react-bootstrap";
 import { FormattedMessage } from 'react-intl'; 
 import { useSelector, useDispatch } from 'react-redux';
 
-import threshold from "../../js/conf/threshold";
-import { role_Arrs} from "../../js/conf/confUser";
+import threshold from "../../../js/conf/threshold";
+import { role_Arrs} from "../../../js/conf/confUser";
 
-import RowIpt from "../../components/basic/RowIpt";
-import UiCards from "../../components/ui/UiCards";
-import ShopCard from "../../views/shop/ui/ShopCard";
-import SearchInput from "../../components/universal/query/SearchInput";
+import RowIpt from "../../../components/basic/RowIpt";
+import UiCards from "../../../components/ui/UiCards";
+import ShopCard from "../../../views/shop/ui/ShopCard";
+import SearchInput from "../../../components/universal/query/SearchInput";
 
-import {selectObjects, postObject} from '../../features/objectsSlice';
+import {selectObjects, postObject} from "../../../features/objectsSlice";
 
 export default function UserPostModal(props) {
 	const {flagSlice, show, onHide} = props;	// 模板的显示隐藏

@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { getRolePath } from "../../../js/conf/confUser";
 
+import SearchInput from "../../../components/universal/query/SearchInput";
 import NavBread from "../../../components/universal/navBread/NavBread";
 import UiVariety from "../../../components/ui/UiVariety";
 import UserRow from "../ui/UserRow";
@@ -12,7 +13,7 @@ import UserCard from "../ui/UserCard";
 
 import {selectObjects, getObjects} from '../../../features/objectsSlice';
 
-const UserPostModal = lazy(() => import( "../../../modal/user/UserPostModal"));
+const UserPostModal = lazy(() => import( "../modal/UserPostModal"));
 export default function Users(props) {
   const dispatch = useDispatch()
   const flagSlice = 'user';
@@ -34,7 +35,7 @@ export default function Users(props) {
   return (
     <>
       <NavBread  activePage={<FormattedMessage id='navLabel-users' defaultMessage='users'/>}></NavBread>
-
+      <SearchInput flagSlice={flagSlice} api={api}/>
       <div className="text-right mb-3">
         <button className="btn btn-info" onClick={() => setModalShow(true)}> + </button>
         <UserPostModal 

@@ -1,9 +1,9 @@
 import { useHistory } from "react-router";
+import { FormattedMessage } from 'react-intl'; 
 import { Modal, Button } from "react-bootstrap";
 
-import { getRolePath } from "../../js/conf/confUser";
-import {LangConf, systemLangs } from "../../js/lang/confLang";
-import { FormattedMessage } from 'react-intl'; 
+import { getRolePath } from "../js/conf/confUser";
+import {LangConf, systemLangs } from "../js/lang/confLang";
 
 export default function LangUpdModal(props) {
         const rolePaht = getRolePath();

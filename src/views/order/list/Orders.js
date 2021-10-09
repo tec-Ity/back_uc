@@ -31,7 +31,6 @@ export default function Orders() {
     dispatch(getObjects({ flagSlice, api }));
   }, [
     dispatch,
-    queryObj.search,
     queryObj.status,
     queryObj.crt_after,
     queryObj.crt_before,
@@ -44,7 +43,7 @@ export default function Orders() {
   return (
     <>
       {/* search bar */}
-      <SearchInput flagSlice={flagSlice} />
+      <SearchInput flagSlice={flagSlice} api={api} />
       {/* genral filter */}
       <FilterGeneral objects={objects} flagSlice={flagSlice} />
       {/* list */}
