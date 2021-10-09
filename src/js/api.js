@@ -98,10 +98,11 @@ export const axiosProm = async (api, method, formData) => {
         });
       }
       if(!result) return resolve({status: 600, message: '[front] axios parames error'});
+      console.log(result)
       return resolve(result.data);
     } catch (e) {
       console.log(e);
-      return resolve({status: 600, message: '[front error]'});
+      return resolve({status: 600, message: '[front error] axiosProm'});
     }
   });
 };
