@@ -8,7 +8,7 @@ import { selectUser, selectLinks, reducerLogout } from "../features/authSlice";
 
 import { getRolePath } from "../js/conf/confUser";
 import threshold from "../js/conf/threshold";
-import LangUpdModal from "../modal/lang/LangUpdModal";
+import LangUpdModal from "./LangUpdModal";
 import "./AppHeaderPc.css";
 
 export default function AppHeaderPc(props) {
