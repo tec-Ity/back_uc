@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { fetch_Prom } from "../js/api";
+import { fetch_Prom, axios_Prom } from "../js/api";
 import { sortBy } from "../js/global";
 
 const initialState = {
@@ -59,12 +59,27 @@ export const postObject = createAsyncThunk(
   "objects/postObject",
   async ({ flagSlice, api, data }, { getState, rejectWithValue }) => {
     // console.log(formdata)
-    const post_res = await fetch_Prom(api, "POST", data);
+    const post_res = await axios_Prom(api, "POST", data);
+    console.log(post_res);
     if (post_res.status === 200) {
-      const objs = getState().objects[flagSlice]?.objects || [];
+      const objs = [...getState().objects[flagSlice]?.objects] || [];
       const newObj = post_res.data.object;
-      const objects = [newObj, ...objs];
-      objects.sort(sortBy("role"));
+      let i = 0;
+      for (; i < objs.length; i++) {
+        const obj = objs[i];
+        if (obj._id === newObj._id) {
+          objs[i] = newObj;
+          break;
+        }
+      }
+      let objects = [];
+      if (i < objs.length) {
+        objects = objs;
+      } else {
+        objects = [newObj, ...objs];
+      }
+      // objects.sort(sortBy("role"));
+      alert("添加成功");
       return { flagSlice, objects };
     } else {
       return rejectWithValue("postObject error info");
@@ -89,27 +104,42 @@ export const postObject = createAsyncThunk(
 // );
 export const putObject = createAsyncThunk(
   "objects/putObject",
-  async ({ flagSlice, api, data }, { rejectWithValue }) => {
-    const put_res = await fetch_Prom(api, "PUT", data);
+  async ({ flagSlice, api, data, isList = false }, { rejectWithValue }) => {
+    const put_res = await axios_Prom(api, "PUT", data);
+    console.log(put_res);
     if (put_res.status === 200) {
       const object = put_res.data.object;
-      return { flagSlice, object };
+      alert("修改成功");
+      return { flagSlice, object, isList };
     } else {
       return rejectWithValue("putObject error info");
       // return rejectWithValue({flagSlice, info:'my error info'});
     }
   }
 );
+// export const putObject = createAsyncThunk(
+//   "objects/putObject",
+//   async ({ flagSlice, api, data }, { rejectWithValue }) => {
+//     const put_res = await fetch_Prom(api, "PUT", data);
+//     if (put_res.status === 200) {
+//       const object = put_res.data.object;
+//       return { flagSlice, object };
+//     } else {
+//       return rejectWithValue("putObject error info");
+//       // return rejectWithValue({flagSlice, info:'my error info'});
+//     }
+//   }
+// );
 export const deleteObject = createAsyncThunk(
   "objects/deleteObject",
-  async ({ flagSlice, api }, { getState, rejectWithValue }) => {
+  async (
+    { flagSlice, api, id, isList = false },
+    { getState, rejectWithValue }
+  ) => {
     // console.log(api)
     const res = await fetch_Prom(api, "DELETE");
     if (res.status === 200) {
-      const objs = getState().objects[flagSlice]?.objects || [];
-      const objects = [];
-      objs.forEach((obj) => {});
-      return { flagSlice, objects };
+      return { flagSlice, id, isList };
     } else {
       return rejectWithValue("deleteObject error info");
       // return rejectWithValue({flagSlice, info:'my error info'});
@@ -179,7 +209,6 @@ export const objectsSlice = createSlice({
     [getObject.rejected]: (state, action) => {
       state.errMsg = action.error.message;
     },
-
     [postObject.pending]: (state) => {
       state.status = "loading";
     },
@@ -197,12 +226,45 @@ export const objectsSlice = createSlice({
       state.status = "loading";
     },
     [putObject.fulfilled]: (state, action) => {
-      const { flagSlice, object } = action.payload;
+      const { flagSlice, object, isList } = action.payload;
       state.status = "succeed";
       if (!state[flagSlice]) state[flagSlice] = {};
-      state[flagSlice].object = object;
+      if (isList) {
+        let i = 0;
+        for (; i < state[flagSlice].objects.length; i++) {
+          if (String(state[flagSlice].objects[i]._id) === String(object._id))
+            break;
+        }
+        if (i < state[flagSlice].objects.length)
+          state[flagSlice].objects[i] = object;
+      } else {
+        state[flagSlice].object = object;
+      }
     },
     [putObject.rejected]: (state, action) => {
+      state.errMsg = action.error.message;
+    },
+    [deleteObject.pending]: (state) => {
+      state.status = "loading";
+    },
+    [deleteObject.fulfilled]: (state, action) => {
+      const { flagSlice, id, isList } = action.payload;
+      state.status = "succeed";
+      if (!state[flagSlice]) state[flagSlice] = {};
+      if (isList) {
+        let i = 0;
+        console.log(11);
+        for (; i < state[flagSlice].objects.length; i++) {
+          if (String(state[flagSlice].objects[i]?._id) === String(id)) break;
+        }
+        console.log(i);
+        if (i < state[flagSlice].objects.length)
+          state[flagSlice].objects.splice(i, 1);
+        //splice returns modified array
+        //slice returns deleted element array
+      }
+    },
+    [deleteObject.rejected]: (state, action) => {
       state.errMsg = action.error.message;
     },
     [fetchOngoingOrderCount.fulfilled]: (state, action) => {
