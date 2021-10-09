@@ -1,7 +1,7 @@
 import { Switch, Route, Redirect} from 'react-router-dom';
 
 import HomeRole from '../views/_index/HomeRole';
-import Setting from '../views/_index/Setting';
+import Setting from '../views/setting/Setting';
 import Center from '../views/_index/Center';	// 个人中心
 
 import Users from '../views/user/list/Users';
