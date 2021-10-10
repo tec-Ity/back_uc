@@ -137,7 +137,7 @@ export default function ShopPostModal(props) {
               <SearchInput
                 flagSlice={flagSlice_Citas}
                 api={api_Citas}
-                farQuery={farQuery_Citas}
+                farSearch={farQuery_Citas}
                 matchSearchCode={matchSearchCode}
               />
             </div>

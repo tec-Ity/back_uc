@@ -41,19 +41,18 @@ export default function SearchInput(props) {
   }, [search]);
   // 根据父组件 farSearch 的变化 及时更新 recucer 中的 filter, (比如点击卡片 search input 会变为 obj.code)
   useEffect(() => {
-    if (farSearch) {
-      if (farSearch.key && farSearch.val) {
+    if (farSearch && typeof farSearch === "string") {
+      console.log(1);
+      dispatch(
         setQuery({
           flagSlice,
           query: { key: "search", val: farSearch },
           isReload: true,
-        });
-      } else {
-        console.log(`parameter Error: farSearch error `);
-      }
+        })
+      );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [farSearch]);
+  }, [dispatch, farSearch, flagSlice]);
+  // console.log(search);
 
   // 卸载
   useEffect(() => {

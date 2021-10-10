@@ -124,7 +124,7 @@ export default function UserPostModal(props) {
 									<SearchInput 
 										flagSlice={flagSlice_Shops}
 										api={api_Shops}
-										farQuery={farQuery_Shops}
+										farSearch={farQuery_Shops}
 										matchSearchCode={matchSearchCode}
 									/>
 								</div>

@@ -159,7 +159,7 @@ export const objectsSlice = createSlice({
     setQuery: (state, action) => {
       const { flagSlice, query, isReload = true } = action.payload;
       // console.log(isReload);
-      // console.log(flagSlice, query);
+      console.log(flagSlice, query);
       if (!state[flagSlice]) state[flagSlice] = {};
       if (!state[flagSlice].query) state[flagSlice].query = {};
       if (isReload === true) {

@@ -20,12 +20,17 @@ export default function ShopAreas(props) {
     <div>
       {ServeCitasUpdate?.map((serveCita) => (
         <ServeCitaRow
+          key={serveCita._id}
           serveCita={serveCita}
-          search={(val) => setSearchValue(val)}
+          search={(val) => {
+            // console.log(1111111111)
+            setSearchValue(val);
+          }}
         />
       ))}
+      {/* hidden input */}
       <SearchInput
-        farSearch={{ key: "", value: searchValue }}
+        farSearch={searchValue}
         flagSlice={cita_flagSlice}
         api={"/Citas"}
         hidden
@@ -34,7 +39,7 @@ export default function ShopAreas(props) {
   );
 }
 
-function ServeCitaRow({ serveCita }) {
+function ServeCitaRow({ serveCita, search }) {
   const [serveCitaUpdate, setServeCitasUpdate] = useState(serveCita);
   const [modifying, setModifying] = useState(false);
   useEffect(() => {
@@ -53,16 +58,23 @@ function ServeCitaRow({ serveCita }) {
       container
       justifyContent='space-between'
       style={{ marginTop: "10px" }}>
-      <Grid item xs={4}>
+      <Grid item xs={2}>
         <CusInput
           disabled={!modifying}
           label='City'
-          value={
-            serveCitaUpdate.Cita.code + "(" + serveCitaUpdate.Cita.nome + ")"
-          }
+          value={serveCitaUpdate.Cita.code || ""}
           onChange={(e) => {
             // setServeCitasUpdate(prev=>({...prev, Cita:{...Cita,}}));
+            console.log(11);
+            search(e.target.value);
           }}
+        />
+      </Grid>
+      <Grid item xs={2}>
+        <CusInput
+          disabled
+          label='City Name'
+          value={serveCitaUpdate.Cita.nome || ""}
         />
       </Grid>
       <Grid item xs={4}>
