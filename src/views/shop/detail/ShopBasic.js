@@ -50,7 +50,7 @@ export default function ShopBasic(props) {
         {/* img component */}
         <>
           <img
-            alt={props.Shop.code}
+            alt={infoUpdate.code}
             src={imgLocal ? imgLocal : get_DNS() + infoUpdate.img_url}
             className={classes.mainImg}
             onClick={() => ref.current.click()}

@@ -24,7 +24,7 @@ const useStyle = makeStyles({
 export default function CusBtnGroup(props) {
   const {
     modifying = false,
-    handleSubmitUpdate,
+    handleSubmit,
     handleDelete,
     handleCancel,
     handleEdit,
@@ -34,7 +34,7 @@ export default function CusBtnGroup(props) {
     <div className={classes.btnGroup}>
       {modifying === true ? (
         <>
-          <div onClick={handleSubmitUpdate}>Done</div>
+          <div onClick={handleSubmit}>Done</div>
           <div onClick={handleCancel}>Cancle</div>
           <div onClick={handleDelete}>Del</div>
         </>
