@@ -36,7 +36,7 @@ export default function User() {
 
   const deleteDB = () => {
     console.log(1);
-    dispatch(deleteObject({ flagSlice, api: api_delete }));
+    dispatch(deleteObject({ flagSlice, api: api_delete, id }));
     hist.replace(`/${rolePath}/users`);
   };
 

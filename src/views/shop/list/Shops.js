@@ -10,6 +10,7 @@ import NavBread from "../../../components/universal/navBread/NavBread";
 import UiCards from "../../../components/ui/UiCards";
 import ShopCard from "../ui/ShopCard";
 import ShopRow from "../ui/ShopRow";
+import SearchInput from "../../../components/universal/query/SearchInput";
 
 const ShopPostModal = lazy(() => import( "../modal/ShopPostModal"));
 
@@ -35,7 +36,10 @@ export default function Shops(props) {
   return (
     <>
       <NavBread  activePage="Shops"></NavBread>
-
+      <SearchInput
+        flagSlice={flagSlice}
+        api={api}
+      />
       <div className="text-right mb-3">
         <button className="btn btn-info" onClick={() => setModalShow(true)}> + </button>
         <ShopPostModal 

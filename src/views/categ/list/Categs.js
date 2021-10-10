@@ -30,7 +30,7 @@ const useStyle = makeStyles({
     // border: "1px solid",
     boxSizing: "border-box",
     height: "160px",
-    marginBottom: "20px",
+    // marginBottom: "20px",
     padding: "2px",
     boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.1)",
     borderRadius: "5px",
@@ -271,6 +271,7 @@ function CategListItem({
         item
         xs={12}
         className={classes.listGridItem}
+        style={{ marginBottom: "20px" }}
         justifyContent='center'
         alignItems='center'
         onClick={() => {
@@ -355,7 +356,7 @@ function CategListItem({
         <Grid container item xs={12} className={classes.childGroup}>
           <AddNewChildRow farId={categ._id} />
           {categ?.Categ_sons?.map((son) => (
-            <CategListItemChild categ={son} key={son._id}/>
+            <CategListItemChild categ={son} key={son._id} />
           ))}
         </Grid>
       )}
@@ -441,7 +442,7 @@ function CategListItemChild({
     imgs: [],
   });
   const [categUpdateData, setCategUpdateData] = useState(initCategInfo);
-  
+
   const [, setImgLocal] = useState([]);
 
   useEffect(() => {
