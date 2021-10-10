@@ -53,7 +53,6 @@ export default function UserPutModal(props) {
   };
 
   const roleFilterShops = (selRole) => {
-    console.log(selRole);
     if (selRole > 100) {
       setIsShop(true);
     } else {
@@ -63,13 +62,12 @@ export default function UserPutModal(props) {
   };
   const chgRole = () => (e) => {
     const selRole = e.target.value;
-    // console.log(selRole)
     roleFilterShops(selRole);
     setFormdata((pre) => ({ ...pre, role: selRole }));
   };
 
   const putSubmit = () => {
-    dispatch(putObject({ flagSlice, api, data: { obj: formdata } }));
+    dispatch(putObject({ flagSlice, api, data: { general: formdata } }));
     onHide();
   };
   
@@ -79,7 +77,6 @@ export default function UserPutModal(props) {
     const Shop = object.Shop ? object.Shop._id : null;
     if (object.Shop) {
       setfarSearch_Shops(object.Shop.code);
-      console.log(object.Shop.code);
     }
     setFormdata({ code, nome, phonePre, phone, role, Shop });
     roleFilterShops(formdata.role);
@@ -87,8 +84,6 @@ export default function UserPutModal(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // console.log(formdata.role)
-  //   console.log(farSearch_Shops)
   return (
     <Modal
       onHide={onHide}
@@ -163,7 +158,6 @@ export default function UserPutModal(props) {
                   })}
                 </select>
               </RowIpt>
-              {console.log(isShop)}
               {isShop && (
                 <>
                   <div className={`row ${text_flow}`}>

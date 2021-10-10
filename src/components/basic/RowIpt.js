@@ -27,8 +27,7 @@ export default function RowIpt(props) {
                   <label
                     htmlFor={item.propsid}
                     className='col-md-2 col-form-label '>
-                    {" "}
-                    {item.props.label}{" "}
+                    {item.props.label}
                   </label>
                 )}
                 <div

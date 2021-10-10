@@ -29,7 +29,7 @@ const zh_CN = {
     "navLabel-brands": '品牌列表',
     "navLabel-brand": '品牌',
     "navLabel-clients": '客户列表',
-    "navLabel-client": '客户',
+    "navLabel-Client": '客户',
     "navLabel-setting": '设置',
     "navLabel-citas": '城市列表',
     "navLabel-cita": '城市',
