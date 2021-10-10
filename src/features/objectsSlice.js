@@ -59,7 +59,6 @@ export const postObject = createAsyncThunk(
   async ({ flagSlice, api, data }, { getState, rejectWithValue }) => {
     // console.log(formdata)
     const post_res = await axios_Prom(api, "POST", data);
-    console.log(post_res);
     if (post_res.status === 200) {
       const objs = [...getState().objects[flagSlice]?.objects] || [];
       const newObj = post_res.data.object;
@@ -159,7 +158,6 @@ export const objectsSlice = createSlice({
     setQuery: (state, action) => {
       const { flagSlice, query, isReload = true } = action.payload;
       // console.log(isReload);
-      console.log(flagSlice, query);
       if (!state[flagSlice]) state[flagSlice] = {};
       if (!state[flagSlice].query) state[flagSlice].query = {};
       if (isReload === true) {

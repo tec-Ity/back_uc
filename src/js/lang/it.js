@@ -29,7 +29,7 @@ const it = {
         "navLabel-brands": 'Marce',
         "navLabel-brand": 'Marca',
         "navLabel-clients": 'Clienti',
-        "navLabel-client": 'Cliente',
+        "navLabel-Client": 'Cliente',
         "navLabel-setting": 'Impostazioni',
         "navLabel-citas": 'Cita Listino',
         "navLabel-cita": 'Cita',

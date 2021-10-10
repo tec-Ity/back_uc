@@ -32,7 +32,7 @@ const en_US = {
     "navLabel-brands": 'Brands',
     "navLabel-brand": 'Brand',
     "navLabel-clients": 'Clients',
-    "navLabel-client": 'Client',
+    "navLabel-Client": 'Client',
     "navLabel-setting": 'Setting',
     "navLabel-citas": 'Cities',
     "navLabel-cita": 'City',
