@@ -126,7 +126,7 @@ const useStyle = makeStyles({
   },
 });
 
-const links = [{ label: "主页", to: "/home" }, { label: "分类列表" }];
+const links = [{ label: "主页", to: "/home" }, { label: "品牌列表" }];
 const flagSlice = "brands";
 const api = "/Brands";
 
@@ -167,13 +167,7 @@ function BrandList(props) {
   );
 }
 
-function BrandListItem({
-  brand,
-  index,
-  addNew = false,
-  closeAddNew,
-  brandLevel = 1,
-}) {
+function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
   const classes = useStyle();
   const dispatch = useDispatch();
   const ref = React.useRef();
@@ -197,9 +191,9 @@ function BrandListItem({
       "obj",
       JSON.stringify({
         code: brandUpdateData.name,
+        nome: brandUpdateData.name,
         sort: brandUpdateData.sort,
         is_usable: brandUpdateData.isUsable,
-        level: brandLevel,
       })
     );
     for (let i = 0; i < brandUpdateData.imgs.length; i++) {
@@ -351,15 +345,7 @@ function BrandListItem({
           )}
         </div>
       </Grid>
-      {/* --- children form --- */}
-      {showChild === true && (
-        <Grid container item xs={12} className={classes.childGroup}>
-          <AddNewChildRow farId={brand._id} />
-          {brand?.Brand_sons?.map((son) => (
-            <BrandListItemChild brand={son} key={son._id} />
-          ))}
-        </Grid>
-      )}
+
       {/* ---modify form--- */}
       {modifying === true && (
         <Grid container item xs={12} style={{ marginBottom: "10px" }}>
@@ -419,260 +405,6 @@ function BrandListItem({
         </Grid>
       )}
     </>
-  );
-}
-function BrandListItemChild({
-  brand,
-  index,
-  farId,
-  addNewChild = false,
-  closeAddNewChild,
-  brandLevel = 2,
-}) {
-  const classes = useStyle();
-  const dispatch = useDispatch();
-  const ref = React.useRef();
-  const status = useSelector((state) => state.objects.status);
-  const [modifying, setModifying] = useState(addNewChild);
-  const [justSubmitted, setJustSubmitted] = useState(false);
-  const [initBrandInfo] = useState({
-    sort: brand?.sort || 0,
-    name: brand?.code || "",
-    isUsable: brand?.is_usable || true,
-    imgs: [],
-  });
-  const [brandUpdateData, setBrandUpdateData] = useState(initBrandInfo);
-
-  const [, setImgLocal] = useState([]);
-
-  useEffect(() => {
-    if (justSubmitted === true && status === "succeed") {
-      setModifying(false);
-      setJustSubmitted(false);
-    }
-  }, [justSubmitted, status]);
-
-  const handleSubmitUpdate = (e) => {
-    e.stopPropagation();
-    const formData = new FormData();
-    formData.append(
-      "obj",
-      JSON.stringify({
-        code: brandUpdateData.name,
-        sort: brandUpdateData.sort,
-        is_usable: brandUpdateData.isUsable,
-        level: brandLevel,
-        Brand_far: farId,
-      })
-    );
-    for (let i = 0; i < brandUpdateData.imgs.length; i++) {
-      formData.append("image" + i, brandUpdateData.imgs[i]);
-    }
-    if (addNewChild === false) {
-      dispatch(
-        putObject({
-          flagSlice,
-          api: "/Brand/" + brand._id,
-          data: formData,
-          isList: true,
-        })
-      );
-      setJustSubmitted(true);
-    } else if (addNewChild === true) {
-      if (brandUpdateData.name.length > 0) {
-        dispatch(
-          postObject({
-            flagSlice,
-            api: "/Brand",
-            data: formData,
-          })
-        );
-        setJustSubmitted(true);
-        closeAddNewChild();
-      } else {
-        alert("name is empty");
-      }
-    }
-  };
-
-  const handleCancel = (e) => {
-    e.stopPropagation();
-    if (addNewChild === false) {
-      setModifying(false);
-      setBrandUpdateData(initBrandInfo);
-    } else if (addNewChild === true) {
-      closeAddNewChild();
-    }
-  };
-
-  const handleDelete = (e) => {
-    e.stopPropagation();
-    if (addNewChild === false) {
-      dispatch(
-        deleteObject({
-          flagSlice,
-          api: "/Brand/" + brand._id,
-          id: brand._id,
-          isList: true,
-        })
-      );
-    } else if (addNewChild === true) {
-      closeAddNewChild();
-    }
-  };
-
-  return (
-    <>
-      {/* ---modify form--- */}
-
-      <Grid
-        container
-        item
-        xs={12}
-        style={{ marginBottom: "10px" }}
-        justifyContent='space-between'>
-        <Grid container item xs={1}>
-          <div
-            className={clsx(
-              classes.childImgBox,
-              modifying === true ? classes.hoverPointer : ""
-            )}>
-            Up
-          </div>
-          <input
-            disabled={modifying === false}
-            ref={ref}
-            style={{ display: "none" }}
-            type='file'
-            onChange={(e) => {
-              // console.log(e.target.files);
-              setBrandUpdateData((prev) => ({
-                ...prev,
-                imgs: e.target.files,
-              }));
-              const imgs = e.target.files;
-              console.log(e.target.files);
-              const imgLocalPath = [];
-              for (let i = 0; i < imgs.length; i++) {
-                const img = URL.createObjectURL(imgs[i]);
-                imgLocalPath.push(img);
-              }
-              setImgLocal(imgLocalPath);
-            }}
-          />
-        </Grid>
-        <Grid item xs={1}>
-          <div className={classes.inputBox}>
-            <input
-              disabled={modifying === false}
-              value={brandUpdateData.sort}
-              className={classes.inputStyle}
-              onChange={(e) =>
-                setBrandUpdateData((prev) => ({
-                  ...prev,
-                  sort: e.target.value,
-                }))
-              }
-            />
-            <label className={classes.inputlabel}>Sort</label>
-          </div>
-        </Grid>
-        <Grid item xs={5}>
-          <div className={classes.inputBox}>
-            <input
-              disabled={modifying === false}
-              value={brandUpdateData.name}
-              className={classes.inputStyle}
-              onChange={(e) =>
-                setBrandUpdateData((prev) => ({
-                  ...prev,
-                  name: e.target.value,
-                }))
-              }
-            />
-            <label className={classes.inputlabel}>Name</label>
-          </div>
-        </Grid>
-        <Grid container item xs={2} alignItems='center' justifyContent='center'>
-          usable
-          <Switch
-            disabled={modifying === false}
-            checked={brandUpdateData.isUsable}
-            size='small'
-            color='default'
-            style={{ color: "#000" }}
-            onChange={(e) =>
-              setBrandUpdateData((prev) => ({
-                ...prev,
-                isUsable: e.target.checked,
-              }))
-            }
-          />
-        </Grid>
-        <Grid
-          container
-          item
-          xs={2}
-          alignItems='center'
-          justifyContent='center'
-          style={{ position: "static" }}
-          className={classes.btnGroup}>
-          {modifying === true ? (
-            <>
-              <div onClick={handleSubmitUpdate}>Done</div>
-              <div onClick={handleCancel}>Cancle</div>
-              <div onClick={handleDelete}>Del</div>
-            </>
-          ) : (
-            <>
-              <div
-                onClick={(e) => {
-                  setModifying(true);
-                  setImgLocal([]);
-                  e.stopPropagation();
-                }}>
-                edit
-              </div>
-              <div onClick={handleDelete}>del</div>
-            </>
-          )}
-        </Grid>
-      </Grid>
-    </>
-  );
-}
-
-function AddNewChildRow({ farId }) {
-  const classes = useStyle();
-  const [addNewChild, setAddNewChild] = useState(false);
-  return addNewChild === false ? (
-    <Grid
-      container
-      item
-      xs={12}
-      style={{ marginBottom: "10px" }}
-      justifyContent='space-between'>
-      <Grid container item xs={1}>
-        <div
-          className={classes.addNewChildImgBox}
-          onClick={() => setAddNewChild(true)}>
-          +
-        </div>
-      </Grid>
-      <Grid item xs={2} container alignItems='center'>
-        添加子分类
-      </Grid>
-      {/* offsets */}
-      <Grid item xs={5}></Grid>
-      <Grid container item xs={1}></Grid>
-      <Grid container item xs={2}></Grid>
-    </Grid>
-  ) : (
-    <BrandListItemChild
-      farId={farId}
-      addNewChild={addNewChild}
-      closeAddNewChild={() => setAddNewChild(false)}
-    />
   );
 }
 

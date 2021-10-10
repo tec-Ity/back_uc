@@ -139,6 +139,7 @@ export const deleteObject = createAsyncThunk(
     if (res.status === 200) {
       return { flagSlice, id, isList };
     } else {
+      alert(res.message);
       return rejectWithValue("deleteObject error info");
       // return rejectWithValue({flagSlice, info:'my error info'});
     }
