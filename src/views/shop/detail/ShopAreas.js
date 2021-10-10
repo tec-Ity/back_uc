@@ -7,7 +7,7 @@ import CusInput from "../../../components/basic/CusInput";
 import SearchInput from "../../../components/universal/query/SearchInput";
 
 export default function ShopAreas(props) {
-  const { Shop, flagSlice, api } = props;
+  const { Shop,  } = props;
   const [ServeCitasUpdate, setServeCitasUpdate] = useState([]);
   useEffect(() => {
     setServeCitasUpdate(Shop.serve_Citas);
@@ -67,6 +67,7 @@ function ServeCitaRow({ serveCita, search }) {
             // setServeCitasUpdate(prev=>({...prev, Cita:{...Cita,}}));
             console.log(11);
             search(e.target.value);
+
           }}
         />
       </Grid>

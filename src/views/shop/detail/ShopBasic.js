@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { get_DNS } from "../../../js/api";
 import makeStyles from "@mui/styles/makeStyles";
-import { Container, Grid } from "@mui/material";
+import { Container } from "@mui/material";
 import CusInput from "../../../components/basic/CusInput";
 
 const useStyle = makeStyles({
@@ -11,13 +11,20 @@ const useStyle = makeStyles({
 });
 
 export default function ShopBasic(props) {
-  const { flagSlice, api, Shop } = props;
+  const { Shop } = props;
   const classes = useStyle();
   const ref = useRef();
   //local img path for display on change
   const [imgLocal, setImgLocal] = useState(null);
-  console.log(Shop);
-  const [infoUpdate, setInfoUpdate] = useState({});
+  // console.log(Shop);
+  const [infoUpdate, setInfoUpdate] = useState({
+    code: "",
+    name: "",
+    city: "",
+    addr: "",
+    zip: "",
+    img_url: "",
+  });
   React.useEffect(() => {
     setInfoUpdate({
       code: Shop?.code || "",
@@ -44,7 +51,7 @@ export default function ShopBasic(props) {
         <>
           <img
             alt={props.Shop.code}
-            src={imgLocal ? imgLocal : `${get_DNS()}${infoUpdate.img_url}`}
+            src={imgLocal ? imgLocal : get_DNS() + infoUpdate.img_url}
             className={classes.mainImg}
             onClick={() => ref.current.click()}
             title='更换图片'
@@ -70,19 +77,40 @@ export default function ShopBasic(props) {
         />
       </div>
       <div className={classes.formItem}>
-        <CusInput label='Name' value={infoUpdate.name} />
+        <CusInput
+          label='Name'
+          value={infoUpdate.name}
+          handleChange={(e) =>
+            setInfoUpdate((prev) => ({ ...prev, name: e.target.value }))
+          }
+        />
       </div>
       <div className={classes.formItem}>
         <CusInput
           label='City'
           value={infoUpdate.city?.code + "(" + infoUpdate.city?.nome + ")"}
+          handleChange={(e) =>
+            setInfoUpdate((prev) => ({ ...prev, city: e.target.value }))
+          }
         />
       </div>
       <div className={classes.formItem}>
-        <CusInput label='Address' value={infoUpdate.addr} />
+        <CusInput
+          label='Address'
+          value={infoUpdate.addr}
+          handleChange={(e) =>
+            setInfoUpdate((prev) => ({ ...prev, addr: e.target.value }))
+          }
+        />
       </div>
       <div className={classes.formItem}>
-        <CusInput label='Zip' value={infoUpdate.zip} />
+        <CusInput
+          label='Zip'
+          value={infoUpdate.zip}
+          handleChange={(e) =>
+            setInfoUpdate((prev) => ({ ...prev, zip: e.target.value }))
+          }
+        />
       </div>
     </Container>
   );

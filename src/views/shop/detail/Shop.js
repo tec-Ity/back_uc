@@ -59,7 +59,7 @@ export default function Shop() {
           />
         </div>
 
-        {console.log(Shop)}
+        {/* {console.log(Shop)} */}
         {Comp === 1 ? (
           <ShopBasic Shop={Shop} flagSlice={flagSlice} api={api} />
         ) : Comp === 2 ? (
