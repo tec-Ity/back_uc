@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { fetch_Prom, axios_Prom } from "../js/api";
-import { sortBy } from "../js/global";
+// import { sortBy } from "../js/global";
 
 const initialState = {
   errMsg: "",
@@ -19,9 +19,8 @@ export const getObjects = createAsyncThunk(
     const res = await fetch_Prom(api + queryStr);
     if (res.status === 200) {
       const objs = getState().objects[flagSlice]?.objects || [];
-      const objects = isReload
-        ? res.data.objects
-        : [...objs, ...res.data.objects];
+      let getObjs = [...res.data.objects];
+      const objects = isReload ? getObjs : [...objs, ...getObjs];
       // console.log(objects);
       return { flagSlice, objects };
     } else {

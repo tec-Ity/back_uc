@@ -3,6 +3,7 @@ import UiCard from "./UiCard";
 
 export default function UiCards(props) {
   const { cols, propsCard, objects, matchId, clickEvent } = props;
+
   const Card = propsCard ? propsCard : UiCard;
   return (
     <>

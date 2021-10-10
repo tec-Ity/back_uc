@@ -31,6 +31,8 @@ const zh_CN = {
     "navLabel-clients": '客户列表',
     "navLabel-client": '客户',
     "navLabel-setting": '设置',
+    "navLabel-citas": '城市列表',
+    "navLabel-cita": '城市',
 
     "welcom-title": "欢迎来到 Union City 管理系统",
     "welcom-code": " 您的账号是 ",
