@@ -34,6 +34,8 @@ const en_US = {
     "navLabel-clients": 'Clients',
     "navLabel-client": 'Client',
     "navLabel-setting": 'Setting',
+    "navLabel-citas": 'Cities',
+    "navLabel-cita": 'City',
 
     "welcom-title": "Welcom to Union City manage System",
     "welcom-code": " Your code is ",

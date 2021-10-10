@@ -31,6 +31,8 @@ const it = {
         "navLabel-clients": 'Clienti',
         "navLabel-client": 'Cliente',
         "navLabel-setting": 'Impostazioni',
+        "navLabel-citas": 'Cita Listino',
+        "navLabel-cita": 'Cita',
 
         "welcom-title": "Benvenuto a  Union City Manage System",
         "welcom-code": " Sua codice è ",
