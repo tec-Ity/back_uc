@@ -56,14 +56,14 @@ const useStyle = makeStyles({
   childGroup: {
     padding: "0 5%",
   },
-  categBg: {
+  brandBg: {
     height: "100%",
     width: "100%",
     objectFit: "cover",
     position: "absolute",
     zIndex: "-1",
   },
-  categCode: {
+  brandCode: {
     width: "fit-content",
     height: "fit-content",
     backgroundColor: "#fff",
@@ -140,12 +140,12 @@ export default function Brands() {
   return (
     <Container>
       <ListPageHeader showAddNew={() => setAddNew(true)} />
-      <CategList addNew={addNew} closeAddNew={() => setAddNew(false)} />
+      <BrandList addNew={addNew} closeAddNew={() => setAddNew(false)} />
     </Container>
   );
 }
 
-function CategList(props) {
+function BrandList(props) {
   const { addNew, closeAddNew } = props;
   const classes = useStyle();
   const brands = useSelector((state) => state.objects[flagSlice]?.objects);
@@ -153,26 +153,26 @@ function CategList(props) {
   return (
     <Grid container className={classes.listGridContainer}>
       {addNew === true && (
-        <CategListItem
+        <BrandListItem
           key='new'
           addNew={addNew}
           closeAddNew={closeAddNew}
-          categ={{}}
+          brand={{}}
         />
       )}
-      {brands?.map((categ, index) => (
-        <CategListItem categ={categ} index={index} key={categ._id} />
+      {brands?.map((brand, index) => (
+        <BrandListItem brand={brand} index={index} key={brand._id} />
       ))}
     </Grid>
   );
 }
 
-function CategListItem({
-  categ,
+function BrandListItem({
+  brand,
   index,
   addNew = false,
   closeAddNew,
-  categLevel = 1,
+  brandLevel = 1,
 }) {
   const classes = useStyle();
   const dispatch = useDispatch();
@@ -181,13 +181,13 @@ function CategListItem({
   const [modifying, setModifying] = useState(addNew);
   const [showChild, setShowChild] = useState(false);
   const [justSubmitted, setJustSubmitted] = useState(false);
-  const [initCategInfo] = useState({
-    sort: categ?.sort || 0,
-    name: categ?.code || "",
-    isUsable: categ?.is_usable || true,
+  const [initBrandInfo] = useState({
+    sort: brand?.sort || 0,
+    name: brand?.code || "",
+    isUsable: brand?.is_usable || true,
     imgs: [],
   });
-  const [categUpdateData, setCategUpdateData] = useState(initCategInfo);
+  const [brandUpdateData, setBrandUpdateData] = useState(initBrandInfo);
   const [imgLocal, setImgLocal] = useState([]);
 
   const handleSubmitUpdate = (e) => {
@@ -196,31 +196,31 @@ function CategListItem({
     formData.append(
       "obj",
       JSON.stringify({
-        code: categUpdateData.name,
-        sort: categUpdateData.sort,
-        is_usable: categUpdateData.isUsable,
-        level: categLevel,
+        code: brandUpdateData.name,
+        sort: brandUpdateData.sort,
+        is_usable: brandUpdateData.isUsable,
+        level: brandLevel,
       })
     );
-    for (let i = 0; i < categUpdateData.imgs.length; i++) {
-      formData.append("image" + i, categUpdateData.imgs[i]);
+    for (let i = 0; i < brandUpdateData.imgs.length; i++) {
+      formData.append("image" + i, brandUpdateData.imgs[i]);
     }
     if (addNew === false) {
       dispatch(
         putObject({
           flagSlice,
-          api: "/Categ/" + categ._id,
+          api: "/Brand/" + brand._id,
           data: formData,
           isList: true,
         })
       );
       setJustSubmitted(true);
     } else if (addNew === true) {
-      if (categUpdateData.name.length > 0) {
+      if (brandUpdateData.name.length > 0) {
         dispatch(
           postObject({
             flagSlice,
-            api: "/Categ",
+            api: "/Brand",
             data: formData,
           })
         );
@@ -236,7 +236,7 @@ function CategListItem({
     e.stopPropagation();
     if (addNew === false) {
       setModifying(false);
-      setCategUpdateData(initCategInfo);
+      setBrandUpdateData(initBrandInfo);
     } else if (addNew === true) {
       closeAddNew();
     }
@@ -247,8 +247,8 @@ function CategListItem({
       dispatch(
         deleteObject({
           flagSlice,
-          api: "/Categ/" + categ._id,
-          id: categ._id,
+          api: "/Brand/" + brand._id,
+          id: brand._id,
           isList: true,
         })
       );
@@ -285,13 +285,13 @@ function CategListItem({
           <>
             {/* bg img */}
             <img
-              src={api_DNS + categ.img_url}
-              alt={categUpdateData.name}
-              className={classes.categBg}
+              src={api_DNS + brand.img_url}
+              alt={brandUpdateData.name}
+              className={classes.brandBg}
             />
             {/* gateg code */}
-            <div className={classes.categCode}>
-              {(index + 1).toFixed(1) + categUpdateData.name}
+            <div className={classes.brandCode}>
+              {(index + 1).toFixed(1) + brandUpdateData.name}
             </div>
           </>
         ) : (
@@ -299,7 +299,7 @@ function CategListItem({
           <>
             {imgLocal.length > 0 ? (
               // show selected img
-              <img src={imgLocal[0]} alt='logo' className={classes.categBg} />
+              <img src={imgLocal[0]} alt='logo' className={classes.brandBg} />
             ) : (
               // when no selected img
               <div>Upload image{" (16:9)"}</div>
@@ -311,7 +311,7 @@ function CategListItem({
               type='file'
               onChange={(e) => {
                 // console.log(e.target.files);
-                setCategUpdateData((prev) => ({
+                setBrandUpdateData((prev) => ({
                   ...prev,
                   imgs: e.target.files,
                 }));
@@ -354,9 +354,9 @@ function CategListItem({
       {/* --- children form --- */}
       {showChild === true && (
         <Grid container item xs={12} className={classes.childGroup}>
-          <AddNewChildRow farId={categ._id} />
-          {categ?.Categ_sons?.map((son) => (
-            <CategListItemChild categ={son} key={son._id} />
+          <AddNewChildRow farId={brand._id} />
+          {brand?.Brand_sons?.map((son) => (
+            <BrandListItemChild brand={son} key={son._id} />
           ))}
         </Grid>
       )}
@@ -366,10 +366,10 @@ function CategListItem({
           <Grid item xs={1}>
             <div className={classes.inputBox}>
               <input
-                value={categUpdateData.sort}
+                value={brandUpdateData.sort}
                 className={classes.inputStyle}
                 onChange={(e) =>
-                  setCategUpdateData((prev) => ({
+                  setBrandUpdateData((prev) => ({
                     ...prev,
                     sort: e.target.value,
                   }))
@@ -382,10 +382,10 @@ function CategListItem({
           <Grid item xs={8}>
             <div className={classes.inputBox}>
               <input
-                value={categUpdateData.name}
+                value={brandUpdateData.name}
                 className={classes.inputStyle}
                 onChange={(e) =>
-                  setCategUpdateData((prev) => ({
+                  setBrandUpdateData((prev) => ({
                     ...prev,
                     name: e.target.value,
                   }))
@@ -403,31 +403,31 @@ function CategListItem({
             justifyContent='flex-end'>
             usable
             <Switch
-              checked={categUpdateData.isUsable}
+              checked={brandUpdateData.isUsable}
               size='small'
               color='default'
               style={{ color: "#000" }}
               onChange={(e) =>
-                setCategUpdateData((prev) => ({
+                setBrandUpdateData((prev) => ({
                   ...prev,
                   isUsable: e.target.checked,
                 }))
               }
             />
-            {console.log(categUpdateData)}
+            {console.log(brandUpdateData)}
           </Grid>
         </Grid>
       )}
     </>
   );
 }
-function CategListItemChild({
-  categ,
+function BrandListItemChild({
+  brand,
   index,
   farId,
   addNewChild = false,
   closeAddNewChild,
-  categLevel = 2,
+  brandLevel = 2,
 }) {
   const classes = useStyle();
   const dispatch = useDispatch();
@@ -435,13 +435,13 @@ function CategListItemChild({
   const status = useSelector((state) => state.objects.status);
   const [modifying, setModifying] = useState(addNewChild);
   const [justSubmitted, setJustSubmitted] = useState(false);
-  const [initCategInfo] = useState({
-    sort: categ?.sort || 0,
-    name: categ?.code || "",
-    isUsable: categ?.is_usable || true,
+  const [initBrandInfo] = useState({
+    sort: brand?.sort || 0,
+    name: brand?.code || "",
+    isUsable: brand?.is_usable || true,
     imgs: [],
   });
-  const [categUpdateData, setCategUpdateData] = useState(initCategInfo);
+  const [brandUpdateData, setBrandUpdateData] = useState(initBrandInfo);
 
   const [, setImgLocal] = useState([]);
 
@@ -458,32 +458,32 @@ function CategListItemChild({
     formData.append(
       "obj",
       JSON.stringify({
-        code: categUpdateData.name,
-        sort: categUpdateData.sort,
-        is_usable: categUpdateData.isUsable,
-        level: categLevel,
-        Categ_far: farId,
+        code: brandUpdateData.name,
+        sort: brandUpdateData.sort,
+        is_usable: brandUpdateData.isUsable,
+        level: brandLevel,
+        Brand_far: farId,
       })
     );
-    for (let i = 0; i < categUpdateData.imgs.length; i++) {
-      formData.append("image" + i, categUpdateData.imgs[i]);
+    for (let i = 0; i < brandUpdateData.imgs.length; i++) {
+      formData.append("image" + i, brandUpdateData.imgs[i]);
     }
     if (addNewChild === false) {
       dispatch(
         putObject({
           flagSlice,
-          api: "/Categ/" + categ._id,
+          api: "/Brand/" + brand._id,
           data: formData,
           isList: true,
         })
       );
       setJustSubmitted(true);
     } else if (addNewChild === true) {
-      if (categUpdateData.name.length > 0) {
+      if (brandUpdateData.name.length > 0) {
         dispatch(
           postObject({
             flagSlice,
-            api: "/Categ",
+            api: "/Brand",
             data: formData,
           })
         );
@@ -499,7 +499,7 @@ function CategListItemChild({
     e.stopPropagation();
     if (addNewChild === false) {
       setModifying(false);
-      setCategUpdateData(initCategInfo);
+      setBrandUpdateData(initBrandInfo);
     } else if (addNewChild === true) {
       closeAddNewChild();
     }
@@ -511,8 +511,8 @@ function CategListItemChild({
       dispatch(
         deleteObject({
           flagSlice,
-          api: "/Categ/" + categ._id,
-          id: categ._id,
+          api: "/Brand/" + brand._id,
+          id: brand._id,
           isList: true,
         })
       );
@@ -546,7 +546,7 @@ function CategListItemChild({
             type='file'
             onChange={(e) => {
               // console.log(e.target.files);
-              setCategUpdateData((prev) => ({
+              setBrandUpdateData((prev) => ({
                 ...prev,
                 imgs: e.target.files,
               }));
@@ -565,10 +565,10 @@ function CategListItemChild({
           <div className={classes.inputBox}>
             <input
               disabled={modifying === false}
-              value={categUpdateData.sort}
+              value={brandUpdateData.sort}
               className={classes.inputStyle}
               onChange={(e) =>
-                setCategUpdateData((prev) => ({
+                setBrandUpdateData((prev) => ({
                   ...prev,
                   sort: e.target.value,
                 }))
@@ -581,10 +581,10 @@ function CategListItemChild({
           <div className={classes.inputBox}>
             <input
               disabled={modifying === false}
-              value={categUpdateData.name}
+              value={brandUpdateData.name}
               className={classes.inputStyle}
               onChange={(e) =>
-                setCategUpdateData((prev) => ({
+                setBrandUpdateData((prev) => ({
                   ...prev,
                   name: e.target.value,
                 }))
@@ -597,12 +597,12 @@ function CategListItemChild({
           usable
           <Switch
             disabled={modifying === false}
-            checked={categUpdateData.isUsable}
+            checked={brandUpdateData.isUsable}
             size='small'
             color='default'
             style={{ color: "#000" }}
             onChange={(e) =>
-              setCategUpdateData((prev) => ({
+              setBrandUpdateData((prev) => ({
                 ...prev,
                 isUsable: e.target.checked,
               }))
@@ -668,7 +668,7 @@ function AddNewChildRow({ farId }) {
       <Grid container item xs={2}></Grid>
     </Grid>
   ) : (
-    <CategListItemChild
+    <BrandListItemChild
       farId={farId}
       addNewChild={addNewChild}
       closeAddNewChild={() => setAddNewChild(false)}
