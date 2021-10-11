@@ -3,8 +3,6 @@ import React, { useState } from "react";
 import UiCards from "./UiCards";
 import UiRows from "./UiRows";
 
-import { FormattedMessage } from "react-intl";
-
 export default function UiVariety(props) {
   const styleUi = {
     init: "card",
@@ -44,18 +42,30 @@ export default function UiVariety(props) {
         return <div> Not exist this UI </div>;
     }
   };
+  let icon = `${process.env.PUBLIC_URL}/img/icon/`
+  // gridView.svg`;
   return (
     <>
-      <button
-        className={`btn  mx-3 ${activeBtns[0]}`}
-        onClick={() => changeUi(0)}>
-        <FormattedMessage id='card' defaultMessage='card' />
-      </button>
-      <button
-        className={`btn  mx-3 ${activeBtns[1]}`}
-        onClick={() => changeUi(1)}>
-        <FormattedMessage id='list' defaultMessage='list' />
-      </button>
+    <div className="text-right">
+        <button
+          className={`btn  mx-3 ${activeBtns[0]}`}
+          onClick={() => changeUi(0)}>
+          <img src={icon+'gridView.svg'}
+                  className="img-neat" 
+                  alt={'gridView'}
+                  style={{width: "30px",height:"30px"}}
+          />
+        </button>
+        <button
+          className={`btn  mx-3 ${activeBtns[1]}`}
+          onClick={() => changeUi(1)}>
+          <img src={icon+'listView.svg'}
+                  className="img-neat" 
+                  alt={'listView'}
+                  style={{width: "30px",height:"30px"}}
+          />
+        </button>
+    </div>
       <div className='mt-5'>{componentUI()}</div>
     </>
   );

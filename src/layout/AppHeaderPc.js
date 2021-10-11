@@ -49,10 +49,12 @@ export default function AppHeaderPc(props) {
   return (
     <div className={`sidebar ${spreadbar}`}>
       <div className='logo_content'>
-        <div className='logo'>
-          <i className='bx bx-doughnut-chart'></i>
-          <div className='logo_name'>GC</div>
-        </div>
+      <NavLink to={`/${getRolePath()}/home`} style={{"textDecoration":"none"}}>              
+          <div className='logo'>
+            <i className='bx bx-doughnut-chart'></i>
+            <div className='logo_name'>UC</div>
+          </div>
+        </NavLink>
         <i className='bx bx-menu' id='btn' onClick={togSidebar}></i>
       </div>
       <ul className='nav_list'>
@@ -112,9 +114,9 @@ export default function AppHeaderPc(props) {
         <div className='profile_content'>
           <div className='profile'>
             <div className='profile_details'>
-              <NavLink to={`/${getRolePath()}/center`}>
+              <NavLink to={`/${getRolePath()}/user/${curUser._id}`}>
                 <img
-                  src={`${process.env.PUBLIC_URL}/dabai.jpeg`}
+                  src={`${process.env.PUBLIC_URL}/img/icon/dabai.jpeg`}
                   alt='avatar'
                 />
               </NavLink>

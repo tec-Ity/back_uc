@@ -36,12 +36,12 @@ export default function Shops(props) {
   return (
     <>
       <NavBread  activePage="Shops"></NavBread>
+      <div className="text-right mb-3">
       <SearchInput
         flagSlice={flagSlice}
         api={api}
       />
-      <div className="text-right mb-3">
-        <button className="btn btn-info" onClick={() => setModalShow(true)}> + </button>
+        <button className="btn btn-info mx-5" onClick={() => setModalShow(true)}> + </button>
         <ShopPostModal 
           flagSlice={flagSlice}
           show={modalShow}

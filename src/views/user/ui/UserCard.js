@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 
 export default function UserCard(props) {
         const { object, clickEvent } = props;
-        let img_url = `${process.env.PUBLIC_URL}/favicon.ico`;
+        let img_url = `${process.env.PUBLIC_URL}/img/icon/userProfile.svg`;
         if(object?.img_url) {
                 img_url = get_DNS()+object.img_url;
         } else if(object?.img_urls?.length > 0) {

@@ -6,6 +6,10 @@ export default function Setting() {
 
         return (
                 <>
+                        <Link to={`/${rolePath}/nations`}>  <span style={{fontSize: '24px'}}>Nation List</span> </Link>
+                        <br/>
+                        <Link to={`/${rolePath}/areas`}>  <span style={{fontSize: '24px'}}>Area List</span> </Link>
+                        <br/>
                         <Link to={`/${rolePath}/Citas`}>  <span style={{fontSize: '24px'}}>City List</span> </Link>
                 </>
         )

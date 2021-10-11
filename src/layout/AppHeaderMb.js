@@ -24,7 +24,7 @@ export default function AppHeaderMb() {
           <Link className='navbar-brand' to='/'>
             <img
               alt=''
-              src={`${process.env.PUBLIC_URL}/favicon.ico`}
+              src={`${process.env.PUBLIC_URL}/img/icon/dabai.jpeg`}
               style={{ height: "35px" }}
             />
           </Link>
