@@ -20,6 +20,7 @@ const useStyle = makeStyles({
   headerContainer: {
     display: "flex",
     justifyContent: "space-between",
+    marginBottom:'20px'
   },
   listGridContainer: {
     // border: "1px solid",
@@ -285,7 +286,7 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
             />
             {/* gateg code */}
             <div className={classes.brandCode}>
-              {(index + 1).toFixed(1) + brandUpdateData.name}
+              {(index + 1).toFixed(1) +' '+ brandUpdateData.name}
             </div>
           </>
         ) : (
@@ -432,7 +433,7 @@ function ListPageHeader({ showAddNew }) {
 
       <SearchInput flagSlice={flagSlice} />
 
-      <div onClick={showAddNew}>添加分类</div>
+      <div onClick={showAddNew}>添加品牌</div>
     </div>
   );
 }

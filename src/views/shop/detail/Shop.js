@@ -73,7 +73,7 @@ export default function Shop() {
   );
 }
 
-function SwitchBtn({ label, handleClick, selected }) {
+export function SwitchBtn({ label, handleClick, selected }) {
   return (
     <button
       className={

@@ -291,7 +291,7 @@ function CategListItem({
             />
             {/* gateg code */}
             <div className={classes.categCode}>
-              {(index + 1).toFixed(1) + categUpdateData.name}
+              {(index + 1).toFixed(1) + " " + categUpdateData.name}
             </div>
           </>
         ) : (
