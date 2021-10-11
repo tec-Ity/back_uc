@@ -11,8 +11,12 @@ import FilterGeneral from "../../../components/universal/query/filter/FilterGene
 import moment from "moment";
 import PageComp from "../../../components/universal/query/page/PageComp";
 import { statusName, statusCode } from "../../../js/conf/confOrder";
+import { useHistory } from "react-router";
+import { getRolePath } from "../../../js/conf/confUser";
 export default function Orders() {
   const dispatch = useDispatch();
+  const hist = useHistory();
+  const rolePath = getRolePath();
   const flagSlice = "orders";
   const api = "/Orders";
   const populateObjs = [
@@ -50,7 +54,11 @@ export default function Orders() {
       {objects.map((order) => {
         imp_Orders += order.imp || 0;
         return (
-          <div key={order._id} className='row py-3 my-2 border rounded'>
+          <div
+            key={order._id}
+            className='row py-3 my-2 border rounded'
+            style={{ cursor: "pointer" }}
+            onClick={() => hist.push(`/${rolePath}/order/${order._id}`)}>
             <div className='col-3 col-md-2 mt-2'>{order.code} </div>
             <div className='col-3 col-md-2 mt-2'>
               {moment(order.at_crt).format("DD/MM/YYYY HH:mm")}{" "}
