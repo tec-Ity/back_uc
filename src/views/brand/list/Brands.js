@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import makeStyles from "@mui/styles/makeStyles";
 import Container from "@mui/material/Container";
-import clsx from "clsx";
+// import clsx from "clsx";
 import { Breadcrumbs, Grid, Link, Typography, Switch } from "@mui/material";
 // import { OutlinedInput, FormControl, InputLabel } from "@material-ui/core";
 // import Modal from "@mui/material/Modal";
@@ -150,7 +150,6 @@ function BrandList(props) {
   const { addNew, closeAddNew } = props;
   const classes = useStyle();
   const brands = useSelector((state) => state.objects[flagSlice]?.objects);
-  console.log(brands);
   return (
     <Grid container className={classes.listGridContainer}>
       {addNew === true && (

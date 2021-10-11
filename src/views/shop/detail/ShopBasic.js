@@ -5,7 +5,9 @@ import { Container } from "@mui/material";
 import CusInput from "../../../components/basic/CusInput";
 import clsx from "clsx";
 import { useDispatch } from "react-redux";
-import { deleteObject, putObject } from "../../../features/objectsSlice";
+import { 
+  // deleteObject,
+  putObject } from "../../../features/objectsSlice";
 
 const useStyle = makeStyles({
   root: { border: "1px solid" },
@@ -56,32 +58,16 @@ export default function ShopBasic(props) {
 
   const handleSubmit = () => {
     const formData = new FormData();
-    // formData.append(
-    //   "obj",
-    //   JSON.stringify({
-    //     code: infoUpdate.code,
-    //     nome: infoUpdate.name,
-    //     zip: infoUpdate.zip,
-    //     test: 11,
-    //     // img_url: !imgLocal && infoUpdate.img_url,
-    //   })
-    // );
-    // // const formData = new FormData();
-    // console.log(11);
-    // console.log(formData);
-    // formData.append(
-    //   "obj",
-    //   JSON.stringify({
-    //     code: infoUpdate.code,
-    //     nome: infoUpdate.name,
-    //     zip: infoUpdate.zip,
-    //     test: 11,
-    //     // img_url: !imgLocal && infoUpdate.img_url,
-    //   })
-    // );
-    formData.append("test", "11");
-    // imgLocal && formData.append("image", imgLocal);
-    console.log(formData);
+    formData.append(
+      "obj",
+      JSON.stringify({
+        code: infoUpdate.code,
+        nome: infoUpdate.name,
+        zip: infoUpdate.zip,
+        // img_url: !imgLocal && infoUpdate.img_url,
+      })
+    );
+    formData.append("img", infoUpdate.img);
     dispatch(
       putObject({
         flagSlice,
@@ -91,9 +77,9 @@ export default function ShopBasic(props) {
     );
   };
 
-  const handleDelete = React.useCallback(() => {
-    dispatch(deleteObject({ flagSlice, api }));
-  });
+  // const handleDelete = React.useCallback(() => {
+  //   dispatch(deleteObject({ flagSlice, api }));
+  // });
   return (
     <Container className={classes.root}>
       <div className={clsx(classes.formItem, classes.flexStyle)}>
@@ -112,7 +98,9 @@ export default function ShopBasic(props) {
             multiple={false} //ctrl on need
             style={{ display: "none" }}
             onChange={(e) =>
-              setImgLocal(URL.createObjectURL(e.target.files[0]))
+              {setImgLocal(URL.createObjectURL(e.target.files[0]))
+              setInfoUpdate((prev)=>({...prev, img:e.target.files[0]}))
+              }
             }
           />
         </div>

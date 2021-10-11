@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   selectObjects,
   putObject,
-  deleteObject,
+  // deleteObject,
 } from "../../../features/objectsSlice";
 import CusBtnGroup from "../../../components/basic/CusBtnGroup";
 import CusInput from "../../../components/basic/CusInput";
@@ -138,7 +138,7 @@ function ServeCitaNew(props) {
   const dispatch = useDispatch();
   const classes = useStyle();
   const [showAdd, setShowAdd] = useState(false);
-  const [justSubmitted, setJustSubmitted] = useState(false);
+  const [, setJustSubmitted] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const [priceShip, setPriceShip] = useState("");
 
