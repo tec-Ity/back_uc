@@ -64,7 +64,6 @@ export default function ShopBasic(props) {
         code: infoUpdate.code,
         nome: infoUpdate.name,
         zip: infoUpdate.zip,
-        // img_url: !imgLocal && infoUpdate.img_url,
       })
     );
     formData.append("img", infoUpdate.img);
