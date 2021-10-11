@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import UiRows from "../../../components/ui/UiRows";
-import UiVariety from "../../../components/ui/UiVariety";
 import { getObjects } from "../../../features/objectsSlice";
 import ProdRow from "../../prod/ui/ProdRow";
 

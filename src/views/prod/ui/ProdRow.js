@@ -2,7 +2,10 @@ import React from "react";
 import { get_DNS } from "../../../js/api";
 
 export default function ProdRow(props) {
-  const { object, clickEvent } = props;
+  const { 
+    object,
+    // clickEvent
+  } = props;
   let img_url = `${process.env.PUBLIC_URL}/favicon.ico`;
   if (object?.img_url) {
     img_url = get_DNS() + object.img_url;

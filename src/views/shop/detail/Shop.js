@@ -26,7 +26,6 @@ export default function Shop() {
 
   const Shop = useSelector(selectObject(flagSlice));
   // const Shop = useSelector((state) => state.objects[flagSlice]?.object);
-  console.log(Shop);
   const setKeyComp = (key) => {
     setComp(Number(key));
   };
@@ -60,7 +59,6 @@ export default function Shop() {
           />
         </div>
 
-        {console.log(Shop)}
         {Comp === 1 ? (
           <ShopBasic Shop={Shop} flagSlice={flagSlice} api={api} />
         ) : Comp === 2 ? (
