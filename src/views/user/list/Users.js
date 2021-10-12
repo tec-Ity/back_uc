@@ -13,7 +13,9 @@ import UserCard from "../ui/UserCard";
 import { makeStyles } from "@mui/styles";
 import { Grid } from "@mui/material";
 import { selectObjects, getObjects } from "../../../features/objectsSlice";
+import ListPageHeader from "../../../components/basic/ListPageHeader";
 
+const links = [{ label: "主页", to: "/home" }, { label: "用户列表" }];
 const UserPostModal = lazy(() => import("../modal/UserPostModal"));
 export default function Users(props) {
   const dispatch = useDispatch();
@@ -33,36 +35,23 @@ export default function Users(props) {
 
   const clickCardEvent = (obj) => (e) => {
     hist.push(`/${rolePath}/user/${obj._id}`);
-  };
-  useEffect(() => {
+  };  useEffect(() => {
     dispatch(getObjects({ flagSlice, api, isReload: true }));
   }, [dispatch]);
   return (
     <>
-      <NavBread
-        activePage={
-          <FormattedMessage id='navLabel-users' defaultMessage='users' />
-        }></NavBread>
-      <SearchInput flagSlice={flagSlice} api={api} />
-      <div className='text-right mb-3'>
-        <button className='btn btn-info' onClick={() => setModalShow(true)}>
-          {" "}
-          +{" "}
-        </button>
-        <UserPostModal
-          flagSlice={flagSlice}
-          show={modalShow}
-          onHide={() => setModalShow(false)}
-        />
-      </div>
-      <ListPageHeader flagSlice={flagSlice} api={api}>
-        <UserPostModal
-          flagSlice={flagSlice}
-          show={modalShow}
-          onHide={() => setModalShow(false)}
-        />
-      </ListPageHeader>
-      <hr />
+      <ListPageHeader
+        flagSlice={flagSlice}
+        api={api}
+        links={links}
+        showAddNew={() => setModalShow(true)}
+        addLabel='添加用户'
+      />
+      <UserPostModal
+        flagSlice={flagSlice}
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+      />
       <UiVariety
         propsCard={UserCard}
         UiRow={UserRow}
@@ -76,25 +65,3 @@ export default function Users(props) {
 const useStyle = makeStyles({
   root: {},
 });
-
-function ListPageHeader(props) {
-  const { flagSlice, api, children } = props;
-  const classes = useStyle();
-
-  return (
-    <Grid container>
-      <Grid item xs={12}>
-        <NavBread
-          activePage={
-            <FormattedMessage id='navLabel-users' defaultMessage='users' />
-          }></NavBread>
-      </Grid>
-      <Grid item xs={8} />
-      <Grid item xs={4}>
-        <SearchInput flagSlice={flagSlice} api={api} />
-      </Grid>
-
-      {children}
-    </Grid>
-  );
-}

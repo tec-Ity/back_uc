@@ -1,7 +1,7 @@
 import { useState, useEffect, lazy } from "react";
 import { useHistory } from "react-router";
-import { useSelector, useDispatch } from 'react-redux';
-import {selectObjects, getObjects } from '../../../features/objectsSlice'
+import { useSelector, useDispatch } from "react-redux";
+import { selectObjects, getObjects } from "../../../features/objectsSlice";
 
 import { getRolePath } from "../../../js/conf/confUser";
 
@@ -10,47 +10,51 @@ import NavBread from "../../../components/universal/navBread/NavBread";
 import UiCards from "../../../components/ui/UiCards";
 import ShopCard from "../ui/ShopCard";
 import ShopRow from "../ui/ShopRow";
-import SearchInput from "../../../components/universal/query/SearchInput";
+import ListPageHeader from "../../../components/basic/ListPageHeader";
+const ShopPostModal = lazy(() => import("../modal/ShopPostModal"));
 
-const ShopPostModal = lazy(() => import( "../modal/ShopPostModal"));
-
+const flagSlice = "shops";
+const api = "/Shops";
+const links = [{ label: "主页", to: "/home" }, { label: "店铺列表" }];
 export default function Shops(props) {
   const rolePath = getRolePath();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const hist = useHistory();
-  const flagSlice = "shops";
-  const api = "/Shops";
-  
+
   const [modalShow, setModalShow] = useState(false);
 
   const clickEvent = (obj) => (e) => {
-    hist.push(`/${rolePath}/shop/${obj._id}`)
-  }
+    hist.push(`/${rolePath}/shop/${obj._id}`);
+  };
 
   const objects = useSelector(selectObjects(flagSlice));
   useEffect(() => {
     dispatch(getObjects({ flagSlice, api, isReload: true }));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <>
-      <NavBread  activePage="Shops"></NavBread>
-      <div className="text-right mb-3">
-      <SearchInput
+      <ListPageHeader
         flagSlice={flagSlice}
         api={api}
+        links={links}
+        showAddNew={() => setModalShow(true)}
+        addLabel='添加店铺'
       />
-        <button className="btn btn-info mx-5" onClick={() => setModalShow(true)}> + </button>
-        <ShopPostModal 
-          flagSlice={flagSlice}
-          show={modalShow}
-          onHide={() => setModalShow(false)}
-          />
-      </div>
-    
+      <ShopPostModal
+        flagSlice={flagSlice}
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+      />
+
       <div>
-        <UiCards propsCard={ShopCard} UiRow={ShopRow} objects={objects} clickEvent={clickEvent} />
+        <UiCards
+          propsCard={ShopCard}
+          UiRow={ShopRow}
+          objects={objects}
+          clickEvent={clickEvent}
+        />
       </div>
     </>
   );

@@ -15,6 +15,7 @@ import {
 import CusInput from "../../../../components/basic/CusInput";
 import api_DNS from "../../../../js/_dns";
 import CusBtnGroup from "../../../../components/basic/CusBtnGroup";
+import { getRolePath } from "../../../../js/conf/confUser";
 const useStyle = makeStyles({
   root: {},
   //header
@@ -114,8 +115,12 @@ const useStyle = makeStyles({
     cursor: "pointer",
   },
 });
-
-const links = [{ label: "主页", to: "/home" }, { label: "城市列表" }];
+const rolePath = getRolePath();
+const links = [
+  { label: "主页", to: "/home" },
+  { label: "设置", to: `/${rolePath}/setting` },
+  { label: "城市列表" },
+];
 const flagSlice = "citys";
 const api = "/Citas";
 const populateObjs = [{ path: "Area", select: "nome" }];
