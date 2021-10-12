@@ -15,6 +15,7 @@ import {
 } from "../../../features/objectsSlice";
 import api_DNS from "../../../js/_dns";
 import CusBtnGroup from "../../../components/basic/CusBtnGroup";
+import ListPageHeader from "../../../components/basic/ListPageHeader";
 const useStyle = makeStyles({
   root: {},
   //header
@@ -128,7 +129,13 @@ export default function Brands() {
 
   return (
     <Container>
-      <ListPageHeader showAddNew={() => setAddNew(true)} />
+      <ListPageHeader
+        links={links}
+        flgs={flagSlice}
+        api={api}
+        showAddNew={() => setAddNew(true)}
+        addLabel='添加品牌'
+      />
       <BrandList addNew={addNew} closeAddNew={() => setAddNew(false)} />
     </Container>
   );
@@ -407,34 +414,5 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
         </Grid>
       )}
     </>
-  );
-}
-
-function ListPageHeader({ showAddNew }) {
-  const classes = useStyle();
-  return (
-    <div className={classes.headerContainer}>
-      <Breadcrumbs>
-        {links?.map((link, index) =>
-          index === links.length - 1 ? (
-            <Typography key={index} color='text.primary'>
-              {link.label}
-            </Typography>
-          ) : (
-            <Link
-              key={index}
-              underline='hover'
-              color={"inherit"}
-              href={link.to}>
-              {link.label}
-            </Link>
-          )
-        )}
-      </Breadcrumbs>
-
-      <SearchInput flagSlice={flagSlice} />
-
-      <div onClick={showAddNew}>添加品牌</div>
-    </div>
   );
 }

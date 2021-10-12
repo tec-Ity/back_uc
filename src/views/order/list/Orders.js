@@ -13,12 +13,67 @@ import PageComp from "../../../components/universal/query/page/PageComp";
 import { statusName, statusCode } from "../../../js/conf/confOrder";
 import { useHistory } from "react-router";
 import { getRolePath } from "../../../js/conf/confUser";
+import makeStyles from "@mui/styles/makeStyles";
+import { Grid } from "@mui/material";
+import ListPageHeader from "../../../components/basic/ListPageHeader";
+const useStyle = makeStyles({
+  root: {},
+  orderListItemContainer: {
+    position: "relative",
+    padding: "10px 0",
+  },
+  orderListItemStyle: {
+    height: "80px",
+    fontSize: "14px",
+    boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.1)",
+    borderRadius: "5px",
+    // marginTop: "20px",
+    padding: "0 20px",
+    justifyContent: "space-between",
+    alignItems: "center",
+    "& > div": { textAlign: "center" },
+    "& > :last-child": {
+      textAlign: "start",
+    },
+  },
+  alertStyle: {
+    position: "absolute",
+    height: "80px",
+    width: "75px",
+    // border: "1px solid",
+    borderRadius: "0 5px 5px 0",
+    right: 0,
+    display: "flex",
+    alignItems: "center",
+    "& > :nth-child(1)": {
+      height: "20px",
+      width: "20px",
+      borderRadius: "50%",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      color: "#fff",
+    },
+    "& > :nth-child(2)": {
+      //   border: "1px solid",
+      position: "absolute",
+      borderRadius: "0 5px 5px 0",
+      right: 0,
+      top: 0,
+      height: "100%",
+      width: "10px",
+    },
+  },
+});
+
+const flagSlice = "orders";
+const api = "/Orders";
+const links = [{ label: "主页", to: "/home" }, { label: "订单列表" }];
 export default function Orders() {
   const dispatch = useDispatch();
   const hist = useHistory();
+  const classes = useStyle();
   const rolePath = getRolePath();
-  const flagSlice = "orders";
-  const api = "/Orders";
   const populateObjs = [
     { path: "Client", select: "code nome phone" },
     { path: "Shop", select: "code nome" },
@@ -47,33 +102,76 @@ export default function Orders() {
   return (
     <>
       {/* search bar */}
-      <SearchInput flagSlice={flagSlice} api={api} />
+      <ListPageHeader
+        flagSlice={flagSlice}
+        api={api}
+        links={links}
+        showAddIcon={false}
+      />
       {/* genral filter */}
       <FilterGeneral objects={objects} flagSlice={flagSlice} />
       {/* list */}
-      {objects.map((order) => {
-        imp_Orders += order.imp || 0;
-        return (
-          <div
-            key={order._id}
-            className='row py-3 my-2 border rounded'
-            style={{ cursor: "pointer" }}
-            onClick={() => hist.push(`/${rolePath}/order/${order._id}`)}>
-            <div className='col-3 col-md-2 mt-2'>{order.code} </div>
-            <div className='col-3 col-md-2 mt-2'>
-              {moment(order.at_crt).format("DD/MM/YYYY HH:mm")}{" "}
-            </div>
-            <div className='col-3 col-md-2 mt-2'>{order.Shop?.code} </div>
-            <div className='col-3 col-md-2 mt-2 d-none d-md-block'>
-              {order.Client?.code}
-            </div>
-            <div className='col-3 col-md-2 mt-2'>{order.imp?.toFixed(2)}</div>
-            <div className='col-3 col-md-2 mt-2'>
-              {statusName[statusCode[order.status]]}
-            </div>
-          </div>
-        );
-      })}
+      <Grid container>
+        {objects.map((order) => {
+          imp_Orders += order.imp || 0;
+          const colorStyle =
+            order.status === 200
+              ? "#D83535"
+              : order.status === 400
+              ? "#FFBF44"
+              : order.status === 700
+              ? "#C0E57B"
+              : "#fff";
+          return (
+            <Grid
+              container
+              item
+              xs={12}
+              key={order._id}
+              style={{ cursor: "pointer" }}
+              className={classes.orderListItemContainer}
+              onClick={() => hist.push(`/${rolePath}/order/${order._id}`)}>
+              <Grid
+                container
+                item
+                xs={12}
+                className={classes.orderListItemStyle}>
+                <Grid item xs={1}>
+                  {order.Shop?.code}
+                </Grid>
+                <Grid item xs={2}>
+                  {order.code}
+                </Grid>
+                <Grid item xs={2}>
+                  {moment(order.at_crt).format("DD/MM/YYYY HH:mm")}
+                </Grid>
+                <Grid item xs={2}>
+                  {order.Client?.code}
+                </Grid>
+                <Grid item xs={1}>
+                  €{order.imp?.toFixed(2)}
+                </Grid>
+                <Grid
+                  item
+                  xs={3}
+                  style={{
+                    fontWeight:
+                      (order.status === 200 ||
+                        order.status === 400 ||
+                        order.status === 700) &&
+                      "700",
+                  }}>
+                  {statusName[statusCode[order.status]]}
+                </Grid>
+              </Grid>
+              <div className={classes.alertStyle}>
+                <div style={{ backgroundColor: colorStyle }}>!</div>
+                <div style={{ backgroundColor: colorStyle }}></div>
+              </div>
+            </Grid>
+          );
+        })}
+      </Grid>
       <h3>{imp_Orders.toFixed(2)}</h3>
       {/* page control */}
       <PageComp flagSlice={flagSlice} count={objects?.length / pageSize} />

@@ -10,7 +10,8 @@ import NavBread from "../../../components/universal/navBread/NavBread";
 import UiVariety from "../../../components/ui/UiVariety";
 import UserRow from "../ui/UserRow";
 import UserCard from "../ui/UserCard";
-
+import { makeStyles } from "@mui/styles";
+import { Grid } from "@mui/material";
 import { selectObjects, getObjects } from "../../../features/objectsSlice";
 
 const UserPostModal = lazy(() => import("../modal/UserPostModal"));
@@ -54,7 +55,13 @@ export default function Users(props) {
           onHide={() => setModalShow(false)}
         />
       </div>
-
+      <ListPageHeader flagSlice={flagSlice} api={api}>
+        <UserPostModal
+          flagSlice={flagSlice}
+          show={modalShow}
+          onHide={() => setModalShow(false)}
+        />
+      </ListPageHeader>
       <hr />
       <UiVariety
         propsCard={UserCard}
@@ -63,5 +70,31 @@ export default function Users(props) {
         clickEvent={clickCardEvent}
       />
     </>
+  );
+}
+
+const useStyle = makeStyles({
+  root: {},
+});
+
+function ListPageHeader(props) {
+  const { flagSlice, api, children } = props;
+  const classes = useStyle();
+
+  return (
+    <Grid container>
+      <Grid item xs={12}>
+        <NavBread
+          activePage={
+            <FormattedMessage id='navLabel-users' defaultMessage='users' />
+          }></NavBread>
+      </Grid>
+      <Grid item xs={8} />
+      <Grid item xs={4}>
+        <SearchInput flagSlice={flagSlice} api={api} />
+      </Grid>
+
+      {children}
+    </Grid>
   );
 }

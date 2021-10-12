@@ -5,7 +5,7 @@ import clsx from "clsx";
 import { Breadcrumbs, Grid, Link, Typography, Switch } from "@mui/material";
 // import { OutlinedInput, FormControl, InputLabel } from "@material-ui/core";
 // import Modal from "@mui/material/Modal";
-import SearchInput from "../../../components/universal/query/SearchInput";
+import ListPageHeader from "../../../components/basic/ListPageHeader";
 import { useDispatch, useSelector } from "react-redux";
 import {
   deleteObject,
@@ -42,8 +42,21 @@ const useStyle = makeStyles({
     right: "0",
     top: 0,
   },
+  btnGroupChild: {
+    display: "flex",
+    paddingRight: "5px",
+    "& > div": {
+      "&:hover": {
+        cursor: "pointer",
+      },
+      height: "30px",
+      width: "30px",
+      margin: "5px",
+    },
+  },
   childGroup: {
     padding: "0 5%",
+    paddingBottom: "50px",
   },
   categBg: {
     height: "100%",
@@ -84,8 +97,8 @@ const useStyle = makeStyles({
     bottom: 0,
     paddingLeft: "20px",
     paddingTop: "0",
-    fontWeight: "700",
-    fontSize: "20px",
+    fontWeight: "600",
+    fontSize: "18px",
     border: "2px solid #1d1d384d",
   },
   //children:
@@ -128,7 +141,13 @@ export default function Categs() {
 
   return (
     <Container>
-      <ListPageHeader showAddNew={() => setAddNew(true)} />
+      <ListPageHeader
+        showAddNew={() => setAddNew(true)}
+        api={api}
+        links={links}
+        addLabel='添加分类'
+        flagSlice={flagSlice}
+      />
       <CategList addNew={addNew} closeAddNew={() => setAddNew(false)} />
     </Container>
   );
@@ -331,18 +350,6 @@ function CategListItem({
             handleDelete={handleDelete}
             handleEdit={handleEdit}
           />
-          {/* {modifying === true ? (
-            <>
-              <div onClick={handleSubmitUpdate}>Done</div>
-              <div onClick={handleCancel}>Cancle</div>
-              <div onClick={handleDelete}>Del</div>
-            </>
-          ) : (
-            <>
-              <div onClick={handleEdit}>edit</div>
-              <div onClick={handleDelete}>del</div>
-            </>
-          )} */}
         </div>
       </Grid>
       {/* --- children form --- */}
@@ -356,7 +363,7 @@ function CategListItem({
       )}
       {/* ---modify form--- */}
       {modifying === true && (
-        <Grid container item xs={12} style={{ marginBottom: "10px" }}>
+        <Grid container item xs={12} style={{ marginBottom: "50px" }}>
           <Grid item xs={1}>
             <div className={classes.inputBox}>
               <input
@@ -617,7 +624,15 @@ function CategListItemChild({
           justifyContent='center'
           style={{ position: "static" }}
           className={classes.btnGroup}>
-          {modifying === true ? (
+          <CusBtnGroup
+            secondary
+            modifying={modifying}
+            handleSubmitUpdate={handleSubmitUpdate}
+            handleCancel={handleCancel}
+            handleDelete={handleDelete}
+            handleEdit={handleEdit}
+          />
+          {/* {modifying === true ? (
             <>
               <div onClick={handleSubmitUpdate}>Done</div>
               <div onClick={handleCancel}>Cancle</div>
@@ -628,7 +643,7 @@ function CategListItemChild({
               <div onClick={handleEdit}>edit</div>
               <div onClick={handleDelete}>del</div>
             </>
-          )}
+          )} */}
         </Grid>
       </Grid>
     </>
@@ -666,34 +681,5 @@ function AddNewChildRow({ farId }) {
       addNewChild={addNewChild}
       closeAddNewChild={() => setAddNewChild(false)}
     />
-  );
-}
-
-function ListPageHeader({ showAddNew }) {
-  const classes = useStyle();
-  return (
-    <div className={classes.headerContainer}>
-      <Breadcrumbs>
-        {links?.map((link, index) =>
-          index === links.length - 1 ? (
-            <Typography key={index} color='text.primary'>
-              {link.label}
-            </Typography>
-          ) : (
-            <Link
-              key={index}
-              underline='hover'
-              color={"inherit"}
-              href={link.to}>
-              {link.label}
-            </Link>
-          )
-        )}
-      </Breadcrumbs>
-
-      <SearchInput flagSlice={flagSlice} />
-
-      <div onClick={showAddNew}>添加分类</div>
-    </div>
   );
 }

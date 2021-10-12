@@ -7,11 +7,40 @@ import {
   unObjectsSlice,
 } from "../../../features/objectsSlice";
 import makeStyles from "@mui/styles/makeStyles";
-import { InputAdornment, OutlinedInput } from "@mui/material";
-import { ReactComponent as Magnifier } from "./magnifier.svg";
+// import { InputAdornment, OutlinedInput } from "@mui/material";
+import { ReactComponent as SearchIcon } from "../../icon/searchIcon.svg";
 const useStyle = makeStyles({
-  root: { width: "392px", borderRadius: "0" },
+  //   root: {
+  //     width: "286px",
+  //     "& .MuiOutlinedInput-notchedOutline": {
+  //       border: "2px solid",
+  //       borderColor: "rgba(0, 0, 0, 0.3)",
+  //       borderRadius: "0",
+  //     },
+  //     "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: "red" },
+  //   },
   magnifierStyle: { width: "30px", height: "30px", opacity: "0.5" },
+  inputBox: {
+    width: "286px",
+    height: "40px",
+    position: "relative",
+  },
+  inputIcon: {
+    width: "24px",
+    height: "20px",
+    position: "absolute",
+    right: "10px",
+    top: "10px",
+  },
+  inputStyle: {
+    height: "100%",
+    width: "100%",
+    paddingRight: "30px",
+    paddingLeft: "12px",
+    border: "2px solid #0000004d",
+    borderRadius: 0,
+    "&:focus": { borderColor: "#000", borderRadius: "0" },
+  },
 });
 
 export default function SearchInput(props) {
@@ -26,7 +55,7 @@ export default function SearchInput(props) {
   } = props;
   const dispatch = useDispatch();
   const search = useSelector(selectQuery(flagSlice))?.search || "";
-  
+
   const onChangeSearch = (e) => {
     const val = e.target.value;
     dispatch(
@@ -57,24 +86,35 @@ export default function SearchInput(props) {
   // 卸载
   useEffect(() => {
     return () => {
-      dispatch(unObjectsSlice(flagSlice));
+      flagSlice && dispatch(unObjectsSlice(flagSlice));
     };
   }, [dispatch, flagSlice]);
 
   return (
-    <OutlinedInput
-      style={{ display: hidden === true ? "none" : "" }}
-      size='small'
-      variant='outlined'
-      classes={{ root: classes.root }}
-      onChange={onChangeSearch}
-      placeholder={placeholder}
-      value={search}
-      endAdornment={
-        <InputAdornment position='end'>
-          <Magnifier className={classes.magnifierStyle} />
-        </InputAdornment>
-      }
-    />
+    // <OutlinedInput
+    //   style={{ display: hidden === true ? "none" : "" }}
+    //   size='small'
+    //   variant='outlined'
+    //   classes={{ root: classes.root }}
+    //   onChange={onChangeSearch}
+    //   placeholder={placeholder}
+    //   value={search}
+    //   endAdornment={
+    //     <InputAdornment position='end'>
+    //       <Magnifier className={classes.magnifierStyle} />
+    //     </InputAdornment>
+    //   }
+    // />
+    <div
+      className={classes.inputBox}
+      style={{ display: hidden === true ? "none" : "" }}>
+      <SearchIcon className={classes.inputIcon} />
+      <input
+        className={classes.inputStyle}
+        placeholder={placeholder}
+        value={search}
+        onChange={onChangeSearch}
+      />
+    </div>
   );
 }

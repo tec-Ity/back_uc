@@ -1,11 +1,33 @@
+import { Grid } from "@mui/material";
 import React, { useState } from "react";
 // import { useDispatch } from "react-redux";
 import OrderStatusBtnGroup from "../../../../views/order/list/OrderStatusBtnGroup";
 import DateFilter from "./DateFilter";
 import ShopFilter from "./ShopFilter";
+import makeStyles from "@mui/styles/makeStyles";
+const useStyle = makeStyles({
+  root: {},
+  headerStyle: {
+    justifyContent: "space-between",
+    alignItems: "center",
+    height: "50px",
+    padding: "0 20px",
+    color: "rgba(0, 0, 0, 0.5)",
+    "& > div": {
+      //   border: "1px solid",
+      display: "flex",
+      justifyContent: "center",
+      cursor: "pointer",
+    },
+    "& > :last-child": {
+      justifyContent: "flex-start",
+    },
+  },
+});
 export default function FilterGeneral(props) {
   const { flagSlice, objects } = props;
   // const dispatch = useDispatch();
+  const classes = useStyle();
   const [anchorEl, setAnchorEl] = useState(null);
   const [type, setType] = useState("");
   const handleClick = (type) => (e) => {
@@ -22,26 +44,35 @@ export default function FilterGeneral(props) {
   const id = open ? "simple-popover" : undefined;
   return (
     <>
-      <div className='row py-3 my-2 border rounded'>
-        <div onClick={handleClick("code")} className=' col-3 col-md-2 mt-2'>
-          code
-        </div>
-        <div onClick={handleClick("date")} className=' col-3 col-md-2 mt-2'>
-          date
-        </div>
-        <div onClick={handleClick("shop")} className=' col-3 col-md-2 mt-2'>
+      <Grid container className={classes.headerStyle}>
+        <Grid container item xs={1} onClick={handleClick("shop")}>
           shop
-        </div>
-        <div onClick={handleClick("client")} className=' col-3 col-md-2 mt-2'>
+          <div style={{ transform: "rotate(90deg)", marginLeft: "5px" }}>
+            &gt;
+          </div>
+        </Grid>
+        <Grid container item xs={2} onClick={handleClick("code")}>
+          code
+        </Grid>
+        <Grid container item xs={2} onClick={handleClick("date")}>
+          date
+          <div style={{ transform: "rotate(90deg)", marginLeft: "5px" }}>
+            &gt;
+          </div>
+        </Grid>
+        <Grid container item xs={2} onClick={handleClick("client")}>
           client
-        </div>
-        <div onClick={handleClick("price")} className=' col-3 col-md-2 mt-2'>
+        </Grid>
+        <Grid container item xs={1} onClick={handleClick("price")}>
           price
-        </div>
-        <div onClick={handleClick("status")} className=' col-3 col-md-2 mt-2'>
+        </Grid>
+        <Grid container item xs={3} onClick={handleClick("status")}>
           status
-        </div>
-      </div>
+          <div style={{ transform: "rotate(90deg)", marginLeft: "5px" }}>
+            &gt;
+          </div>
+        </Grid>
+      </Grid>
       {type === "status" && (
         <OrderStatusBtnGroup
           id={id}

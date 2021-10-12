@@ -5,7 +5,7 @@ import UiRows from "./UiRows";
 
 export default function UiVariety(props) {
   const styleUi = {
-    init: "card",
+    init: "card", 
     arr: ["card", "row"],
   };
   const [keyUi, setKeyUi] = useState(styleUi.init);

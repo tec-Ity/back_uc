@@ -9,6 +9,7 @@ const useStyle = makeStyles({
   inputlabel: {
     // border:'1px solid',
     fontFamily: "Montserrat",
+    fontSize:'14px',
     padding: "0 2px",
     lineHeight: "1em",
     backgroundColor: "#fff",

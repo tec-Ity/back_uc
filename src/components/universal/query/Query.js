@@ -42,7 +42,7 @@ export default function Query(props) {
   }, [queryStr]);
   useEffect(() => {
     return () => {
-      dispatch(unObjectsSlice(flagSlice));
+      flagSlice && dispatch(unObjectsSlice(flagSlice));
     };
   }, [dispatch, flagSlice]);
 

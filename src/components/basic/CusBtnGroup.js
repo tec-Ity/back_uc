@@ -4,6 +4,11 @@ import { ReactComponent as Confirm } from "../icon/confirm.svg";
 import { ReactComponent as Cancel } from "../icon/cancel.svg";
 import { ReactComponent as Delete } from "../icon/delete.svg";
 import { ReactComponent as Edit } from "../icon/edit.svg";
+import { ReactComponent as ConfirmSec } from "../icon/doneBlack.svg";
+import { ReactComponent as CancelSec } from "../icon/cancelBlack.svg";
+import { ReactComponent as DeleteSec } from "../icon/deleteBlack.svg";
+import { ReactComponent as EditSec } from "../icon/editBlack.svg";
+
 const useStyle = makeStyles({
   btnGroup: {
     display: "flex",
@@ -14,17 +19,14 @@ const useStyle = makeStyles({
       },
       height: "30px",
       width: "30px",
-      // backgroundColor: "#1d1d3840",
-      //   backgroundColor: "#fff",
       margin: "5px",
-      //   border: "2px solid #000",
-      //   borderRadius: "5px",
     },
   },
 });
 
 export default function CusBtnGroup(props) {
   const {
+    secondary = false,
     modifying = false,
     handleSubmit,
     handleDelete,
@@ -37,22 +39,22 @@ export default function CusBtnGroup(props) {
       {modifying === true ? (
         <>
           <div onClick={handleSubmit}>
-            <Confirm />
+            {secondary === true ? <ConfirmSec /> : <Confirm />}
           </div>
           <div onClick={handleCancel}>
-            <Cancel />
+            {secondary === true ? <CancelSec /> : <Cancel />}
           </div>
           <div onClick={handleDelete}>
-            <Delete />
+            {secondary === true ? <DeleteSec /> : <Delete />}
           </div>
         </>
       ) : (
         <>
           <div onClick={handleEdit}>
-            <Edit />
+            {secondary === true ? <EditSec /> : <Edit />}
           </div>
           <div onClick={handleDelete}>
-            <Delete />
+            {secondary === true ? <DeleteSec /> : <Delete />}
           </div>
         </>
       )}
