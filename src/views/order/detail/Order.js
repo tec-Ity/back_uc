@@ -1,14 +1,23 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Grid } from "@mui/material";
 import NavBread from "../../../components/universal/navBread/NavBread";
 import { getRolePath } from "../../../js/conf/confUser";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import makeStyles from "@mui/styles/makeStyles";
+import api_DNS from "../../../js/_dns";
 import clsx from "clsx";
-import { getObject, selectObject } from "../../../features/objectsSlice";
+import {
+  getObject,
+  selectObject,
+  cleanField,
+} from "../../../features/objectsSlice";
+import moment from "moment";
+import { ReactComponent as ViewMore } from "../../../components/icon/orderDetailViewMore.svg";
+import { ReactComponent as ViewLess } from "../../../components/icon/orderDetailViewLess.svg";
+
 const useStyle = makeStyles({
-  root: { fontFamily: "Montserrat" },
+  root: { fontFamily: "Montserrat", paddingBottom: "100px" },
   containerItem: {
     marginBottom: "20px",
   },
@@ -84,7 +93,7 @@ const useStyle = makeStyles({
     //num
     "& > :nth-child(1)": { justifyContent: "flex-start" },
     //img
-    "& > :nth-child(2)": { height: "50px" },
+    "& > :nth-child(2)": { "& img": { height: "50px", width: "50px" } },
     //name
     "& > :nth-child(3)": { fontWeight: "700" },
     //categs
@@ -93,23 +102,61 @@ const useStyle = makeStyles({
       display: "flex",
       flexDirection: "column",
     },
-    "& :last-child": { justifyContent: "flex-end" },
+    // "& :last-child": { justifyContent: "flex-end" },
   },
+  OrderInfoTd: {
+    fontSize: "14px",
+    padding: "10px 0",
+    "& > :nth-child(1)": {
+      color: "rgba(0, 0, 0, 0.5)",
+    },
+  },
+
+  //orderProds
 });
+
 const rolePath = getRolePath();
 const flagSlice = "order";
-// const flagField = "object";
-
+const flagField = "object";
+//populate objs
+const categPopObj = {
+  path: "Categ",
+  select: "code Categ_far",
+  populate: { path: "Categ_far", select: "code" },
+};
+const pdPopObj = {
+  path: "Pd",
+  select: "img_urls Categ",
+  populate: [categPopObj],
+};
+const orderSkuPopObj = { path: "OrderSkus", select: "attrs" };
+const populateObjs = [
+  { path: "Shop", select: "code" },
+  { path: "Client", select: "code" },
+  {
+    path: "OrderProds",
+    select: "nome unit prod_regular prod_quantity prod_sale Pd OrderSkus",
+    populate: [pdPopObj, orderSkuPopObj],
+  },
+  { path: "ship_info", select: "Cita.code" },
+];
+////////////////////////////////////////////////////////////////
 export default function Order() {
   const classes = useStyle();
   const dispatch = useDispatch();
   const { id } = useParams();
   const api = `/Order/${id}`;
   const order = useSelector(selectObject(flagSlice));
+
   useEffect(() => {
-    dispatch(getObject({ flagSlice, api }));
+    dispatch(
+      getObject({
+        flagSlice,
+        api: api + "?populateObjs=" + JSON.stringify(populateObjs),
+      })
+    );
     return () => {
-      //   dispatch(cleanField({ flagSlice, flagField }));
+      dispatch(cleanField({ flagSlice, flagField }));
     };
   }, [api, dispatch]);
   console.log(order);
@@ -125,18 +172,42 @@ export default function Order() {
       </div>
       {/* order info */}
       <div className={classes.containerItem}>
-        <OrderInfoSection />
+        <OrderInfoSection order={order} />
       </div>
       {/* prods info */}
       <div className={classes.containerItem}>
-        <ProdsInfoSection />
+        <ProdsInfoSection orderProds={order.OrderProds} />
       </div>
       {/* ship info */}
-      <ShipInfoSection />
+      <ShipInfoSection shipInfo={order.ship_info} />
       {/* control btns */}
     </Container>
   );
 }
+// ------------------------ order Status -------------------------
+//progress bar component
+function OrderStatusProgressBar(props) {
+  const { label, isActive, isPassed } = props;
+  const classes = useStyle();
+  const color =
+    isActive === true
+      ? "#D83535"
+      : isPassed === true
+      ? "#000"
+      : "rgba(0, 0, 0, 0.3)";
+
+  return (
+    <div className={classes.progressBarStyle}>
+      <div style={{ color }}>{label}</div>
+      {/* pregress bar */}
+      <div
+        style={{
+          backgroundColor: color,
+        }}></div>
+    </div>
+  );
+}
+
 const orderStatusObjs = [
   { label: "客户正在下单", status: 100 },
   { label: "等待商家接单", status: 200 }, //已确认下单
@@ -151,7 +222,7 @@ function OrderStatusSection(props) {
   return (
     <SectionHeader label='订单状态'>
       <>
-        <div style={{ display: "flex", width: "90%" }}>
+        <div style={{ display: "flex", width: "100%" }}>
           {orderStatusObjs.map((oStatus) => (
             <OrderStatusProgressBar
               label={oStatus.label}
@@ -160,27 +231,132 @@ function OrderStatusSection(props) {
             />
           ))}
         </div>
-        <div>请接单</div>
       </>
     </SectionHeader>
   );
 }
 
-function OrderInfoSection() {
+//-----------------------order info--------------------------------
+function OrderInfoSection({ order }) {
+  const classes = useStyle();
+  const [showMore, setShowMore] = useState(false);
+  console.log(order);
+  const orderInfoObjsLess = order
+    ? [
+        { key: "商铺", value: order.Shop?.code },
+        { key: "客户应付", value: order.total },
+        {
+          key: "预计收货时间",
+          value: moment(order.at_schedule).format("DD/MM/YYYY HH:mm"),
+        },
+      ]
+    : [];
+  const orderInfoObjsFull = order
+    ? [
+        { key: "商铺", value: order.Shop?.code }, //pop
+        { key: "付款方式", value: order.type_paid },
+        {
+          key: "创建时间",
+          value: moment(order.at_crt).format("DD/MM/YYYY HH:mm"),
+        },
+        { key: "客户编号", value: order.Client?.code }, //pop
+        { key: "付款状态", value: order.is_paid },
+        {
+          key: "更新时间",
+          value: moment(order.at_upd).format("DD/MM/YYYY HH:mm"),
+        },
+        { key: "订单备注", value: order.note_Client },
+        { key: "付款信息", value: order.paid_info }, //obj 付款人信息
+        {
+          key: "预计收货时间",
+          value: moment(order.at_schedule).format("DD/MM/YYYY HH:mm"),
+        },
+        { key: "订单类型", value: order.type_Order },
+        { key: "初始总额", value: "€" + order.total_regular?.toFixed(2) },
+        {
+          key: "确认订单时间",
+          value: moment(order.at_confirm).format("DD/MM/YYYY HH:mm"),
+        },
+        { key: "订单管理员", value: order.User_Oder }, //接单后台用户
+        { key: "折后总额", value: "€" + order.total_sale?.toFixed(2) }, // sale -> sell
+        {
+          key: "付款时间",
+          value: moment(order.at_paid).format("DD/MM/YYYY HH:mm"),
+        },
+        { key: "管理员备注", value: order.note_Oder },
+        { key: "折扣金额", value: "€" + order.total_discount?.toFixed(2) },
+        {
+          key: "配送时间",
+          value: moment(order.at_shipping).format("DD/MM/YYYY HH:mm"),
+        },
+        { key: "订单配送员", value: order.User_Dver },
+        { key: "客户应付", value: "€" + order.total?.toFixed(2) },
+        {
+          key: "完成时间",
+          value: moment(order.at_completed).format("DD/MM/YYYY HH:mm"),
+        },
+        { key: "配送员备注", value: order.note_Dver },
+        { key: "店铺实收", value: "€" + order.imp?.toFixed(2) },
+        { key: "", value: " " }, //empty offsets
+        { key: "第三方物流信息", value: order.log_info },
+        { key: "配送费", value: "€" + order.price_ship?.toFixed(2) },
+        { key: "", value: " " }, //empty offsets
+        { key: "商品总数", value: order.OrderProds?.length },
+        { key: "配送状态", value: order.is_ship },
+      ]
+    : [];
   return (
     <>
       <SectionHeader label='订单信息'>
         <>
-          <div>订单编号</div>
-          <div>查看更多</div>
+          <div>{order?.code}</div>
+          {showMore === true ? (
+            <div onClick={() => setShowMore(false)}>
+              <ViewLess />
+            </div>
+          ) : (
+            <div onClick={() => setShowMore(true)}>
+              <ViewMore />
+            </div>
+          )}
         </>
       </SectionHeader>
-      <Container>信息。。。。</Container>
+      {/* information */}
+      <Container style={{ marginTop: "10px" }}>
+        {showMore === false ? (
+          <Grid container>
+            {orderInfoObjsLess?.map((obj) => (
+              <Grid container item xs={4} className={classes.OrderInfoTd}>
+                <Grid item xs={5}>
+                  {obj.key}
+                </Grid>
+                <Grid item xs={7}>
+                  {obj.value || "-"}
+                </Grid>
+              </Grid>
+            ))}
+          </Grid>
+        ) : (
+          <Grid container>
+            {orderInfoObjsFull.map((obj) => (
+              <Grid container item xs={4} className={classes.OrderInfoTd}>
+                <Grid item xs={5}>
+                  {obj.key}
+                </Grid>
+                <Grid item xs={7}>
+                  {obj.value || "-"}
+                </Grid>
+              </Grid>
+            ))}
+          </Grid>
+        )}
+      </Container>
     </>
   );
 }
 
-function ProdsInfoSection() {
+//-----------------------prods info------------------------------------------
+function ProdsInfoSection({ orderProds }) {
   const classes = useStyle();
   return (
     <>
@@ -217,49 +393,88 @@ function ProdsInfoSection() {
         </Grid>
       </Grid>
       <Grid>
-        <Grid container item xs={12} className={classes.prodsListStyle}>
-          <Grid container item xs={1}>
-            1
-          </Grid>
-          <Grid container item xs={1}>
-            img
-          </Grid>
-          <Grid container item xs={2}>
-            名称
-          </Grid>
-          <Grid container item xs={2}>
-            <div>一级分类</div>
-            <div>二级分类</div>
-          </Grid>
-          <Grid container item xs={2}>
-            属性...
-          </Grid>
-          {/* <Grid container item xs={1}>
+        {orderProds?.map((op, index) => (
+          <Grid container item xs={12} className={classes.prodsListStyle}>
+            <Grid container item xs={1}>
+              {index + 1}
+            </Grid>
+            <Grid container item xs={1}>
+              <img src={api_DNS + op?.Pd?.img_urls[0]} alt={op.nome} />
+            </Grid>
+            <Grid container item xs={2}>
+              {op.nome}
+            </Grid>
+            <Grid container item xs={2}>
+              <div>{op.Pd?.Categ?.Categ_far?.code}</div>
+              <div>{op.Pd?.Categ?.code}</div>
+            </Grid>
+            <Grid container item xs={2}>
+              {op.OrderProds?.OrderSkus[0]?.attrs || "-"}
+            </Grid>
+            {/* <Grid container item xs={1}>
           国家
         </Grid> */}
-          <Grid container item xs={1}>
-            €5,00
+            <Grid container item xs={1}>
+              €{op.prod_regular?.toFixed(2)}
+            </Grid>
+            <Grid container item xs={2}>
+              {op.prod_quantity}&nbsp;{op.unit || "件"}
+            </Grid>
+            <Grid container item xs={1}>
+              €{op.prod_sale?.toFixed(2)}
+            </Grid>
           </Grid>
-          <Grid container item xs={2}>
-            10 件
-          </Grid>
-          <Grid container item xs={1}>
-            €5,00
-          </Grid>
-        </Grid>
+        ))}
       </Grid>
     </>
   );
 }
 
-function ShipInfoSection() {
+function ShipInfoSection({ shipInfo }) {
+  const classes = useStyle();
+  const shipInfoObjs = [
+    {
+      key: "收货人",
+      value:
+        shipInfo?.firstname && shipInfo?.firstname + " " + shipInfo?.lastname,
+    },
+    { key: "收货地址", value: shipInfo?.address },
+    { key: "", value: " " },
+    { key: "邮箱", value: shipInfo?.email },
+    { key: "城市", value: shipInfo?.city },
+    { key: "", value: " " },
+    { key: "手机", value: shipInfo?.phone },
+    { key: "大区", value: shipInfo?.state },
+    { key: "", value: " " },
+    { key: "公司名称", value: shipInfo?.company },
+    { key: "邮编", value: shipInfo?.postcode },
+    { key: "", value: " " },
+    { key: "", value: " " },
+    { key: "国家", value: shipInfo?.country },
+  ];
+
   return (
     <>
       <SectionHeader label='配送信息' />
+      <Container>
+        <Grid container>
+          {shipInfoObjs.map((info) => (
+            <Grid container item xs={4} className={classes.OrderInfoTd}>
+              <Grid item xs={5}>
+                {info.key}
+              </Grid>
+              <Grid item xs={7}>
+                {info.value || "-"}
+              </Grid>
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
     </>
   );
 }
 
+//----------------------component section header-----------------------
 function SectionHeader(props) {
   const { label, children } = props;
   const classes = useStyle();
@@ -267,28 +482,6 @@ function SectionHeader(props) {
     <div className={classes.sectionHeaderStyle}>
       <div className={classes.headerSubLabel}>{label}</div>
       <div className={classes.headerSubContentStyle}>{children}</div>
-    </div>
-  );
-}
-
-function OrderStatusProgressBar(props) {
-  const { label, isActive, isPassed } = props;
-  const classes = useStyle();
-  const color =
-    isActive === true
-      ? "#D83535"
-      : isPassed === true
-      ? "#000"
-      : "rgba(0, 0, 0, 0.3)";
-
-  return (
-    <div className={classes.progressBarStyle}>
-      <div style={{ color }}>{label}</div>
-      {/* pregress bar */}
-      <div
-        style={{
-          backgroundColor: color,
-        }}></div>
     </div>
   );
 }

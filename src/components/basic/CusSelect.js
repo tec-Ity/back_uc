@@ -52,7 +52,7 @@ export default function CusSelect({
       //   },
       // }}
       // getOptionsLabel={(option) => option.label}
-      isOptionEqualToValue={(option, value) => option.id === value.id}
+      isOptionEqualToValue={(option, value) => option.id === value?.id}
       value={value}
       // getOptionSelected={(option) => option.id === value.id}
       onChange={(e, val) => handleSelect(e, val)}

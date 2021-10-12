@@ -1,12 +1,13 @@
 import React from "react";
 import { makeStyles } from "@mui/styles";
-
+import { ReactComponent as Confirm } from "../icon/confirm.svg";
+import { ReactComponent as Cancel } from "../icon/cancel.svg";
+import { ReactComponent as Delete } from "../icon/delete.svg";
+import { ReactComponent as Edit } from "../icon/edit.svg";
 const useStyle = makeStyles({
   btnGroup: {
     display: "flex",
-    // position: "absolute",
-    // right: "0",
-    // top: 0,
+    paddingRight: "5px",
     "& > div": {
       "&:hover": {
         cursor: "pointer",
@@ -14,13 +15,14 @@ const useStyle = makeStyles({
       height: "30px",
       width: "30px",
       // backgroundColor: "#1d1d3840",
-      backgroundColor: "#fff",
+      //   backgroundColor: "#fff",
       margin: "5px",
-      border: "2px solid #000",
-      borderRadius: "5px",
+      //   border: "2px solid #000",
+      //   borderRadius: "5px",
     },
   },
 });
+
 export default function CusBtnGroup(props) {
   const {
     modifying = false,
@@ -34,14 +36,24 @@ export default function CusBtnGroup(props) {
     <div className={classes.btnGroup}>
       {modifying === true ? (
         <>
-          <div onClick={handleSubmit}>Done</div>
-          <div onClick={handleCancel}>Cancle</div>
-          <div onClick={handleDelete}>Del</div>
+          <div onClick={handleSubmit}>
+            <Confirm />
+          </div>
+          <div onClick={handleCancel}>
+            <Cancel />
+          </div>
+          <div onClick={handleDelete}>
+            <Delete />
+          </div>
         </>
       ) : (
         <>
-          <div onClick={handleEdit}>edit</div>
-          <div onClick={handleDelete}>del</div>
+          <div onClick={handleEdit}>
+            <Edit />
+          </div>
+          <div onClick={handleDelete}>
+            <Delete />
+          </div>
         </>
       )}
     </div>

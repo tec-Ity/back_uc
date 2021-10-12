@@ -14,6 +14,7 @@ import {
 } from "../../../../features/objectsSlice";
 import CusInput from "../../../../components/basic/CusInput";
 import api_DNS from "../../../../js/_dns";
+import CusBtnGroup from "../../../../components/basic/CusBtnGroup";
 const useStyle = makeStyles({
   root: {},
   //header
@@ -37,22 +38,9 @@ const useStyle = makeStyles({
     borderRadius: "5px",
   },
   btnGroup: {
-    display: "flex",
     position: "absolute",
     right: "0",
     top: 0,
-    "& > div": {
-      "&:hover": {
-        cursor: "pointer",
-      },
-      height: "30px",
-      width: "30px",
-      // backgroundColor: "#1d1d3840",
-      backgroundColor: "#fff",
-      margin: "5px",
-      border: "2px solid #000",
-      borderRadius: "5px",
-    },
   },
   childGroup: {
     padding: "0 5%",
@@ -253,6 +241,13 @@ function CityListItem({ city, index, addNew = false, closeAddNew }) {
     }
   };
 
+  const handleEdit = (e) => {
+    setModifying(true);
+    setShowChild(false);
+    setImgLocal([]);
+    e.stopPropagation();
+  };
+
   useEffect(() => {
     if (justSubmitted === true && status === "succeed") {
       setModifying(false);
@@ -325,7 +320,14 @@ function CityListItem({ city, index, addNew = false, closeAddNew }) {
         )}
         {/* icon groups */}
         <div className={classes.btnGroup}>
-          {modifying === true ? (
+          <CusBtnGroup
+            modifying={modifying}
+            handleSubmitUpdate={handleSubmitUpdate}
+            handleCancel={handleCancel}
+            handleDelete={handleDelete}
+            handleEdit={handleEdit}
+          />
+          {/* {modifying === true ? (
             <>
               <div onClick={handleSubmitUpdate}>Done</div>
               <div onClick={handleCancel}>Cancle</div>
@@ -344,7 +346,7 @@ function CityListItem({ city, index, addNew = false, closeAddNew }) {
               </div>
               <div onClick={handleDelete}>del</div>
             </>
-          )}
+          )} */}
         </div>
       </Grid>
 
