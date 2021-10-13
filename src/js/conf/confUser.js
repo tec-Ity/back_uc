@@ -45,7 +45,6 @@ const confUser = {
         { icon: "bx bxs-package", label: "prods", to: "/bser/prods" },
         { icon: "bx bx-list-ul", label: "orders", to: "/bser/orders" },
         { icon: "bx bx-package", label: "pds", to: "/bser/pds" },
-        { icon: "bx bx-cog", label: "setting", to: "/bser/setting" },
       ],
     },
     105: {
@@ -54,7 +53,6 @@ const confUser = {
         { icon: "bx bxs-package", label: "prods", to: "/wker/prods" },
         { icon: "bx bx-list-ul", label: "orders", to: "/wker/orders" },
         { icon: "bx bx-package", label: "pds", to: "/bser/pds" },
-        { icon: "bx bx-cog", label: "setting", to: "/wker/setting" },
       ],
     },
   },
