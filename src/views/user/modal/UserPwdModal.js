@@ -15,6 +15,7 @@ export default function UserPutModal(props) {
     window.innerWidth >= threshold.pc_mb ? "text-right" : "text-left";
 
   const dispatch = useDispatch();
+  const curRole = parseInt(localStorage.getItem("role"));
 
   const api = "/User/" + object._id;
 
@@ -27,6 +28,7 @@ export default function UserPutModal(props) {
 
   const putSubmit = () => {
     dispatch(putObject({ flagSlice, api, data: { password: formdata } }));
+    setFormdata({pwd: '', pwdConfirm: ''})
     onHide();
   };
 
@@ -45,6 +47,13 @@ export default function UserPutModal(props) {
 
       <Modal.Body>
         <form>
+          {
+            curRole >= object.role && (
+              <RowIpt rowClass={`my-3 ${text_flow}`}>
+                <input type='text' className='form-control' id='pwdOrg-ipt' onChange={iptFormdata("pwdOrg")} label='原密码' value={formdata.pwdOrg} />
+              </RowIpt>
+            )
+          }
           <RowIpt rowClass={`my-3 ${text_flow}`}>
             <input type='text' className='form-control' id='pwd-ipt' onChange={iptFormdata("pwd")} label='新密码' value={formdata.pwd} />
           </RowIpt>

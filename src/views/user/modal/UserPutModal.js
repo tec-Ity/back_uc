@@ -80,45 +80,112 @@ export default function UserPutModal(props) {
     }
     setFormdata({ code, nome, phonePre, phone, role, Shop });
     roleFilterShops(formdata.role);
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return (
-    <Modal
-      onHide={onHide}
-      show={show}
-      size='lg'
-      aria-labelledby='contained-modal-title-vcenter'
-      centered>
-      <Modal.Header closeButton>
-        <Modal.Title id='contained-modal-title-vcenter'>
-          <FormattedMessage id='update' defaultMessage='update' />
-        </Modal.Title>
-      </Modal.Header>
-
-      <Modal.Body>
-        <form>
+  const renderCodePut = () => {
+    if(curRole < object.role){
+        return (
           <RowIpt rowClass={`my-3 ${text_flow}`}>
-            <input
-              type='text'
-              className='form-control'
-              id='code-ipt'
-              onChange={iptFormdata("code")}
-              label='Codice'
-              value={formdata.code}
-            />
-            <input
-              type='text'
-              className='form-control'
-              id='nome-ipt'
-              onChange={iptFormdata("nome")}
-              label='Name'
-              value={formdata.nome}
-            />
-          </RowIpt>
-
-          <RowIpt rowClass={`my-3 ${text_flow}`}>
+                <input
+                  type='text'
+                  className='form-control'
+                  id='code-ipt'
+                  onChange={iptFormdata("code")}
+                  label='Codice'
+                  value={formdata.code}
+                />
+                <input
+                  type='text'
+                  className='form-control'
+                  id='nome-ipt'
+                  onChange={iptFormdata("nome")}
+                  label='Name'
+                  value={formdata.nome}
+                />
+              </RowIpt>
+        )
+    } else {
+      return (
+        <RowIpt rowClass={`my-3 ${text_flow}`}>
+        <input
+          type='text'
+          className='form-control'
+          id='nome-ipt'
+          onChange={iptFormdata("nome")}
+          label='Name'
+          value={formdata.nome}
+        />
+      </RowIpt>
+      )
+    }
+  }
+  // 分店不可修改 role权限 自己不可修改自己的权限
+  const renderRole_lt = () => {
+    if(curRole < object.role && curRole < 100)
+    return (
+      <>
+        <RowIpt rowClass={`my-3 ${text_flow}`}>
+          <select
+            className='form-control'
+            id='role-ipt'
+            data-style='btn-info'
+            onChange={chgRole()}
+            label='Role'
+            defaultValue={formdata.role}>
+            <option>please select</option>
+            {role_Arrs.map((item) => {
+              return (
+                item > curRole && (
+                  <FormattedMessage id={`role-${item}`} key={item}>
+                    {(message) => <option value={item}>{message}</option>}
+                  </FormattedMessage>
+                )
+              );
+            })}
+          </select>
+        </RowIpt>
+        {isShop && (
+          <>
+            <div className={`row ${text_flow}`}>
+              <label
+                htmlFor='Shop-ipt'
+                className={`col-md-2 col-form-label ${
+                  formdata.Shop && "text-success"
+                }`}>
+                Shop
+              </label>
+              <div className='col-md-10'>
+                <SearchInput
+                  flagSlice={flagSlice_Shops}
+                  api={api_Shops}
+                  farSearch={farSearch_Shops}
+                  matchSearchCode={matchSearchCode}
+                />
+              </div>
+            </div>
+            <div className='row'>
+              <div className='col-md-2'></div>
+              <div className='col-md-10'>
+                <UiCards
+                  cols='col-6 col-md-4 col-xl-3 mt-2'
+                  matchId={formdata.Shop}
+                  propsCard={ShopCard}
+                  objects={Shops}
+                  clickEvent={clickShopCard}
+                />
+              </div>
+            </div>
+          </>
+        )}
+      </>
+    )
+  }
+  // 员工不能修改自己的电话号码
+  const renderPhonePut = () => {
+    if(curRole < object.role || [1, 3, 101].includes(curRole))
+    return (
+    <RowIpt rowClass={`my-3 ${text_flow}`}>
             <input
               type='text'
               className='form-control'
@@ -136,75 +203,33 @@ export default function UserPutModal(props) {
               value={formdata.phone}
             />
           </RowIpt>
-          {localStorage.getItem("_id") !== object._id && (
-            <>
-              <RowIpt rowClass={`my-3 ${text_flow}`}>
-                <select
-                  className='form-control'
-                  id='role-ipt'
-                  data-style='btn-info'
-                  onChange={chgRole()}
-                  label='Role'
-                  defaultValue={formdata.role}>
-                  <option>please select</option>
-                  {role_Arrs.map((item) => {
-                    return (
-                      item > curRole && (
-                        <FormattedMessage id={`role-${item}`} key={item}>
-                          {(message) => <option value={item}>{message}</option>}
-                        </FormattedMessage>
-                      )
-                    );
-                  })}
-                </select>
-              </RowIpt>
-              {isShop && (
-                <>
-                  <div className={`row ${text_flow}`}>
-                    <label
-                      htmlFor='Shop-ipt'
-                      className={`col-md-2 col-form-label ${
-                        formdata.Shop && "text-success"
-                      }`}>
-                      {" "}
-                      Shop
-                    </label>
-                    <div className='col-md-10'>
-                      <SearchInput
-                        flagSlice={flagSlice_Shops}
-                        api={api_Shops}
-                        farSearch={farSearch_Shops}
-                        matchSearchCode={matchSearchCode}
-                      />
-                    </div>
-                  </div>
-
-                  <div className='row'>
-                    <div className='col-md-2'></div>
-                    <div className='col-md-10'>
-                      <UiCards
-                        cols='col-6 col-md-4 col-xl-3 mt-2'
-                        matchId={formdata.Shop}
-                        propsCard={ShopCard}
-                        objects={Shops}
-                        clickEvent={clickShopCard}
-                      />
-                    </div>
-                  </div>
-                </>
-              )}
-            </>
-          )}
+    )
+  }
+  return (
+    <Modal
+      onHide={onHide}
+      show={show}
+      size='lg'
+      aria-labelledby='contained-modal-title-vcenter'
+      centered>
+      <Modal.Header closeButton>
+        <Modal.Title id='contained-modal-title-vcenter'>
+          <FormattedMessage id='update' defaultMessage='update' />
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <form>
+          {renderCodePut()}
+          {renderPhonePut()}
+          {renderRole_lt()}
         </form>
       </Modal.Body>
-
       <Modal.Footer>
         <Button variant='secondary' onClick={onHide}>
           <FormattedMessage id='close' />
         </Button>
         <Button variant='primary' onClick={putSubmit}>
-          {" "}
-          <FormattedMessage id='confirm' />{" "}
+          <FormattedMessage id='confirm' />
         </Button>
       </Modal.Footer>
     </Modal>

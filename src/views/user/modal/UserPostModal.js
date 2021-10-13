@@ -74,35 +74,13 @@ export default function UserPostModal(props) {
 		roleFilterShops(formdata.role);
 	  // eslint-disable-next-line react-hooks/exhaustive-deps
 	  }, []);
-
-	return (
-		<Modal onHide={onHide} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered >
-			<Modal.Header closeButton>
-				<Modal.Title id="contained-modal-title-vcenter">
-					<FormattedMessage
-						id='create'
-						defaultMessage='Create'
-					/>
-				</Modal.Title>
-			</Modal.Header>
-
-			<Modal.Body>
-				<form>
-					<RowIpt rowClass={`my-3 ${text_flow}`}>
-						<input type="text" className="form-control" id="code-ipt" onChange={iptFormdata("code")} label="Codice" value={formdata.code} />
-						<input type="text" className="form-control" id="nome-ipt" onChange={iptFormdata("nome")} label="Name" value={formdata.nome} />
-					</RowIpt>
-
-					<RowIpt rowClass={`my-3 ${text_flow}`}>
-						<input type="password" className="form-control" id="pwd-ipt" onChange={iptFormdata("pwd")} label="Password" value={formdata.pwd} />
-					</RowIpt>
-
-					<RowIpt rowClass={`my-3 ${text_flow}`}>
-						<input type="text" className="form-control" id="phonePre-ipt" onChange={iptFormdata("phonePre")} colnum="col-4 col-md-2" label="Phone" value={formdata.phonePre} />
-						<input type="text" className="form-control" onChange={iptFormdata("phone")} colnum="col-8" value={formdata.phone} />
-					</RowIpt>
-
-					<RowIpt rowClass={`my-3 ${text_flow}`}>
+	
+	// 如果是总店的使用者 员工所属分店的选择
+	const renderShop = () => {
+		if(curRole < 100)
+		return (
+			<>
+				<RowIpt rowClass={`my-3 ${text_flow}`}>
 						<select className="form-control" id="role-ipt" data-style="btn-info"onChange={chgRole()}  label="Role" defaultValue={formdata.role}>
 							<option>please select</option>
 							{
@@ -144,6 +122,38 @@ export default function UserPostModal(props) {
 							</div>
 						</>)
 					}
+			</>
+		)
+	}
+
+	return (
+		<Modal onHide={onHide} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered >
+			<Modal.Header closeButton>
+				<Modal.Title id="contained-modal-title-vcenter">
+					<FormattedMessage
+						id='create'
+						defaultMessage='Create'
+					/>
+				</Modal.Title>
+			</Modal.Header>
+
+			<Modal.Body>
+				<form>
+					<RowIpt rowClass={`my-3 ${text_flow}`}>
+						<input type="text" className="form-control" id="code-ipt" onChange={iptFormdata("code")} label="Codice" value={formdata.code} />
+						<input type="text" className="form-control" id="nome-ipt" onChange={iptFormdata("nome")} label="Name" value={formdata.nome} />
+					</RowIpt>
+
+					<RowIpt rowClass={`my-3 ${text_flow}`}>
+						<input type="password" className="form-control" id="pwd-ipt" onChange={iptFormdata("pwd")} label="Password" value={formdata.pwd} />
+					</RowIpt>
+
+					<RowIpt rowClass={`my-3 ${text_flow}`}>
+						<input type="text" className="form-control" id="phonePre-ipt" onChange={iptFormdata("phonePre")} colnum="col-4 col-md-2" label="Phone" value={formdata.phonePre} />
+						<input type="text" className="form-control" onChange={iptFormdata("phone")} colnum="col-8" value={formdata.phone} />
+					</RowIpt>
+
+					{renderShop()}
 				</form>
 			</Modal.Body>
 
