@@ -10,7 +10,7 @@ import UserPutModal from "../modal/UserPutModal";
 import UserPwdModal from "../modal/UserPwdModal";
 import NavBread from "../../../components/universal/navBread/NavBread";
 
-import { selectUser } from "../../../features/authSlice";
+// import { selectUser } from "../../../features/authSlice";
 import {
   getObject,
   deleteObject,
@@ -28,7 +28,8 @@ export default function User() {
   const api = `/user/${id}`;
   const api_delete = "/User/" + id;
 
-  const curUser = useSelector(selectUser);
+  // const curUser = useSelector(selectUser);
+  const curRole = parseInt(localStorage.getItem("role"));
   const object = useSelector(selectObject(flagSlice));
 
   const rolePath = getRolePath();
@@ -62,11 +63,14 @@ export default function User() {
         <div className='text-right'>
           {
             // 如果比自己等级低 可删除
-          curUser._id !== object._id && (
+            curRole < object.role && (
             <>
             <button className='btn btn-danger mx-4' onClick={deleteDB}>
               <i className='bx bx-trash'></i>
             </button>
+          </>
+          )}
+
           <button className='btn btn-warning mx-3' onClick={() => setModalPwd(true)}> <i className='bx bx-lock-open'></i> </button>
           <UserPwdModal
             show={modalPwd}
@@ -74,8 +78,6 @@ export default function User() {
             object={object}
             flagSlice={flagSlice}
           />
-          </>
-          )}
 
           <button className='btn btn-info' onClick={() => setModalPut(true)}> <i className='bx bx-edit-alt'></i> </button>
           <UserPutModal
