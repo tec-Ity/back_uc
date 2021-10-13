@@ -30,11 +30,11 @@
     "react-scripts": "4.0.3",
     "web-vitals": "^1.1.2"
   },
-  "homepage": "./",
+  "homepage": ".",
   "scripts": {
     "dev": "react-scripts start",
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && echo ‘/* /index.html 200’ | cat >build/_redirects",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
