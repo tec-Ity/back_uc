@@ -1,12 +1,11 @@
 import { useEffect } from "react";
 import { useHistory } from "react-router";
-import { FormattedMessage } from "react-intl";
+// import { FormattedMessage } from "react-intl";
 import { useSelector, useDispatch } from "react-redux";
 
 import { selectObjects, getObjects } from "../../../features/objectsSlice";
 
 import { getRolePath } from "../../../js/conf/confUser";
-import NavBread from "../../../components/universal/navBread/NavBread";
 import ListPageHeader from "../../../components/basic/ListPageHeader";
 import UiVariety from "../../../components/ui/UiVariety";
 import PdCard from "../ui/PdCard";
@@ -15,6 +14,7 @@ import PdRow from "../ui/PdRow";
 const links = [{ label: "主页", to: "/home" }, { label: "产品列表" }];
 
 export default function Pds(props) {
+    const {isShop} = props
   const dispatch = useDispatch();
   const flagSlice = "pds";
   const api = "/Pds";

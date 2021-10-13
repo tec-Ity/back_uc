@@ -45,7 +45,7 @@ export default function WkerRouter() {
           <Pds />
         </Route>
         <Route path='/wker/pd/:id'>
-          <Pd />
+          <Pd/>
         </Route>
 
         <Route path='/wker/reload'>

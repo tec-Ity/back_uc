@@ -51,7 +51,9 @@ export default function CusSelect({
       //       theme.palette.getContrastText(theme.palette.background.paper),
       //   },
       // }}
-      // getOptionsLabel={(option) => option.label}
+      getOptionsLabel={(option) =>
+        typeof option?.label === "string" ? option.label : ""
+      }
       isOptionEqualToValue={(option, value) => option.id === value?.id}
       value={value}
       // getOptionSelected={(option) => option.id === value.id}

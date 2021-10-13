@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
-
+import CusSwitchBtn from "../../../components/basic/CusSwitchBtn";
 import {
   getObject,
   selectObject,
@@ -16,7 +16,7 @@ export default function Pd(props) {
   const flagSlice = "pd";
   const flagField = "object";
   const api = `/pd/${id}`;
-  
+
   const Pd = useSelector(selectObject(flagSlice));
 
   const [Key, setKey] = useState(1);
@@ -42,16 +42,16 @@ export default function Pd(props) {
   return (
     <div>
       <div className='form-inline my-3'>
-        <button
-          className='btn btn-outline-success mx-3'
-          onClick={() => setComponentKey(1)}>
-          Basic
-        </button>
-        <button
-          className='btn btn-outline-success mx-3'
-          onClick={() => setComponentKey(2)}>
-          Products
-        </button>
+        <CusSwitchBtn
+          label='Basic'
+          selected={Key === 1}
+          handleClick={() => setComponentKey(1)}
+        />
+        <CusSwitchBtn
+          label='Products'
+          selected={Key === 2}
+          handleClick={() => setComponentKey(2)}
+        />
       </div>
       {routeFunc()}
     </div>

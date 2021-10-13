@@ -26,8 +26,8 @@ const useStyle = makeStyles({
     bottom: 0,
     paddingLeft: "20px",
     paddingTop: "0",
-    fontWeight: "700",
-    fontSize: "20px",
+    fontWeight: "400",
+    fontSize: "16px",
     border: "2px solid #1d1d384d",
   },
 });

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
-
+import CusSwitchBtn from "../../../components/basic/CusSwitchBtn";
 import { getRolePath } from "../../../js/conf/confUser";
 import NavBread from "../../../components/universal/navBread/NavBread";
 
@@ -42,17 +42,17 @@ export default function Shop() {
       </NavBread>
       <div>
         <div className='form-inline my-3'>
-          <SwitchBtn
+          <CusSwitchBtn
             label='Basic'
             selected={Boolean(Comp === 1)}
             handleClick={() => setKeyComp(1)}
           />
-          <SwitchBtn
+          <CusSwitchBtn
             label='Service Areas'
             selected={Boolean(Comp === 2)}
             handleClick={() => setKeyComp(2)}
           />
-          <SwitchBtn
+          <CusSwitchBtn
             label='Products'
             selected={Boolean(Comp === 3)}
             handleClick={() => setKeyComp(3)}
@@ -68,20 +68,5 @@ export default function Shop() {
         )}
       </div>
     </>
-  );
-}
-
-export function SwitchBtn({ label, handleClick, selected }) {
-  return (
-    <button
-      className={
-        selected === true
-          ? "btn mx-3 btn-success"
-          : "btn mx-3 btn-outline-success"
-      }
-      type='button'
-      onClick={handleClick}>
-      {label}
-    </button>
   );
 }
