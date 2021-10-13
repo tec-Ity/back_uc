@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { get_DNS } from "../../../js/api";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { selectUser } from "../../../features/authSlice";
 // import CusSettingCart from "../../../components/basic/CusSettingCart";
 import makeStyles from "@mui/styles/makeStyles";
-
+import { postObject } from "../../../features/objectsSlice";
+import { useHistory } from "react-router";
+import { getRolePath } from "../../../js/conf/confUser";
 const useStyle = makeStyles({
   root: {
     paddingBottom: "40px",
@@ -55,9 +57,19 @@ const useStyle = makeStyles({
   },
 });
 
+const prodSyncSlice = "prods";
+const prodSyncApi = "/Prod";
 export default function PdCard(props) {
   const { object, clickEvent } = props;
   const classes = useStyle();
+  const dispatch = useDispatch();
+  const rolePath = getRolePath();
+  const hist = useHistory();
+  const curUser = useSelector(selectUser);
+  const status = useSelector((state) => state.objects.status);
+  const Prods = useSelector((state) => state.objects[prodSyncSlice]?.objects);
+  console.log(Prods);
+  const [justPosted, setJustPosted] = useState(false);
   const curRole = localStorage.getItem("role");
   let img_url = `${process.env.PUBLIC_URL}/favicon.ico`;
   if (object?.img_url) {
@@ -66,7 +78,26 @@ export default function PdCard(props) {
     img_url = get_DNS() + object.img_urls[0];
   }
   console.log(object);
-  const curUser = useSelector(selectUser);
+  console.log(curUser);
+  const syncProd = (e) => {
+    e.stopPropagation();
+    dispatch(
+      postObject({
+        flagSlice: prodSyncSlice,
+        api: prodSyncApi,
+        data: { Pd: object?._id, Shop: curUser.Shop },
+      })
+    );
+    setJustPosted(true);
+  };
+
+  useEffect(() => {
+    console.log(Prods);
+    if (justPosted === true) {
+      const prodId = Prods?.find((prod) => prod.Pd === object?._id)?._id;
+      prodId && hist.push(`/${rolePath}/prod/${prodId}`);
+    }
+  }, [Prods, hist, justPosted, object?._id, rolePath]);
 
   return (
     <>
@@ -91,9 +122,7 @@ export default function PdCard(props) {
                   已同步
                 </div>
               ) : (
-                <div
-                  className={classes.bottomBtn}
-                  onClick={(e) => e.stopPropagation()}>
+                <div className={classes.bottomBtn} onClick={syncProd}>
                   同步
                 </div>
               ))}

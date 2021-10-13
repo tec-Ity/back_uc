@@ -198,7 +198,7 @@ function CategListItem({
   const [categUpdateData, setCategUpdateData] = useState(initCategInfo);
   const [imgLocal, setImgLocal] = useState([]);
 
-  const handleSubmitUpdate = (e) => {
+  const handleSubmit = (e) => {
     e.stopPropagation();
     const formData = new FormData();
     formData.append(
@@ -345,7 +345,7 @@ function CategListItem({
         <div className={classes.btnGroup}>
           <CusBtnGroup
             modifying={modifying}
-            handleSubmitUpdate={handleSubmitUpdate}
+            handleSubmit={handleSubmit}
             handleCancel={handleCancel}
             handleDelete={handleDelete}
             handleEdit={handleEdit}
@@ -453,7 +453,7 @@ function CategListItemChild({
     }
   }, [justSubmitted, status]);
 
-  const handleSubmitUpdate = (e) => {
+  const handleSubmit = (e) => {
     e.stopPropagation();
     const formData = new FormData();
     formData.append(
@@ -627,14 +627,14 @@ function CategListItemChild({
           <CusBtnGroup
             secondary
             modifying={modifying}
-            handleSubmitUpdate={handleSubmitUpdate}
+            handleSubmit={handleSubmit}
             handleCancel={handleCancel}
             handleDelete={handleDelete}
             handleEdit={handleEdit}
           />
           {/* {modifying === true ? (
             <>
-              <div onClick={handleSubmitUpdate}>Done</div>
+              <div onClick={handleSubmit}>Done</div>
               <div onClick={handleCancel}>Cancle</div>
               <div onClick={handleDelete}>Del</div>
             </>

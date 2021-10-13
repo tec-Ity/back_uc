@@ -57,28 +57,28 @@ export const fetchOngoingOrderCount = createAsyncThunk(
 export const postObject = createAsyncThunk(
   "objects/postObject",
   async ({ flagSlice, api, data }, { getState, rejectWithValue }) => {
-    // console.log(formdata)
     const post_res = await axios_Prom(api, "POST", data);
     if (post_res.status === 200) {
-      const objs = [...getState().objects[flagSlice]?.objects] || [];
-      const newObj = post_res.data.object;
-      let i = 0;
-      for (; i < objs.length; i++) {
-        const obj = objs[i];
-        if (obj._id === newObj._id) {
-          objs[i] = newObj;
-          break;
-        }
-      }
-      let objects = [];
-      if (i < objs.length) {
-        objects = objs;
-      } else {
-        objects = [newObj, ...objs];
-      }
-      // objects.sort(sortBy("role"));
-      alert("添加成功");
-      return { flagSlice, objects };
+      alert("同步成功");
+      return { flagSlice, object: post_res.data.object };
+      //   const objs = [...getState().objects[flagSlice]?.objects] || [];
+      //   const newObj = post_res.data.object;
+      //   let i = 0;
+      //   for (; i < objs.length; i++) {
+      //     const obj = objs[i];
+      //     if (obj._id === newObj._id) {
+      //       objs[i] = newObj;
+      //       break;
+      //     }
+      //   }
+      //   let objects = [];
+      //   if (i < objs.length) {
+      //     objects = objs;
+      //   } else {
+      //     objects = [newObj, ...objs];
+      //   }
+      //   // objects.sort(sortBy("role"));
+      //   return { flagSlice, objects };
     } else {
       return rejectWithValue("postObject error info");
     }
@@ -211,8 +211,28 @@ export const objectsSlice = createSlice({
       state.status = "loading";
     },
     [postObject.fulfilled]: (state, action) => {
-      const { flagSlice, objects } = action.payload;
+      const { flagSlice, object } = action.payload;
+      console.log(object)
       state.status = "succeed";
+      const objs = state[flagSlice]?.objects || [];
+      console.log(objs)
+      const newObj = object;
+      let i = 0;
+      for (; i < objs.length; i++) {
+        const obj = objs[i];
+        if (obj._id === newObj._id) {
+          objs[i] = newObj;
+          break;
+        }
+      }
+      let objects = [];
+      if (i < objs.length) {
+        objects = objs;
+      } else {
+        objects = [newObj, ...objs];
+      }
+      // objects.sort(sortBy("role"));
+
       if (!state[flagSlice]) state[flagSlice] = {};
       state[flagSlice].objects = objects;
     },

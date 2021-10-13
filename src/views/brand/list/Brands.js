@@ -179,7 +179,7 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
   const [brandUpdateData, setBrandUpdateData] = useState(initBrandInfo);
   const [imgLocal, setImgLocal] = useState([]);
 
-  const handleSubmitUpdate = (e) => {
+  const handleSubmit = (e) => {
     e.stopPropagation();
     const formData = new FormData();
     formData.append(
@@ -327,14 +327,14 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
         <div className={classes.btnGroup}>
           <CusBtnGroup
             modifying={modifying}
-            handleSubmitUpdate={handleSubmitUpdate}
+            handleSubmit={handleSubmit}
             handleCancel={handleCancel}
             handleDelete={handleDelete}
             handleEdit={handleEdit}
           />
           {/* {modifying === true ? (
             <>
-              <div onClick={handleSubmitUpdate}>Done</div>
+              <div onClick={handleSubmit}>Done</div>
               <div onClick={handleCancel}>Cancle</div>
               <div onClick={handleDelete}>Del</div>
             </>
