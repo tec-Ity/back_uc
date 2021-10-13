@@ -30,6 +30,7 @@
     "react-scripts": "4.0.3",
     "web-vitals": "^1.1.2"
   },
+  "homepage": "./",
   "scripts": {
     "dev": "react-scripts start",
     "start": "react-scripts start",
