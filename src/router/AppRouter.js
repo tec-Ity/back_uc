@@ -10,10 +10,11 @@ import BserRouter from './BserRouter';
 import WkerRouter from './WkerRouter';
 
 export default function AppRouter(props) {
+    // console.log('AppRouter')
 	return (
 		<Switch>
 			<Route path="/home" ><HomePage /></Route>
-
+            
 			<Route path="/errpage" component={Errpage} />
 			
 			<Route path="/ower" component={OwerRouter} />

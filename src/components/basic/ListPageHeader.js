@@ -44,6 +44,7 @@ const useStyle = makeStyles({
 export default function ListPageHeader({
   showAddNew,
   showAddIcon = true,
+  showSearch = true,
   flagSlice,
   addLabel,
   links,
@@ -70,7 +71,7 @@ export default function ListPageHeader({
         )}
       </Breadcrumbs>
       <div className={classes.searchSection}>
-        <SearchInput flagSlice={flagSlice} api={api} />
+        {showSearch === true && <SearchInput flagSlice={flagSlice} api={api} />}
         {showAddIcon === true && (
           <div onClick={showAddNew} className={classes.addButton}>
             <AddIcon className={classes.AddIconStyle} />

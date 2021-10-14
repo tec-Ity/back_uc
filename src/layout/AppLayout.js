@@ -3,7 +3,11 @@ import { useState, useEffect, useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { IntlProvider } from "react-intl";
-import intlLang, { systemLangs, defaultLang, langLocale } from "../js/lang/confLang";
+import intlLang, {
+  systemLangs,
+  defaultLang,
+  langLocale,
+} from "../js/lang/confLang";
 
 import AppRouter from "../router/AppRouter";
 import AppHeaderPc from "./AppHeaderPc";
@@ -37,6 +41,8 @@ export default function AppLayout() {
         // 登录状态
         const pathname = window.location.pathname; // 浏览器url
         const curPageRolePath = pathname.split("/")[1]; // 浏览器想要访问的权限
+        // console.log(curPageRolePath)
+        // console.log(rolePath)
         /* 如果 应该跳转的URL 与 路由权限 不同 则跳转 */
         if (curPageRolePath !== rolePath) {
           hist.replace("/" + rolePath);
@@ -49,11 +55,12 @@ export default function AppLayout() {
   }, [curUser.role, dispatch, hist]);
 
   useEffect(() => {
-	  // 判断是手机还是电脑版
-	  window.addEventListener("resize", () => setInnerWidth(window.innerWidth));
-	  // 安全门在此处
+    // 判断是手机还是电脑版
+    window.addEventListener("resize", () => setInnerWidth(window.innerWidth));
+    // 安全门在此处
     AppCallback();
   }, [AppCallback]);
+
   const chooseLocale = () => {
     let lang = localStorage.getItem("lang");
     if (!lang) lang = navigator.language;
@@ -62,13 +69,13 @@ export default function AppLayout() {
       return intlLang[lang];
     }
     return defaultLang;
-	;
   };
   return (
     <>
       <IntlProvider locale={langLocale} messages={chooseLocale()}>
         {innerWidth >= threshold.pc_mb ? (
           <>
+            {/* {console.log('PC')} */}
             <AppHeaderPc lang={lang} setLang={setLang} />
             <div className='home_content'>
               <AppRouter />
@@ -76,6 +83,7 @@ export default function AppLayout() {
           </>
         ) : (
           <>
+            {/* {console.log('MB')} */}
             <AppHeaderMb />
             <AppRouter />
           </>

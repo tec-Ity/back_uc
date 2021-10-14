@@ -1,9 +1,9 @@
 import { Grid } from "@mui/material";
 import ListPageHeader from "../../components/basic/ListPageHeader";
 import { getRolePath } from "../../js/conf/confUser";
-import { ReactComponent as CountryIcon } from "../../components/icon/CountryIcon.svg";
-import { ReactComponent as RegionIcon } from "../../components/icon/RegionIcon.svg";
-import { ReactComponent as CityIcon } from "../../components/icon/cityIcon.svg";
+import { default as CountryIcon } from "../../components/icon/CountryIcon.svg";
+import { default as RegionIcon } from "../../components/icon/RegionIcon.svg";
+import { default as CityIcon } from "../../components/icon/cityIcon.svg";
 import { useHistory } from "react-router";
 import CusSettingCart from "../../components/basic/CusSettingCard";
 const links = [{ label: "主页", to: "/home" }, { label: "设置" }];
@@ -12,7 +12,7 @@ export default function Setting() {
   const hist = useHistory();
   return (
     <>
-      <ListPageHeader links={links} showAddIcon={false} />
+      <ListPageHeader links={links} showAddIcon={false} showSearch={false} />
       <Grid container justifyContent='space-around'>
         <Grid container item xs={4}>
           <CusSettingCart

@@ -1,17 +1,17 @@
-import { useState, useEffect, lazy } from "react";
+import { useState, useEffect,  } from "react";
 import { useHistory } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import { selectObjects, getObjects } from "../../../features/objectsSlice";
 
 import { getRolePath } from "../../../js/conf/confUser";
-
-import NavBread from "../../../components/universal/navBread/NavBread";
+import ShopPostModal from "../modal/ShopPostModal";
+// import NavBread from "../../../components/universal/navBread/NavBread";
 
 import UiCards from "../../../components/ui/UiCards";
 import ShopCard from "../ui/ShopCard";
 import ShopRow from "../ui/ShopRow";
 import ListPageHeader from "../../../components/basic/ListPageHeader";
-const ShopPostModal = lazy(() => import("../modal/ShopPostModal"));
+// const ShopPostModal = lazy(() => import("../modal/ShopPostModal"));
 
 const flagSlice = "shops";
 const api = "/Shops";

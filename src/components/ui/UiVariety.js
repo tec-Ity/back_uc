@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import UiCards from "./UiCards";
 import UiRows from "./UiRows";
 import makeStyles from "@mui/styles/makeStyles";
+import { default as listView } from "../icon/listView.svg";
+import { default as gridView } from "../icon/gridView.svg";
 import clsx from "clsx";
 const useStyle = makeStyles({
   root: {
@@ -62,7 +64,7 @@ export default function UiVariety(props) {
         return <div> Not exist this UI </div>;
     }
   };
-  let icon = `${process.env.PUBLIC_URL}/img/icon/`;
+  //   let icon = `${process.env.PUBLIC_URL}/img/icon/`;
   // gridView.svg`;
   return (
     <>
@@ -74,7 +76,7 @@ export default function UiVariety(props) {
           )}
           onClick={() => changeUi(0)}>
           <img
-            src={icon + "gridView.svg"}
+            src={gridView}
             className='img-neat'
             alt={"gridView"}
             style={{ width: "30px", height: "30px" }}
@@ -88,7 +90,7 @@ export default function UiVariety(props) {
           style={{ marginLeft: "30px" }}
           onClick={() => changeUi(1)}>
           <img
-            src={icon + "listView.svg"}
+            src={listView}
             className='img-neat'
             alt={"listView"}
             style={{ width: "30px", height: "30px" }}

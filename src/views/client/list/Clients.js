@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import { useHistory } from "react-router";
-import { FormattedMessage } from "react-intl";
+// import { FormattedMessage } from "react-intl";
 import { useSelector, useDispatch } from "react-redux";
 
 import { selectObjects, getObjects } from "../../../features/objectsSlice";
 
 import { getRolePath } from "../../../js/conf/confUser";
-import NavBread from "../../../components/universal/navBread/NavBread";
+// import NavBread from "../../../components/universal/navBread/NavBread";
 
 import UiVariety from "../../../components/ui/UiVariety";
 import ClientCard from "../ui/ClientCard";

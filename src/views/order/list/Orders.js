@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import SearchInput from "../../../components/universal/query/SearchInput";
+// import SearchInput from "../../../components/universal/query/SearchInput";
 import {
   selectObjects,
   selectQuery,

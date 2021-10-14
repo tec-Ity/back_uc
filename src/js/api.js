@@ -8,6 +8,7 @@ export const get_DNS = () => api_DNS;
 const fetchProm = (api, method, bodyObj) => {
   return new Promise(async (resolve) => {
     try {
+      //   console.log(api, method, bodyObj);
       const api_server = api_DNS + api_version + api;
       const token = localStorage.getItem("accessToken");
       const fetchObj = {
@@ -28,7 +29,7 @@ const fetchProm = (api, method, bodyObj) => {
       // console.log("result", result)
       resolve(result);
     } catch (error) {
-      console.log('fetchProm Error:', error);
+      console.log("fetchProm Error:", error);
       resolve({ status: 500, message: `[front] fetchProm Error` });
     }
   });
@@ -60,7 +61,6 @@ export const fetch_Prom = (api, method = "GET", bodyObj) => {
     }
   });
 };
-
 
 export const axiosProm = async (api, method, formData) => {
   return new Promise(async (resolve, reject) => {
@@ -97,12 +97,13 @@ export const axiosProm = async (api, method, formData) => {
           },
         });
       }
-      if(!result) return resolve({status: 600, message: '[front] axios parames error'});
+      if (!result)
+        return resolve({ status: 600, message: "[front] axios parames error" });
       // console.log(result)
       return resolve(result.data);
     } catch (e) {
       console.log(e);
-      return resolve({status: 600, message: '[front error] axiosProm'});
+      return resolve({ status: 600, message: "[front error] axiosProm" });
     }
   });
 };
@@ -133,7 +134,6 @@ export const axios_Prom = async (api, method = "GET", formData) => {
   });
 };
 
-
 export const refreshToken_Prom = () => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -160,5 +160,3 @@ export const refreshToken_Prom = () => {
     }
   });
 };
-
-

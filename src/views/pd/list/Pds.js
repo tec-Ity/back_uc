@@ -14,7 +14,7 @@ import PdRow from "../ui/PdRow";
 const links = [{ label: "主页", to: "/home" }, { label: "产品列表" }];
 
 export default function Pds(props) {
-    const {isShop} = props
+  // const {isShop} = props
   const dispatch = useDispatch();
   const flagSlice = "pds";
   const api = "/Pds";

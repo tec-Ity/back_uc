@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Grid } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
 import CusInput from "../../../components/basic/CusInput";
-import CusSelect from "../../../components/basic/CusSelect";
+// import CusSelect from "../../../components/basic/CusSelect";
 import api_DNS from "../../../js/_dns";
 const useStyle = makeStyles({
   root: {

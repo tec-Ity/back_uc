@@ -45,7 +45,7 @@ export default function AppHeaderPc(props) {
       setInnerWidth("");
     };
   }, []);
-
+// console.log('Header')
   return (
     <div className={`sidebar ${spreadbar}`}>
       <div className='logo_content'>
