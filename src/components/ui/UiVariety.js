@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import UiCards from "./UiCards";
 import UiRows from "./UiRows";
 import makeStyles from "@mui/styles/makeStyles";
-import { default as listView } from "../icon/listView.svg";
-import { default as gridView } from "../icon/gridView.svg";
+import { ReactComponent as ListView } from "../icon/listView.svg";
+import { ReactComponent as GridView } from "../icon/gridView.svg";
 import clsx from "clsx";
 const useStyle = makeStyles({
   root: {
@@ -75,10 +75,10 @@ export default function UiVariety(props) {
             activeBtn === 0 && classes.activeBtnStyle
           )}
           onClick={() => changeUi(0)}>
-          <img
-            src={gridView}
-            className='img-neat'
-            alt={"gridView"}
+          <GridView
+            // src={gridView}
+            // className='img-neat'
+            // alt={"gridView"}
             style={{ width: "30px", height: "30px" }}
           />
         </div>
@@ -89,10 +89,10 @@ export default function UiVariety(props) {
           )}
           style={{ marginLeft: "30px" }}
           onClick={() => changeUi(1)}>
-          <img
-            src={listView}
-            className='img-neat'
-            alt={"listView"}
+          <ListView
+            // src={listView}
+            // className='img-neat'
+            // alt={"listView"}
             style={{ width: "30px", height: "30px" }}
           />
         </div>

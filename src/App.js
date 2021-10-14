@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, Suspense } from "react";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter  } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import AppLayout from "./layout/AppLayout";
 import "./App.css";
@@ -31,10 +31,10 @@ export default function App() {
   }, [getOngoingOrderCount]);
 
   return (
-    <BrowserRouter>
+    <BrowserRouter >
       <Suspense fallback={<>loading</>}>
         <AppLayout />
       </Suspense>
-    </BrowserRouter>
+    </BrowserRouter >
   );
 }

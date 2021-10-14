@@ -8,6 +8,7 @@ export const get_DNS = () => api_DNS;
 const fetchProm = (api, method, bodyObj) => {
   return new Promise(async (resolve) => {
     try {
+        if(!api) return resolve({ status: 400, message: "api 不能为空"});
       //   console.log(api, method, bodyObj);
       const api_server = api_DNS + api_version + api;
       const token = localStorage.getItem("accessToken");
@@ -27,10 +28,10 @@ const fetchProm = (api, method, bodyObj) => {
       const resPromise = await fetch(api_server, fetchObj);
       const result = await resPromise.json();
       // console.log("result", result)
-      resolve(result);
+      return resolve(result);
     } catch (error) {
       console.log("fetchProm Error:", error);
-      resolve({ status: 500, message: `[front] fetchProm Error` });
+      return resolve({ status: 500, message: `[front] fetchProm Error` });
     }
   });
 };
@@ -38,6 +39,7 @@ const fetchProm = (api, method, bodyObj) => {
 export const fetch_Prom = (api, method = "GET", bodyObj) => {
   return new Promise(async (resolve) => {
     try {
+        if(!api) return resolve({ status: 400, message: "api 不能为空"});
       method = method.toUpperCase();
       let result = await fetchProm(api, method, bodyObj);
       //unauthorized user
@@ -65,6 +67,7 @@ export const fetch_Prom = (api, method = "GET", bodyObj) => {
 export const axiosProm = async (api, method, formData) => {
   return new Promise(async (resolve, reject) => {
     try {
+        if(!api) return resolve({ status: 400, message: "api 不能为空"});
       const api_server = api_DNS + api_version + api;
       const token = localStorage.getItem("accessToken");
       let result = null;
@@ -110,6 +113,7 @@ export const axiosProm = async (api, method, formData) => {
 export const axios_Prom = async (api, method = "GET", formData) => {
   return new Promise(async (resolve, reject) => {
     try {
+        if(!api) return resolve({ status: 400, message: "api 不能为空"});
       method = method.toUpperCase();
       let result = await axiosProm(api, method, formData);
       //unauthorized user
