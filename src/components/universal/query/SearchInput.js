@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { Children, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   setQuery,
@@ -91,20 +91,6 @@ export default function SearchInput(props) {
   }, [dispatch, flagSlice]);
 
   return (
-    // <OutlinedInput
-    //   style={{ display: hidden === true ? "none" : "" }}
-    //   size='small'
-    //   variant='outlined'
-    //   classes={{ root: classes.root }}
-    //   onChange={onChangeSearch}
-    //   placeholder={placeholder}
-    //   value={search}
-    //   endAdornment={
-    //     <InputAdornment position='end'>
-    //       <Magnifier className={classes.magnifierStyle} />
-    //     </InputAdornment>
-    //   }
-    // />
     <div
       className={classes.inputBox}
       style={{ display: hidden === true ? "none" : "" }}>

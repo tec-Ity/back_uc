@@ -9,7 +9,7 @@ const useStyle = makeStyles({
   inputlabel: {
     // border:'1px solid',
     fontFamily: "Montserrat",
-    fontSize:'14px',
+    fontSize: "14px",
     padding: "0 2px",
     lineHeight: "1em",
     backgroundColor: "#fff",
@@ -31,15 +31,23 @@ const useStyle = makeStyles({
     border: "2px solid #1d1d384d",
   },
 });
-export default function CusInput({ label, value, handleChange, disabled }) {
+export default function CusInput({
+  label,
+  value,
+  handleChange,
+  disabled,
+  ref,
+  autoCompleteParam,
+}) {
   const classes = useStyle();
   return (
-    <div className={classes.inputBox}>
+    <div className={classes.inputBox} ref={ref}>
       <input
-        disabled={disabled}
         value={value}
-        className={classes.inputStyle}
         onChange={handleChange}
+        {...autoCompleteParam}
+        disabled={disabled}
+        className={classes.inputStyle}
       />
       <label className={classes.inputlabel}>{label}</label>
     </div>

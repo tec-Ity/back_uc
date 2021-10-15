@@ -2,15 +2,22 @@ import React, { useState, useEffect } from "react";
 import { Grid } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
 import CusInput from "../../../components/basic/CusInput";
-// import CusSelect from "../../../components/basic/CusSelect";
+import CusSelectSearch from "../../../components/basic/CusSelectSearch";
+import { useSelector, useDispatch } from "react-redux";
+import { getObjects } from "../../../features/objectsSlice";
 import api_DNS from "../../../js/_dns";
 const useStyle = makeStyles({
   root: {
     "& > div": { padding: "10px 5px" },
   },
 });
+const brandSlice = "brands";
+const brandApi = "/Brands";
 export default function PdBasic({ Pd }) {
   const classes = useStyle();
+  const dispatch = useDispatch();
+  const brands = useSelector((state) => state.objects[brandSlice]?.objects);
+  console.log(brands);
   console.log(Pd);
   //   const initPdInfo = Pd
   //     ? {
@@ -31,7 +38,7 @@ export default function PdBasic({ Pd }) {
     setPdInfo({
       code: Pd.code || "",
       name: Pd.nome || "",
-      brand: Pd.brand || {}, //code id
+      brand: Pd.Brand || { code: "", id: "" }, //code id
       nation: Pd.Nation || {}, //code nome
       categ2: Pd.Categ || {}, //code nome
       categ1: Pd.Categ?.Categ_far || {}, //code nome
@@ -41,11 +48,15 @@ export default function PdBasic({ Pd }) {
       desp: Pd.desp || "",
     });
   }, [Pd]);
+  useEffect(() => {
+    dispatch(getObjects({ flagSlice: brandSlice, api: brandApi }));
+  }, [dispatch]);
   return (
     <Grid container className={classes.root}>
       <Grid item xs={12}>
         {Pd.img_urls?.map((img) => (
           <img
+            key={img}
             src={api_DNS + img}
             alt={Pd?.nome}
             style={{
@@ -57,7 +68,6 @@ export default function PdBasic({ Pd }) {
           />
         ))}
       </Grid>
-      {/* <Grid item xs={6}></Grid> */}
       {/* code */}
       <Grid item xs={6}>
         <CusInput label='Code' disabled value={pdInfo.code} />
@@ -68,11 +78,13 @@ export default function PdBasic({ Pd }) {
       </Grid>
       {/* brand */}
       <Grid item xs={6}>
-        {/* <CusSelect
+        <CusSelectSearch
           label='Brand'
-          value={{ id: pdInfo.brand?._id, label: pdInfo.brand?.code }}
-        /> */}
-        <CusInput label='Brand' value={pdInfo.brand?.code} />
+          flagSlice={brandSlice}
+          api={brandApi}
+          defaultSel={pdInfo.brand?.code}
+        />
+        {/* <CusInput label='Brand' value={pdInfo.brand?.code} /> */}
       </Grid>
       {/* country */}
       <Grid item xs={6}>

@@ -26,8 +26,8 @@ const useStyle = makeStyles({
     bottom: 0,
     paddingLeft: "20px",
     paddingTop: "0",
-    fontWeight: "700",
-    fontSize: "20px",
+    fontWeight: "400",
+    fontSize: "16px",
     border: "2px solid #1d1d384d",
   },
 });
@@ -42,15 +42,6 @@ export default function CusSelect({
   const classes = useStyle();
   return (
     <Autocomplete
-      // sx={{
-      //   display: "inline-block",
-      //   "& input": {
-      //     width: 200,
-      //     bgcolor: "background.paper",
-      //     color: (theme) =>
-      //       theme.palette.getContrastText(theme.palette.background.paper),
-      //   },
-      // }}
       getOptionsLabel={(option) =>
         typeof option?.label === "string" ? option.label : ""
       }
