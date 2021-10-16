@@ -38,7 +38,6 @@ export default function User() {
   const [modalPwd, setModalPwd] = useState(false);
 
   const deleteDB = () => {
-    console.log(1);
     dispatch(deleteObject({ flagSlice, api: api_delete, id }));
     hist.replace(`/${rolePath}/users`);
   };

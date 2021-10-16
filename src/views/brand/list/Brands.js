@@ -312,7 +312,6 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
                   imgs: e.target.files,
                 }));
                 const imgs = e.target.files;
-                console.log(e.target.files);
                 const imgLocalPath = [];
                 for (let i = 0; i < imgs.length; i++) {
                   const img = URL.createObjectURL(imgs[i]);
@@ -409,7 +408,6 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
                 }))
               }
             />
-            {console.log(brandUpdateData)}
           </Grid>
         </Grid>
       )}

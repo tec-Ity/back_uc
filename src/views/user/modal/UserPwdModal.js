@@ -22,7 +22,6 @@ export default function UserPutModal(props) {
   const [formdata, setFormdata] = useState({pwd: '', pwdConfirm: ''}); // 创建的数据
 
   const iptFormdata = (type) => (e) =>{
-                console.log(type)
                 setFormdata((pre) => ({ ...pre, [type]: e.target.value }));
   }
 

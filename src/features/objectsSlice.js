@@ -21,8 +21,9 @@ export const getObjects = createAsyncThunk(
       const objs = getState().objects[flagSlice]?.objects || [];
       let getObjs = [...res.data.objects];
       const objects = isReload ? getObjs : [...objs, ...getObjs];
+      const pageNum = (res.data.pagesize && res.data.count)? Math.ceil(res.data.count / res.data.pagesize): 0;
       // console.log(objects);
-      return { flagSlice, objects };
+      return { flagSlice, objects, pageNum};
     } else {
       return rejectWithValue("getObjects error info");
       // return rejectWithValue({flagSlice, info:'my error info'});
@@ -187,10 +188,11 @@ export const objectsSlice = createSlice({
       state.status = "loading";
     },
     [getObjects.fulfilled]: (state, action) => {
-      const { flagSlice, objects } = action.payload;
+      const { flagSlice, objects, pageNum } = action.payload;
       state.status = "succeed";
       if (!state[flagSlice]) state[flagSlice] = {};
       state[flagSlice].objects = objects;
+      state[flagSlice].pageNum = pageNum;
     },
     [getObjects.rejected]: (state, action) => {
       state.errMsg = action.error.message;
@@ -212,10 +214,10 @@ export const objectsSlice = createSlice({
     },
     [postObject.fulfilled]: (state, action) => {
       const { flagSlice, object } = action.payload;
-      console.log(object)
+      // console.log(object)
       state.status = "succeed";
       const objs = state[flagSlice]?.objects || [];
-      console.log(objs)
+      // console.log(objs)
       const newObj = object;
       let i = 0;
       for (; i < objs.length; i++) {
@@ -271,11 +273,10 @@ export const objectsSlice = createSlice({
       if (!state[flagSlice]) state[flagSlice] = {};
       if (isList) {
         let i = 0;
-        console.log(11);
         for (; i < state[flagSlice].objects.length; i++) {
           if (String(state[flagSlice].objects[i]?._id) === String(id)) break;
         }
-        console.log(i);
+        // console.log(i);
         if (i < state[flagSlice].objects.length)
           state[flagSlice].objects.splice(i, 1);
         //splice returns modified array
@@ -327,6 +328,13 @@ export const selectObject = (flagSlice) => (state) => {
   }
 };
 
+export const selectPageNum = (flagSlice) => (state) => {
+  if (state.objects[flagSlice] && state.objects[flagSlice].pageNum) {
+    return state.objects[flagSlice].pageNum;
+  } else {
+    return null;
+  }
+};
 export const selectObjects = (flagSlice) => (state) => {
   if (state.objects[flagSlice] && state.objects[flagSlice].objects) {
     return state.objects[flagSlice].objects;

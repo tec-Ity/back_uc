@@ -3,7 +3,9 @@ import { Grid } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
 import CusInput from "../../../components/basic/CusInput";
 import CusSelectSearch from "../../../components/basic/CusSelectSearch";
-import { useSelector, useDispatch } from "react-redux";
+import { 
+  // useSelector,
+  useDispatch } from "react-redux";
 import { getObjects } from "../../../features/objectsSlice";
 import api_DNS from "../../../js/_dns";
 const useStyle = makeStyles({
@@ -16,9 +18,7 @@ const brandApi = "/Brands";
 export default function PdBasic({ Pd }) {
   const classes = useStyle();
   const dispatch = useDispatch();
-  const brands = useSelector((state) => state.objects[brandSlice]?.objects);
-  console.log(brands);
-  console.log(Pd);
+  // const brands = useSelector((state) => state.objects[brandSlice]?.objects);
   //   const initPdInfo = Pd
   //     ? {
   //         code: Pd.code || "",

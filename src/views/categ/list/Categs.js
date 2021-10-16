@@ -330,7 +330,6 @@ function CategListItem({
                   imgs: e.target.files,
                 }));
                 const imgs = e.target.files;
-                console.log(e.target.files);
                 const imgLocalPath = [];
                 for (let i = 0; i < imgs.length; i++) {
                   const img = URL.createObjectURL(imgs[i]);
@@ -415,7 +414,6 @@ function CategListItem({
                 }))
               }
             />
-            {console.log(categUpdateData)}
           </Grid>
         </Grid>
       )}
@@ -558,7 +556,6 @@ function CategListItemChild({
                 imgs: e.target.files,
               }));
               const imgs = e.target.files;
-              console.log(e.target.files);
               const imgLocalPath = [];
               for (let i = 0; i < imgs.length; i++) {
                 const img = URL.createObjectURL(imgs[i]);

@@ -144,7 +144,6 @@ function CityList(props) {
   const { addNew, closeAddNew } = props;
   const classes = useStyle();
   const citys = useSelector((state) => state.objects[flagSlice]?.objects);
-  console.log(citys);
   return (
     <Grid container className={classes.listGridContainer}>
       {addNew === true && (
@@ -312,7 +311,6 @@ function CityListItem({ city, index, addNew = false, closeAddNew }) {
                   imgs: e.target.files,
                 }));
                 const imgs = e.target.files;
-                console.log(e.target.files);
                 const imgLocalPath = [];
                 for (let i = 0; i < imgs.length; i++) {
                   const img = URL.createObjectURL(imgs[i]);
@@ -416,7 +414,6 @@ function CityListItem({ city, index, addNew = false, closeAddNew }) {
                 }))
               }
             />
-            {console.log(cityUpdateData)}
           </Grid>
         </Grid>
       )}
