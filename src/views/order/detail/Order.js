@@ -159,7 +159,6 @@ export default function Order() {
       dispatch(cleanField({ flagSlice, flagField }));
     };
   }, [api, dispatch]);
-  console.log(order);
   return (
     <Container className={classes.root}>
       {/* bread */}
@@ -240,7 +239,6 @@ function OrderStatusSection(props) {
 function OrderInfoSection({ order }) {
   const classes = useStyle();
   const [showMore, setShowMore] = useState(false);
-  console.log(order);
   const orderInfoObjsLess = order
     ? [
         { key: "商铺", value: order.Shop?.code },

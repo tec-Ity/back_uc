@@ -309,7 +309,6 @@ function CityListItem({ area, index, addNew = false, closeAddNew }) {
                   imgs: e.target.files,
                 }));
                 const imgs = e.target.files;
-                console.log(e.target.files);
                 const imgLocalPath = [];
                 for (let i = 0; i < imgs.length; i++) {
                   const img = URL.createObjectURL(imgs[i]);
@@ -411,7 +410,6 @@ function CityListItem({ area, index, addNew = false, closeAddNew }) {
                 }))
               }
             />
-            {console.log(areaUpdateData)}
           </Grid>
         </Grid>
       )}

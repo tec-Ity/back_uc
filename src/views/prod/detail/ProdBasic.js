@@ -11,7 +11,6 @@ const useStyle = makeStyles({
 });
 export default function ProdBasic({ Prod }) {
   const classes = useStyle();
-  console.log(Prod);
   //   const initProdInfo = Prod
   //     ? {
   //         code: Prod.code || "",

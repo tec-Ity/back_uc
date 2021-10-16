@@ -21,7 +21,6 @@ export default function ShopAreas(props) {
   const cita_flagSlice = "citas";
   const Citas = useSelector(selectObjects(cita_flagSlice));
   const [searchValue, setSearchValue] = useState("");
-  console.log(Citas);
   return (
     <div>
       <ServeCitaNew Citas={Citas} shopId={Shop._id} api={api} />
@@ -70,7 +69,6 @@ function ServeCitaRow({ flagSlice, serveCita = {}, search, api }) {
       })
     );
   };
-  console.log(serveCita);
   return (
     <Grid
       container
@@ -142,7 +140,6 @@ function ServeCitaNew(props) {
   const [selectedId, setSelectedId] = useState(null);
   const [priceShip, setPriceShip] = useState("");
 
-  console.log(selectedId);
   const handleSubmit = () => {
     if (selectedId && priceShip) {
       dispatch(
