@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import makeStyles from "@mui/styles/makeStyles";
 import { Autocomplete } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  setQuery,
-  selectQuery,
+  //   setQuery,
+  //   selectQuery,
   getObjects,
   unObjectsSlice,
 } from "../../features/objectsSlice";
@@ -38,48 +38,54 @@ const useStyle = makeStyles({
     border: "2px solid #1d1d384d",
   },
 });
-export default function CusSelect({
+export default function CusSelectSearch({
   label,
-  value,
+  optionLabelType = "code",
   flagSlice,
+  populateObjs = null,
   api,
   placeholder,
   defaultSel,
-  handleChange,
   disabled,
-  options = [],
-//   handleSelect,
+  handleSelect,
 }) {
   const classes = useStyle();
   const dispatch = useDispatch();
-  const search = useSelector(selectQuery(flagSlice))?.search || "";
+  //   const search = useSelector(selectQuery(flagSlice))?.search || "";
+  const objects = useSelector((state) => state.objects[flagSlice]?.objects);
+  const [inputValue, setInputValue] = useState(defaultSel || "");
 
-  const handleSelect = (e, val) => {
-    // const val = e.target.value;
-    dispatch(
-      setQuery({ flagSlice, query: { key: "search", val }, isReload: true })
-    );
-    // // 如果找到完全匹配的code
-    // if (matchSearchCode) matchSearchCode(val);
+  //on select autocompelete option
+  const handleSelectOption = (e, val) => {
+    handleSelect(val);
   };
-  // 根据本身 filter 的变化, 更新 reducer 中对应查找的数据 (如果加载此组件， 则不用在父组件中加载)
-  useEffect(() => {
-    dispatch(getObjects({ flagSlice, api, isReload: true }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search]);
-  // 根据父组件 defaultSel 的变化 及时更新 recucer 中的 filter, (比如点击卡片 search input 会变为 obj.code)
+
+  //on inputvalue change
+  const handleChangeInputValue = useCallback(
+    (e, val) => {
+      //e passed null at first time with no reason
+      if (e) {
+        setInputValue(val);
+        dispatch(
+          getObjects({
+            flagSlice,
+            api: populateObjs
+              ? api + "?populateObjs=" + JSON.stringify(populateObjs)
+              : api,
+            isReload: true,
+          })
+        );
+      }
+    },
+    [api, dispatch, flagSlice, populateObjs]
+  );
+
+  //init default selection provided by parent component
   useEffect(() => {
     if (defaultSel && typeof defaultSel === "string") {
-      dispatch(
-        setQuery({
-          flagSlice,
-          query: { key: "search", val: defaultSel },
-          isReload: true,
-        })
-      );
+      handleChangeInputValue("init", defaultSel);
     }
-  }, [dispatch, defaultSel, flagSlice]);
-  // console.log(search);
+  }, [defaultSel, handleChangeInputValue]);
 
   // 卸载
   useEffect(() => {
@@ -90,14 +96,22 @@ export default function CusSelect({
   return (
     <Autocomplete
       getOptionsLabel={(option) =>
-        typeof option?.code === "string" ? option.code : ""
+        typeof option?.label === "string" ? option.label : ""
       }
       isOptionEqualToValue={(option, value) => option.id === value?.id}
-      value={value}
+      inputValue={inputValue}
       // getOptionSelected={(option) => option.id === value.id}
-      onChange={(e, val) => handleSelect(e, val)}
-      id='custom-input-demo'
-      options={options}
+      onChange={handleSelectOption}
+      onInputChange={handleChangeInputValue}
+      id={"custom-input-demo" + flagSlice}
+      options={
+        objects
+          ? objects.map((obj) => ({
+              id: obj._id,
+              label: obj[optionLabelType],
+            }))
+          : []
+      }
       renderInput={(params) => (
         <div ref={params.InputProps.ref} className={classes.inputBox}>
           <input

@@ -83,6 +83,7 @@ export default function PdBasic({ Pd }) {
           flagSlice={brandSlice}
           api={brandApi}
           defaultSel={pdInfo.brand?.code}
+          handleSelect={(val)=>console.log(val)}
         />
         {/* <CusInput label='Brand' value={pdInfo.brand?.code} /> */}
       </Grid>
