@@ -23,6 +23,7 @@ const useStyle = makeStyles({
 });
 
 export default function UiVariety(props) {
+  const { propsCard, UiRow, objects, clickEvent } = props;
   const classes = useStyle();
   const styleUi = {
     init: "card",
@@ -34,7 +35,6 @@ export default function UiVariety(props) {
   //     "btn-outline-success",
   //   ]);
   const [activeBtn, setActiveBtn] = useState(0);
-  const { propsCard, UiRow, objects, clickEvent } = props;
   const changeUi = (iBtn) => {
     // 变化样式组件
     setKeyUi(styleUi.arr[iBtn]);

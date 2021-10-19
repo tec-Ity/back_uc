@@ -48,36 +48,45 @@ export default function CusSelectSearch({
   defaultSel,
   disabled,
   handleSelect,
+  queryUrl = "",
 }) {
   const classes = useStyle();
   const dispatch = useDispatch();
   //   const search = useSelector(selectQuery(flagSlice))?.search || "";
   const objects = useSelector((state) => state.objects[flagSlice]?.objects);
   const [inputValue, setInputValue] = useState(defaultSel || "");
-
   //on select autocompelete option
   const handleSelectOption = (e, val) => {
     handleSelect(val);
   };
-
+  //   console.log(queryUrl);
   //on inputvalue change
+//   console.log(queryUrl);
+//   console.log("flag", flagSlice);
+//   console.log(objects);
   const handleChangeInputValue = useCallback(
     (e, val) => {
       //e passed null at first time with no reason
       if (e) {
         setInputValue(val);
-        dispatch(
-          getObjects({
-            flagSlice,
-            api: populateObjs
-              ? api + "?populateObjs=" + JSON.stringify(populateObjs)
-              : api,
-            isReload: true,
-          })
-        );
+        flagSlice &&
+          dispatch(
+            getObjects({
+              flagSlice,
+              api:
+                api +
+                "?search=" +
+                val +
+                queryUrl +
+                (populateObjs
+                  ? "&populateObjs=" + JSON.stringify(populateObjs)
+                  : ""),
+              isReload: true,
+            })
+          );
       }
     },
-    [api, dispatch, flagSlice, populateObjs]
+    [api, dispatch, flagSlice, populateObjs, queryUrl]
   );
 
   //init default selection provided by parent component
@@ -95,15 +104,16 @@ export default function CusSelectSearch({
   }, [dispatch, flagSlice]);
   return (
     <Autocomplete
-      getOptionsLabel={(option) =>
-        typeof option?.label === "string" ? option.label : ""
-      }
       isOptionEqualToValue={(option, value) => option.id === value?.id}
+      //   getOptionsLabel={(option) =>
+      //     typeof option?.label === "string" ? option.label : ""
+      //   }
       inputValue={inputValue}
-      // getOptionSelected={(option) => option.id === value.id}
       onChange={handleSelectOption}
       onInputChange={handleChangeInputValue}
-      id={"custom-input-demo" + flagSlice}
+      filterOptions={(x) => x}
+      id={"custom-input-demo" + flagSlice + api}
+      clearOnBlur={false}
       options={
         objects
           ? objects.map((obj) => ({

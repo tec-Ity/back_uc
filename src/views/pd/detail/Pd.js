@@ -10,22 +10,32 @@ import {
 
 import PdBasic from "./PdBasic";
 import PdProds from "./PdProds";
+const flagSlice = "pd";
+const flagField = "object";
+const populateObjs = [
+  {
+    path: "Categ",
+    select: "Categ_far code",
+    populate: { path: "Categ_far", select: "code" },
+  },
+  { path: "Brand", select: "code nome" },
+  { path: "Nation", select: "code nome" },
+  { path: "Prods", populate: { path: "Shop", select: "code nome" } },
+];
 export default function Pd(props) {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const flagSlice = "pd";
-  const flagField = "object";
   const api = `/pd/${id}`;
 
   const Pd = useSelector(selectObject(flagSlice));
-
+  //   console.log(Pd);
   const [Key, setKey] = useState(1);
   const routeFunc = () => {
     switch (Key) {
       case 1:
-        return <PdBasic Pd={Pd} />;
+        return <PdBasic Pd={Pd} flagSlice={flagSlice} api={api} />;
       default:
-        return <PdProds />;
+        return <PdProds prods={Pd.Prods} />;
     }
   };
 
@@ -34,7 +44,12 @@ export default function Pd(props) {
   };
 
   useEffect(() => {
-    dispatch(getObject({ flagSlice, api }));
+    dispatch(
+      getObject({
+        flagSlice,
+        api: api + "?populateObjs=" + JSON.stringify(populateObjs),
+      })
+    );
     return () => {
       dispatch(cleanField({ flagSlice, flagField }));
     };

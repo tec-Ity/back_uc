@@ -104,6 +104,9 @@ export const postObject = createAsyncThunk(
 export const putObject = createAsyncThunk(
   "objects/putObject",
   async ({ flagSlice, api, data, isList = false }, { rejectWithValue }) => {
+      console.log(22)
+    //   console.log(data)
+      console.log(api)
     const put_res = await axios_Prom(api, "PUT", data);
     console.log(put_res);
     if (put_res.status === 200) {

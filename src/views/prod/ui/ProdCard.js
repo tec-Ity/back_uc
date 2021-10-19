@@ -9,6 +9,7 @@ export default function ProdCard(props) {
   } else if (object?.img_urls?.length > 0) {
     img_url = get_DNS() + object.img_urls[0];
   }
+  console.log(img_url);
   return (
     <>
       {object ? (
@@ -22,7 +23,8 @@ export default function ProdCard(props) {
           <div className='card-body'>
             <h5 className='card-title'>{object.code}</h5>
             <p className='card-text'>{object.nome}</p>
-            <p className='card-text'>    
+            <p>{object.Shop?.nome}</p>
+            <p className='card-text'>
               {object.price_max === object.price_min
                 ? object.price_min
                 : object.price_min + "~" + object.price_max}

@@ -7,10 +7,19 @@ import {
   selectObject,
   cleanField,
 } from "../../../features/objectsSlice";
-
+import ProdAttr from "./ProdAttr";
 import ProdBasic from "./ProdBasic";
 import ProdSku from "./ProdSku";
-
+const populateObjs = [
+  {
+    path: "Categ",
+    select: "Categ_far code",
+    populate: { path: "Categ_far", select: "code" },
+  },
+  { path: "Brand", select: "code nome" },
+  { path: "Attrs", select: "nome options Prod" },
+  { path: "Skus", select: "Prod attrs " },
+];
 export default function Prod(props) {
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -24,9 +33,14 @@ export default function Prod(props) {
   const routeFunc = () => {
     switch (Key) {
       case 1:
-        return <ProdBasic Prod={Prod} />;
+        return <ProdBasic Prod={Prod} api={api} />;
       case 2:
-        return <ProdSku Skus={Prod?.Skus} />;
+        return (
+          <>
+            <ProdAttr Attrs={Prod?.Attrs} prodId={id} flagSlice={flagSlice} />
+            <ProdSku Skus={Prod?.Skus} Attrs={Prod?.Attrs} api={api} />
+          </>
+        );
       default:
         // return <ProdProds />;
         return "";
@@ -38,11 +52,17 @@ export default function Prod(props) {
   };
 
   useEffect(() => {
-    dispatch(getObject({ flagSlice, api }));
+    dispatch(
+      getObject({
+        flagSlice,
+        api: api + "?populateObjs=" + JSON.stringify(populateObjs),
+      })
+    );
     return () => {
       dispatch(cleanField({ flagSlice, flagField }));
     };
   }, [api, dispatch]);
+
   return (
     <div>
       <div className='form-inline my-3'>
@@ -52,7 +72,7 @@ export default function Prod(props) {
           handleClick={() => setComponentKey(1)}
         />
         <CusSwitchBtn
-          label='Products'
+          label='Skus'
           selected={Key === 2}
           handleClick={() => setComponentKey(2)}
         />

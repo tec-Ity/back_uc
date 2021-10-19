@@ -12,6 +12,7 @@ import { ReactComponent as EditSec } from "../icon/editBlack.svg";
 const useStyle = makeStyles({
   btnGroup: {
     display: "flex",
+    // alignItems: "center",
     paddingRight: "5px",
     "& > div": {
       "&:hover": {
@@ -21,6 +22,9 @@ const useStyle = makeStyles({
       width: "30px",
       margin: "5px",
     },
+  },
+  deleteRed: {
+    "& rect": { fill: "#d83535" },
   },
 });
 
@@ -45,7 +49,11 @@ export default function CusBtnGroup(props) {
             {secondary === true ? <CancelSec /> : <Cancel />}
           </div>
           <div onClick={handleDelete}>
-            {secondary === true ? <DeleteSec /> : <Delete />}
+            {secondary === true ? (
+              <DeleteSec />
+            ) : (
+              <Delete className={classes.deleteRed} />
+            )}
           </div>
         </>
       ) : (
@@ -54,7 +62,11 @@ export default function CusBtnGroup(props) {
             {secondary === true ? <EditSec /> : <Edit />}
           </div>
           <div onClick={handleDelete}>
-            {secondary === true ? <DeleteSec /> : <Delete />}
+            {secondary === true ? (
+              <DeleteSec />
+            ) : (
+              <Delete className={classes.deleteRed} />
+            )}
           </div>
         </>
       )}
