@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import makeStyles from "@mui/styles/makeStyles";
 import { Autocomplete } from "@mui/material";
 const useStyle = makeStyles({
@@ -18,6 +18,7 @@ const useStyle = makeStyles({
     left: "10px",
     fontWeight: "700",
     color: "#1d1d384d",
+    fontSize: "14px"
   },
   inputStyle: {
     width: "100%",
@@ -34,21 +35,32 @@ const useStyle = makeStyles({
 export default function CusSelect({
   label,
   value,
-  handleChange,
   disabled,
   options = [],
   handleSelect,
+  placeholder,
 }) {
   const classes = useStyle();
+  const [vauleUpdate, setVauleUpdate] = useState(value || "");
+  //init input value to prop value
+  React.useEffect(() => {
+    setVauleUpdate(value);
+  }, [value]);
+  const handleInputChange = (val) => {
+    setVauleUpdate(val);
+  };
   return (
     <Autocomplete
-    //   getOptionsLabel={(option) =>
-    //     typeof option?.label === "string" ? option.label : ""
-    //   }
+      //   getOptionsLabel={(option) =>
+      //     typeof option?.label === "string" ? option.label : ""
+      //   }
+      disabled={disabled}
       isOptionEqualToValue={(option, value) => option.id === value?.id}
-      inputValue={value}
+      inputValue={vauleUpdate}
       // getOptionSelected={(option) => option.id === value.id}
-      onChange={(e, val) => handleSelect(val)}
+      clearOnBlur={false}
+      onChange={(e, val) => e && handleSelect(val)}
+      onInputChange={(e, val) => e && handleInputChange(val)}
       id='custom-input-demo'
       options={options}
       renderInput={(params) => (
@@ -57,6 +69,7 @@ export default function CusSelect({
             type='text'
             {...params.inputProps}
             className={classes.inputStyle}
+            placeholder={placeholder}
           />
           <label className={classes.inputLabel}>{label}</label>
         </div>

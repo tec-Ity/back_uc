@@ -4,6 +4,7 @@ const useStyle = makeStyles({
   inputBox: {
     position: "relative",
     // border: "1px solid",
+    width: "100%",
     height: "50px",
   },
   inputlabel: {
@@ -37,6 +38,7 @@ export default function CusInput({
   handleChange,
   disabled,
   ref,
+  placeholder = "",
   autoCompleteParam,
 }) {
   const classes = useStyle();
@@ -48,6 +50,7 @@ export default function CusInput({
         {...autoCompleteParam}
         disabled={disabled}
         className={classes.inputStyle}
+        placeholder={placeholder}
       />
       <label className={classes.inputlabel}>{label}</label>
     </div>

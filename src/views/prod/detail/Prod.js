@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router";
+import { useLocation, useParams, useHistory } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import CusSwitchBtn from "../../../components/basic/CusSwitchBtn";
 import {
@@ -18,18 +18,27 @@ const populateObjs = [
   },
   { path: "Brand", select: "code nome" },
   { path: "Attrs", select: "nome options Prod" },
-  { path: "Skus", select: "Prod attrs " },
+  {
+    path: "Skus",
+    select:
+      "Prod attrs price_regular price_sale limit_quantity purchase_note is_controlStock quantity quantity_alert allow_backorder",
+  },
 ];
 export default function Prod(props) {
   const { id } = useParams();
+  const hist = useHistory();
   const dispatch = useDispatch();
   const flagSlice = "prod";
   const flagField = "object";
   const api = `/prod/${id}`;
-
   const Prod = useSelector(selectObject(flagSlice));
-
+  const param = new URLSearchParams(useLocation().search);
+  const section = param.get("section");
+  console.log(section);
   const [Key, setKey] = useState(1);
+  useEffect(() => {
+    setKey(section === "sku" ? 2 : 1);
+  }, [section]);
   const routeFunc = () => {
     switch (Key) {
       case 1:
@@ -69,12 +78,18 @@ export default function Prod(props) {
         <CusSwitchBtn
           label='Basic'
           selected={Key === 1}
-          handleClick={() => setComponentKey(1)}
+          handleClick={() => {
+            hist.push("?section=basic");
+            setComponentKey(1);
+          }}
         />
         <CusSwitchBtn
           label='Skus'
           selected={Key === 2}
-          handleClick={() => setComponentKey(2)}
+          handleClick={() => {
+            hist.push("?section=sku");
+            setComponentKey(2);
+          }}
         />
       </div>
       {routeFunc()}

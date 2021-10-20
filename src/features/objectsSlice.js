@@ -21,9 +21,12 @@ export const getObjects = createAsyncThunk(
       const objs = getState().objects[flagSlice]?.objects || [];
       let getObjs = [...res.data.objects];
       const objects = isReload ? getObjs : [...objs, ...getObjs];
-      const pageNum = (res.data.pagesize && res.data.count)? Math.ceil(res.data.count / res.data.pagesize): 0;
+      const pageNum =
+        res.data.pagesize && res.data.count
+          ? Math.ceil(res.data.count / res.data.pagesize)
+          : 0;
       // console.log(objects);
-      return { flagSlice, objects, pageNum};
+      return { flagSlice, objects, pageNum };
     } else {
       return rejectWithValue("getObjects error info");
       // return rejectWithValue({flagSlice, info:'my error info'});
@@ -104,9 +107,9 @@ export const postObject = createAsyncThunk(
 export const putObject = createAsyncThunk(
   "objects/putObject",
   async ({ flagSlice, api, data, isList = false }, { rejectWithValue }) => {
-      console.log(22)
+    console.log(22);
     //   console.log(data)
-      console.log(api)
+    console.log(api);
     const put_res = await axios_Prom(api, "PUT", data);
     console.log(put_res);
     if (put_res.status === 200) {
@@ -141,6 +144,7 @@ export const deleteObject = createAsyncThunk(
     // console.log(api)
     const res = await fetch_Prom(api, "DELETE");
     if (res.status === 200) {
+      alert("删除成功");
       return { flagSlice, id, isList };
     } else {
       alert(res.message);
