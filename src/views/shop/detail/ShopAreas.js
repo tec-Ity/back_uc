@@ -139,7 +139,7 @@ function ServeCitaNew(props) {
   const [, setJustSubmitted] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const [priceShip, setPriceShip] = useState("");
-
+  console.log(Citas);
   const handleSubmit = () => {
     if (selectedId && priceShip) {
       dispatch(

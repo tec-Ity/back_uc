@@ -10,7 +10,7 @@ import {
   putObject } from "../../../features/objectsSlice";
 
 const useStyle = makeStyles({
-  root: { border: "1px solid" },
+  root: { },
   mainImg: { height: "300px", width: "300px", cursor: "pointer" },
   formItem: { width: "50%", marginTop: "10px" },
   flexStyle: {
