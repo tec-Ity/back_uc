@@ -47,7 +47,7 @@ export default function Users(props) {
         api={api}
         links={links}
         showAddNew={() => setModalShow(true)}
-        addLabel='添加用户'
+        addLabel="添加用户"
       />
       <UserPostModal
         flagSlice={flagSlice}
@@ -55,6 +55,7 @@ export default function Users(props) {
         onHide={() => setModalShow(false)}
       />
       <UiVariety
+        cols="col-3"
         propsCard={UserCard}
         UiRow={UserRow}
         objects={objects}

@@ -8,7 +8,7 @@ export const get_DNS = () => api_DNS;
 const fetchProm = (api, method, bodyObj) => {
   return new Promise(async (resolve) => {
     try {
-        if(!api) return resolve({ status: 400, message: "api 不能为空"});
+      if (!api) return resolve({ status: 400, message: "api 不能为空" });
       //   console.log(api, method, bodyObj);
       const api_server = api_DNS + api_version + api;
       const token = localStorage.getItem("accessToken");
@@ -39,7 +39,7 @@ const fetchProm = (api, method, bodyObj) => {
 export const fetch_Prom = (api, method = "GET", bodyObj) => {
   return new Promise(async (resolve) => {
     try {
-        if(!api) return resolve({ status: 400, message: "api 不能为空"});
+      if (!api) return resolve({ status: 400, message: "api 不能为空" });
       method = method.toUpperCase();
       let result = await fetchProm(api, method, bodyObj);
       //unauthorized user
@@ -67,7 +67,7 @@ export const fetch_Prom = (api, method = "GET", bodyObj) => {
 export const axiosProm = async (api, method, formData) => {
   return new Promise(async (resolve, reject) => {
     try {
-        if(!api) return resolve({ status: 400, message: "api 不能为空"});
+      if (!api) return resolve({ status: 400, message: "api 不能为空" });
       const api_server = api_DNS + api_version + api;
       const token = localStorage.getItem("accessToken");
       let result = null;
@@ -113,7 +113,7 @@ export const axiosProm = async (api, method, formData) => {
 export const axios_Prom = async (api, method = "GET", formData) => {
   return new Promise(async (resolve, reject) => {
     try {
-        if(!api) return resolve({ status: 400, message: "api 不能为空"});
+      if (!api) return resolve({ status: 400, message: "api 不能为空" });
       method = method.toUpperCase();
       let result = await axiosProm(api, method, formData);
       //unauthorized user
@@ -146,7 +146,7 @@ export const refreshToken_Prom = () => {
       const resPromise = await fetch(api, {
         headers: {
           "content-type": "application/json",
-          authorization: "accessToken " + token,
+          authorization: "code " + token + " re",
         },
         method: "GET",
       });

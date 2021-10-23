@@ -23,7 +23,7 @@ const useStyle = makeStyles({
 });
 
 export default function UiVariety(props) {
-  const { propsCard, UiRow, objects, clickEvent } = props;
+  const { propsCard, UiRow, objects, clickEvent, cols } = props;
   const classes = useStyle();
   const styleUi = {
     init: "card",
@@ -51,6 +51,7 @@ export default function UiVariety(props) {
       case styleUi.arr[0]:
         return (
           <UiCards
+            cols={cols}
             propsCard={propsCard}
             objects={objects}
             clickEvent={clickEvent}
@@ -74,12 +75,13 @@ export default function UiVariety(props) {
             classes.btnStyle,
             activeBtn === 0 && classes.activeBtnStyle
           )}
-          onClick={() => changeUi(0)}>
+          onClick={() => changeUi(0)}
+        >
           <GridView
             // src={gridView}
             // className='img-neat'
             // alt={"gridView"}
-            style={{ width: "30px", height: "30px" }}
+            style={{ width: "21px", height: "21px" }}
           />
         </div>
         <div
@@ -88,16 +90,17 @@ export default function UiVariety(props) {
             activeBtn === 1 && classes.activeBtnStyle
           )}
           style={{ marginLeft: "30px" }}
-          onClick={() => changeUi(1)}>
+          onClick={() => changeUi(1)}
+        >
           <ListView
             // src={listView}
             // className='img-neat'
             // alt={"listView"}
-            style={{ width: "30px", height: "30px" }}
+            style={{ width: "21px", height: "21px" }}
           />
         </div>
       </div>
-      <div className='mt-5'>{componentUI()}</div>
+      <div className="mt-5">{componentUI()}</div>
     </>
   );
 }
