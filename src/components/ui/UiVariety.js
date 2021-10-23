@@ -81,7 +81,7 @@ export default function UiVariety(props) {
             // src={gridView}
             // className='img-neat'
             // alt={"gridView"}
-            style={{ width: "30px", height: "30px" }}
+            style={{ width: "21px", height: "21px" }}
           />
         </div>
         <div
@@ -96,7 +96,7 @@ export default function UiVariety(props) {
             // src={listView}
             // className='img-neat'
             // alt={"listView"}
-            style={{ width: "30px", height: "30px" }}
+            style={{ width: "21px", height: "21px" }}
           />
         </div>
       </div>
