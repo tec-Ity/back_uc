@@ -41,6 +41,7 @@ const useStyle = makeStyles({
 export default function CusSelectSearch({
   label,
   optionLabelType = "code",
+  extraValueType,
   flagSlice,
   populateObjs = null,
   api,
@@ -61,9 +62,9 @@ export default function CusSelectSearch({
   };
   //   console.log(queryUrl);
   //on inputvalue change
-//   console.log(queryUrl);
-//   console.log("flag", flagSlice);
-//   console.log(objects);
+  //   console.log(queryUrl);
+  //   console.log("flag", flagSlice);
+  //   console.log(objects);
   const handleChangeInputValue = useCallback(
     (e, val) => {
       //e passed null at first time with no reason
@@ -108,6 +109,7 @@ export default function CusSelectSearch({
       //   getOptionsLabel={(option) =>
       //     typeof option?.label === "string" ? option.label : ""
       //   }
+      disabled={disabled}
       inputValue={inputValue}
       onChange={handleSelectOption}
       onInputChange={handleChangeInputValue}
@@ -119,6 +121,7 @@ export default function CusSelectSearch({
           ? objects.map((obj) => ({
               id: obj._id,
               label: obj[optionLabelType],
+              [extraValueType]: obj[extraValueType],
             }))
           : []
       }
@@ -126,6 +129,7 @@ export default function CusSelectSearch({
         <div ref={params.InputProps.ref} className={classes.inputBox}>
           <input
             type='text'
+            placeholder={placeholder}
             {...params.inputProps}
             className={classes.inputStyle}
           />

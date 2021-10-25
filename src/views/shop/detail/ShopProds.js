@@ -11,5 +11,10 @@ export default function ShopProds({ shopId }) {
   useEffect(() => {
     dispatch(getObjects({ flagSlice, api: "/Prods?Shops=" + shopId }));
   }, [dispatch, shopId]);
-  return <UiRows UiRow={ProdRow} objects={shopProds} />;
+  console.log(shopProds);
+  return shopProds?.length > 0 ? (
+    <UiRows UiRow={ProdRow} objects={shopProds} />
+  ) : (
+    <h3>此门店暂无同步产品</h3>
+  );
 }

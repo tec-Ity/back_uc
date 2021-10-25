@@ -5,13 +5,21 @@ import { Container } from "@mui/material";
 import CusInput from "../../../components/basic/CusInput";
 import clsx from "clsx";
 import { useDispatch } from "react-redux";
-import { 
+import {
   // deleteObject,
-  putObject } from "../../../features/objectsSlice";
+  putObject,
+} from "../../../features/objectsSlice";
+
+import shopDefaul from "../../../components/icon/Shop.jpg";
 
 const useStyle = makeStyles({
-  root: { },
-  mainImg: { height: "300px", width: "300px", cursor: "pointer" },
+  root: {},
+  mainImg: {
+    height: "300px",
+    width: "300px",
+    cursor: "pointer",
+    background: "transparent",
+  },
   formItem: { width: "50%", marginTop: "10px" },
   flexStyle: {
     width: "100%",
@@ -83,12 +91,17 @@ export default function ShopBasic(props) {
     <Container className={classes.root}>
       <div className={clsx(classes.formItem, classes.flexStyle)}>
         {/* img component */}
-        <div>
+        <div onClick={() => ref.current.click()}>
           <img
             alt={infoUpdate.code}
-            src={imgLocal ? imgLocal : get_DNS() + infoUpdate.img_url}
+            src={
+              imgLocal
+                ? imgLocal
+                : infoUpdate.img_url
+                ? get_DNS() + infoUpdate.img_url
+                : shopDefaul
+            }
             className={classes.mainImg}
-            onClick={() => ref.current.click()}
             title='更换图片'
           />
           <input
@@ -96,11 +109,10 @@ export default function ShopBasic(props) {
             type='file'
             multiple={false} //ctrl on need
             style={{ display: "none" }}
-            onChange={(e) =>
-              {setImgLocal(URL.createObjectURL(e.target.files[0]))
-              setInfoUpdate((prev)=>({...prev, img:e.target.files[0]}))
-              }
-            }
+            onChange={(e) => {
+              setImgLocal(URL.createObjectURL(e.target.files[0]));
+              setInfoUpdate((prev) => ({ ...prev, img: e.target.files[0] }));
+            }}
           />
         </div>
         <div>
@@ -158,7 +170,7 @@ export default function ShopBasic(props) {
         <CusInput
           label='City'
           disabled
-          value={infoUpdate.city?.code + "(" + infoUpdate.city?.nome + ")"}
+          value={infoUpdate.city?.code + " (" + infoUpdate.city?.nome + ")"}
           handleChange={(e) =>
             setInfoUpdate((prev) => ({ ...prev, city: e.target.value }))
           }

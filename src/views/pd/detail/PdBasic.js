@@ -84,11 +84,12 @@ export default function PdBasic({ Pd, flagSlice, api }) {
   const [imgsUpdate, setImgsUpdate] = useState();
   const [imgLocal, setImgLocal] = useState([]);
   const [showImgDeleteBtn, setShowImgDeleteBtn] = useState(false);
+  const [modifying, ] = useState(false);
   //   console.log(imgsUpdate);
   return (
     <Grid container className={classes.root}>
       <button className='btn btn-success mx-3' onClick={handleSubmit}>
-        修改
+        提交修改
       </button>
       <button
         className='btn btn-success mx-3'
@@ -222,6 +223,7 @@ export default function PdBasic({ Pd, flagSlice, api }) {
       {/* name */}
       <Grid item xs={6}>
         <CusInput
+          disabled={!modifying}
           label='Name'
           value={pdInfo.name}
           handleChange={(e) =>
@@ -232,6 +234,7 @@ export default function PdBasic({ Pd, flagSlice, api }) {
       {/* brand */}
       <Grid item xs={6}>
         <CusSelectSearch
+          disabled={!modifying}
           label='Brand'
           flagSlice={brandSlice}
           api={brandApi}
@@ -248,6 +251,7 @@ export default function PdBasic({ Pd, flagSlice, api }) {
       {/* country */}
       <Grid item xs={6}>
         <CusSelectSearch
+          disabled={!modifying}
           label='Nation'
           flagSlice={nationSlice}
           api={nationApi}
@@ -264,6 +268,7 @@ export default function PdBasic({ Pd, flagSlice, api }) {
       {/* categ 1 */}
       <Grid item xs={6}>
         <CusSelectSearch
+          disabled={!modifying}
           label='First Categ'
           flagSlice={categSlice + "1"}
           api={categApi}
@@ -286,6 +291,7 @@ export default function PdBasic({ Pd, flagSlice, api }) {
       {/* categ 2 */}
       <Grid item xs={6}>
         <CusSelectSearch
+          disabled={!modifying}
           label='Second Categ'
           flagSlice={pdInfo.categ1?.code && categSlice + "2"}
           api={categApi}
@@ -303,6 +309,7 @@ export default function PdBasic({ Pd, flagSlice, api }) {
       {/* sort */}
       <Grid item xs={6}>
         <CusInput
+          disabled={!modifying}
           label='Sort'
           value={pdInfo.sort}
           handleChange={(e) =>
@@ -315,6 +322,7 @@ export default function PdBasic({ Pd, flagSlice, api }) {
       {/* price regular */}
       <Grid item xs={6}>
         <CusInput
+          disabled={!modifying}
           label='Price'
           value={pdInfo.price_regular}
           handleChange={(e) =>
@@ -325,6 +333,7 @@ export default function PdBasic({ Pd, flagSlice, api }) {
       {/* unit */}
       <Grid item xs={6}>
         <CusInput
+          disabled={!modifying}
           label='Unit'
           value={pdInfo.unit}
           handleChange={(e) =>
@@ -335,6 +344,7 @@ export default function PdBasic({ Pd, flagSlice, api }) {
       {/* desp */}
       <Grid item xs={12}>
         <CusInput
+          disabled={!modifying}
           label='Description'
           value={pdInfo.desp}
           handleChange={(e) =>

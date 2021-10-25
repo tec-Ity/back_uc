@@ -2,51 +2,53 @@ import { Grid } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  selectObjects,
   putObject,
   // deleteObject,
 } from "../../../features/objectsSlice";
 import CusBtnGroup from "../../../components/basic/CusBtnGroup";
 import CusInput from "../../../components/basic/CusInput";
-import SearchInput from "../../../components/universal/query/SearchInput";
-import CusSelect from "../../../components/basic/CusSelect";
+// import SearchInput from "../../../components/universal/query/SearchInput";
+import CusSelectSearch from "../../../components/basic/CusSelectSearch";
 import { makeStyles } from "@mui/styles";
-
+import { useHistory } from "react-router";
+import { getRolePath } from "../../../js/conf/confUser";
 export default function ShopAreas(props) {
   const { Shop, flagSlice, api } = props;
   const [ServeCitasUpdate, setServeCitasUpdate] = useState([]);
   useEffect(() => {
     setServeCitasUpdate(Shop.serve_Citas);
   }, [Shop.serve_Citas]);
-  const cita_flagSlice = "citas";
-  const Citas = useSelector(selectObjects(cita_flagSlice));
-  const [searchValue, setSearchValue] = useState("");
+  //   const cita_flagSlice = "citas";
+  //   const Citas = useSelector(selectObjects(cita_flagSlice));
+  //   const [searchValue, setSearchValue] = useState("");
+  //   console.log(Citas);
   return (
     <div>
-      <ServeCitaNew Citas={Citas} shopId={Shop._id} api={api} />
+      <ServeCitaNew shopId={Shop._id} api={api} />
       {ServeCitasUpdate?.map((serveCita) => (
         <ServeCitaRow
           key={serveCita._id}
           flagSlice={flagSlice}
           api={api}
           serveCita={serveCita}
-          search={(val) => {
-            setSearchValue(val);
-          }}
+          //   search={(val) => {
+          //     setSearchValue(val);
+          //   }}
         />
       ))}
       {/* hidden input */}
-      <SearchInput
+      {/* <SearchInput
         farSearch={searchValue}
         flagSlice={cita_flagSlice}
         api={"/Citas"}
         hidden
-      />
+      /> */}
     </div>
   );
 }
 
 function ServeCitaRow({ flagSlice, serveCita = {}, search, api }) {
+  console.log(serveCita);
   const dispatch = useDispatch();
   const [serveCitaUpdate, setServeCitasUpdate] = useState(serveCita);
   const [modifying, setModifying] = useState(false);
@@ -131,22 +133,35 @@ const useStyle = makeStyles({
   },
 });
 
+const citaFlag = "Citas";
+
 function ServeCitaNew(props) {
-  const { Citas, flagSlice, api } = props;
+  const { flagSlice, api } = props;
+  const status = useSelector((state) => state.objects.status);
   const dispatch = useDispatch();
   const classes = useStyle();
+  const hist = useHistory();
   const [showAdd, setShowAdd] = useState(false);
-  const [, setJustSubmitted] = useState(false);
-  const [selectedId, setSelectedId] = useState(null);
+  const [justSubmitted, setJustSubmitted] = useState(false);
+  const [selected, setSelected] = useState(null);
   const [priceShip, setPriceShip] = useState("");
-  console.log(Citas);
+  console.log(selected);
+
+  useEffect(() => {
+    if (justSubmitted === true && status === "succeed") {
+      const rolePath = getRolePath();
+      hist.push(`/${rolePath}/reload`);
+    }
+  }, [hist, justSubmitted, status]);
   const handleSubmit = () => {
-    if (selectedId && priceShip) {
+    if (selected && priceShip) {
       dispatch(
         putObject({
           flagSlice,
           api,
-          data: { serveCitaPost: { Cita: selectedId, price_ship: priceShip } },
+          data: {
+            serveCitaPost: { Cita: selected?.id, price_ship: priceShip },
+          },
         })
       );
       setJustSubmitted(true);
@@ -154,12 +169,12 @@ function ServeCitaNew(props) {
   };
   const handleCancel = () => {
     setShowAdd(false);
-    setSelectedId(null);
+    setSelected(null);
     setPriceShip("");
   };
   const handleDelete = () => {
     setShowAdd(false);
-    setSelectedId(null);
+    setSelected(null);
     setPriceShip("");
   };
   return showAdd === false ? (
@@ -184,7 +199,7 @@ function ServeCitaNew(props) {
       justifyContent='space-between'
       style={{ marginTop: "10px" }}>
       <Grid item xs={2}>
-        <CusSelect
+        {/* <CusSelect
           label='City Code'
           handleSelect={(e, val) => {
             setSelectedId(val?.id);
@@ -196,10 +211,19 @@ function ServeCitaNew(props) {
             }
           }
           options={Citas.map((cita) => ({ label: cita.code, id: cita._id }))}
+        /> */}
+        <CusSelectSearch
+          api='/Citas'
+          label='City Code'
+          flagSlice={citaFlag}
+          placeholder='输入城市代码'
+          extraValueType='nome'
+          defaultSel={selected?.code || ""}
+          handleSelect={(val) => val && setSelected(val)}
         />
       </Grid>
       <Grid item xs={2}>
-        <CusSelect
+        {/* <CusSelect
           label='City Name'
           handleSelect={(e, val) => {
             setSelectedId(val?.id);
@@ -211,12 +235,23 @@ function ServeCitaNew(props) {
             }
           }
           options={Citas.map((cita) => ({ label: cita.nome, id: cita._id }))}
+        /> */}
+        <CusSelectSearch
+          api='/Citas'
+          label='City Name'
+          flagSlice={citaFlag}
+          optionLabelType='nome'
+          extraValueType='code'
+          placeholder='输入城市名称'
+          defaultSel={selected?.nome || ""}
+          handleSelect={(val) => val && setSelected(val)}
         />
       </Grid>
       <Grid item xs={4}>
         <CusInput
           label='Price Ship'
           value={priceShip}
+          placeholder='输入运费'
           handleChange={(e) => {
             !isNaN(e.target.value) && setPriceShip(e.target.value);
           }}

@@ -7,7 +7,7 @@ import {
   AccordionSummary,
   Switch,
 } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+// import { makeStyles } from "@mui/styles";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CusSelectList from "../../../components/basic/CusSelectList";
 import CusInput from "../../../components/basic/CusInput";
@@ -21,9 +21,9 @@ import {
 import { useHistory } from "react-router";
 import { getRolePath } from "../../../js/conf/confUser";
 
-const useStyle = makeStyles({
-  root: {},
-});
+// const useStyle = makeStyles({
+//   root: {},
+// });
 export default function ProdSku({ Skus, Attrs }) {
   //   const [showAddNew, setShowAddNew] = useState(false);
   const [expanded, setExpanded] = useState(false);
