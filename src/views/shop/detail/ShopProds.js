@@ -11,7 +11,7 @@ export default function ShopProds({ shopId }) {
   useEffect(() => {
     dispatch(getObjects({ flagSlice, api: "/Prods?Shops=" + shopId }));
   }, [dispatch, shopId]);
-  console.log(shopProds);
+//   console.log(shopProds);
   return shopProds?.length > 0 ? (
     <UiRows UiRow={ProdRow} objects={shopProds} />
   ) : (

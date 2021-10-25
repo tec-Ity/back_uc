@@ -32,12 +32,12 @@ export default function Shop() {
   const section = param.get("section");
   //   console.log(section);
   const Shop = useSelector(selectObject(flagSlice));
-  console.log(Shop);
+//   console.log(Shop);
   // const Shop = useSelector((state) => state.objects[flagSlice]?.object);
   const setKeyComp = (key) => {
     setComp(Number(key));
   };
-  console.log(populateObjs);
+//   console.log(populateObjs);
   useEffect(() => {
     dispatch(
       getObject({

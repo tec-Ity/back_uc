@@ -48,7 +48,7 @@ export default function ShopAreas(props) {
 }
 
 function ServeCitaRow({ flagSlice, serveCita = {}, search, api }) {
-  console.log(serveCita);
+//   console.log(serveCita);
   const dispatch = useDispatch();
   const [serveCitaUpdate, setServeCitasUpdate] = useState(serveCita);
   const [modifying, setModifying] = useState(false);
@@ -145,7 +145,7 @@ function ServeCitaNew(props) {
   const [justSubmitted, setJustSubmitted] = useState(false);
   const [selected, setSelected] = useState(null);
   const [priceShip, setPriceShip] = useState("");
-  console.log(selected);
+//   console.log(selected);
 
   useEffect(() => {
     if (justSubmitted === true && status === "succeed") {
