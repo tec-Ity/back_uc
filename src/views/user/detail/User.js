@@ -24,9 +24,13 @@ import {
   Typography,
   TextField,
   Button,
+  IconButton,
   MenuItem,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+import { ReactComponent as EditIcon } from "../../../components/icon/editBlack.svg";
+import ListPageHeader from "../../../components/basic/ListPageHeader.js";
+import VarietyInput from "./VarietyInput";
 
 const useStyle = makeStyles({
   infobox: {
@@ -70,13 +74,21 @@ export default function User() {
   }, [api, dispatch]);
 
   const classes = useStyle();
+  const [editing, setEditing] = useState(false);
+  const [formdata, setFormdata] = useState();
 
-  function InfoBox({ label = "label", content = "content", variant, noBox }) {
+  function handleChange(props) {
+    setFormdata(props.target.value);
+    console.log(props.target.value);
+  }
+
+  function InfoBox({ label, content, type, variant, noBox }) {
+    const { 1: userPerms } = permMap;
     return (
       <Grid item xs={1}>
         <Box
           sx={{
-            border: !noBox ? 1 : 0,
+            border: noBox || !(editing && userPerms.includes(type)) ? 0 : 1,
             p: "10px",
             mt: "10px",
             position: "relative",
@@ -95,26 +107,36 @@ export default function User() {
           >
             {label}
           </Typography>
-          <Typography sx={{ fontSize: "16px", fontWeight: "700" }}>
-            {content}
-          </Typography>
-          {!variant && (
-            <TextField
-              id="standard-basic"
-              defaultValue={content}
-              variant="standard"
-              InputProps={{ disableUnderline: true }}
-            />
-          )}
-          {variant == "shop" && (
-            <TextField
-              id="standard-basic"
-              defaultValue={content}
-              variant="standard"
-              select
-              InputProps={{ disableUnderline: true }}
-            />
-          )}
+          {
+            editing && userPerms.includes(type) ? (
+              <VarietyInput
+                content={content}
+                variant={variant}
+                handleChange={handleChange}
+              />
+            ) : (
+              <Typography sx={{ fontSize: "16px", fontWeight: "700" }}>
+                {content}
+              </Typography>
+            )
+            // (!variant && (
+            //   <TextField
+            //     id="standard-basic"
+            //     defaultValue={content}
+            //     variant="standard"
+            //     InputProps={{ disableUnderline: true }}
+            //   />
+            // )
+            // variant == "shop" && (
+            //   <TextField
+            //     id="standard-basic"
+            //     defaultValue={content}
+            //     variant="standard"
+            //     select
+            //     InputProps={{ disableUnderline: true }}
+            //   />
+            // ))
+          }
         </Box>
       </Grid>
     );
@@ -135,9 +157,21 @@ export default function User() {
     );
   }
 
+  const links = [
+    { label: "主页", to: "/ower/home" },
+    { label: "用户列表", to: "/ower/users" },
+    { label: "详情" },
+  ];
+
+  const permMap = {
+    1: ["uid", "name", "role", "shop", "phone", "usable"],
+    3: ["name", "role"],
+  };
+
   return (
     <>
-      <NavBread
+      <ListPageHeader links={links} showSearch={false} showAddIcon={false} />
+      {/* <NavBread
         activePage={
           <FormattedMessage id="navLabel-user" defaultMessage="user" />
         }
@@ -145,7 +179,7 @@ export default function User() {
         <Link to={`/${rolePath}/users`}>
           <FormattedMessage id="navLabel-users" defaultMessage="users" />
         </Link>
-      </NavBread>
+      </NavBread> */}
       {
         // 数据正确
         object._id && String(object._id) === String(id) && (
@@ -185,6 +219,9 @@ export default function User() {
               object={object}
               flagSlice={flagSlice}
             />
+            <IconButton onClick={() => setEditing(!editing)}>
+              <EditIcon />
+            </IconButton>
           </div>
         )
       }
@@ -198,12 +235,30 @@ export default function User() {
           justifyContent="flex-start"
           alignItems="center"
         >
-          <InfoBox label="登录账号" content={object.code} />
-          <InfoBox label="用户角色" content={object.role} />
-          <InfoBox label="用户姓名" content={object.nome} />
-          <InfoBox label="Shop" content={object.Shop} variant="shop" />
-          <InfoBox label="电话" content={object.phone} />
-          <InfoBox label="是否可用" content={object.is_usable} noBox />
+          <InfoBox label="登录账号" type="uid" content={object.code} />
+          <InfoBox label="用户角色" type="role" content={object.role} />
+          <InfoBox label="用户姓名" type="name" content={object.nome} />
+          <InfoBox
+            label="Shop"
+            type="shop"
+            content={object.Shop?.code}
+            variant="shop"
+          />
+          <Grid container columns={2} spacing={1} item xs={1}>
+            <InfoBox
+              label="电话"
+              type="phone"
+              content={object.phonePre}
+              variant="prefix"
+            />
+            <InfoBox type="phone" content={object.phone} />
+          </Grid>
+          <InfoBox
+            label="是否可用"
+            type="usable"
+            content={object.is_usable}
+            noBox
+          />
         </Grid>
         <Box mt="44px">
           <FooterBox
@@ -219,14 +274,18 @@ export default function User() {
             </Button>
           </Grid>
           <Grid item xs={1}>
+            <Button variant="contained" color="secondary" fullWidth>
+              CANCEL
+            </Button>
+          </Grid>
+          <Grid item xs={1}>
             <Button variant="contained" color="error" fullWidth>
               DELETE
             </Button>
           </Grid>
         </Grid>
       </Box>
-
-      <div className="row mt-3">
+      {/* <div className="row mt-3">
         <div className="col-4 col-md-2"> 登录账号: </div>
         <div className="col-8 col-md-10"> {object.code} </div>
       </div>
@@ -260,7 +319,7 @@ export default function User() {
           <div className="col-4 col-md-2"> 所属店铺: </div>
           <div className="col-8 col-md-10"> {object.Shop.code} </div>
         </div>
-      )}
+      )} */}
     </>
   );
 }
