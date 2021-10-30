@@ -4,7 +4,6 @@ import { FormattedMessage } from "react-intl";
 import {
   Card,
   CardActionArea,
-  CardContent,
   CardMedia,
   Typography,
   Container,
@@ -73,7 +72,7 @@ export default function UserCard(props) {
     <>
       {object ? (
         <Box className={classes.cardBox}>
-          <Card>
+          <Card elevation={0}>
             <CardActionArea
               className={classes.innerbox}
               onClick={clickEvent && clickEvent(object)}

@@ -101,16 +101,6 @@ export default function User() {
           </Typography>
         </Grid>
       </>
-      // <Box className={classes.infobox} mt="5px">
-      //   <Typography
-      //     sx={{ fontSize: "16px", color: "#0000004D", fontWeight: "700" }}
-      //   >
-      //     {label}
-      //   </Typography>
-      //   <Typography sx={{ fontSize: "16px", fontWeight: "700" }}>
-      //     {content}
-      //   </Typography>
-      // </Box>
     );
   }
 
@@ -261,7 +251,7 @@ export default function User() {
           alignItems="center"
         >
           {fields.map((field) => {
-            if (field.variant == "phone") {
+            if (field.variant === "phone") {
               return (
                 <Grid
                   container
