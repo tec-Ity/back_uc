@@ -18,19 +18,13 @@ import {
   cleanField,
 } from "../../../features/objectsSlice";
 
-import {
-  Box,
-  Grid,
-  Typography,
-  TextField,
-  Button,
-  IconButton,
-  MenuItem,
-} from "@mui/material";
+import { Box, Grid, Typography, Button, IconButton } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { ReactComponent as EditIcon } from "../../../components/icon/editBlack.svg";
+import { ReactComponent as CancelIcon } from "../../../components/icon/cancelBlack.svg";
+import { ReactComponent as DoneIcon } from "../../../components/icon/doneBlack.svg";
 import ListPageHeader from "../../../components/basic/ListPageHeader.js";
-import VarietyInput from "./VarietyInput";
+import InfoBox from "./InfoBox";
 
 const useStyle = makeStyles({
   infobox: {
@@ -75,85 +69,48 @@ export default function User() {
 
   const classes = useStyle();
   const [editing, setEditing] = useState(false);
-  const [formdata, setFormdata] = useState();
+  const [form, setForm] = useState(() => {
+    const { code, nome, phonePre, phone, role } = object;
+    const Shop = object.Shop ? object.Shop._id : null;
+    // if (object.Shop) {
+    //   setfarSearch_Shops(object.Shop.code);
+    // }
+    // roleFilterShops(formdata.role);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    return { code, nome, phonePre, phone, role, Shop };
+  });
 
-  function handleChange(props) {
-    setFormdata(props.target.value);
-    console.log(props.target.value);
-  }
-
-  function InfoBox({ label, content, type, variant, noBox }) {
-    const { 1: userPerms } = permMap;
-    return (
-      <Grid item xs={1}>
-        <Box
-          sx={{
-            border: noBox || !(editing && userPerms.includes(type)) ? 0 : 1,
-            p: "10px",
-            mt: "10px",
-            position: "relative",
-            borderRadius: "5px",
-          }}
-        >
-          <Typography
-            sx={{
-              fontSize: "16px",
-              color: "#0000004D",
-              fontWeight: "700",
-              position: "absolute",
-              top: "-10px",
-              bgcolor: "white",
-            }}
-          >
-            {label}
-          </Typography>
-          {
-            editing && userPerms.includes(type) ? (
-              <VarietyInput
-                content={content}
-                variant={variant}
-                handleChange={handleChange}
-              />
-            ) : (
-              <Typography sx={{ fontSize: "16px", fontWeight: "700" }}>
-                {content}
-              </Typography>
-            )
-            // (!variant && (
-            //   <TextField
-            //     id="standard-basic"
-            //     defaultValue={content}
-            //     variant="standard"
-            //     InputProps={{ disableUnderline: true }}
-            //   />
-            // )
-            // variant == "shop" && (
-            //   <TextField
-            //     id="standard-basic"
-            //     defaultValue={content}
-            //     variant="standard"
-            //     select
-            //     InputProps={{ disableUnderline: true }}
-            //   />
-            // ))
-          }
-        </Box>
-      </Grid>
-    );
+  function handleSave() {
+    console.log(form);
+    setEditing(!editing);
   }
 
   function FooterBox({ label = "label", content = "content", variant, noBox }) {
     return (
-      <Box className={classes.infobox} mt="5px">
-        <Typography
-          sx={{ fontSize: "16px", color: "#0000004D", fontWeight: "700" }}
-        >
-          {label}
-        </Typography>
-        <Typography sx={{ fontSize: "16px", fontWeight: "700" }}>
-          {content}
-        </Typography>
-      </Box>
+      <>
+        <Grid item xs={3}>
+          <Typography
+            sx={{ fontSize: "16px", color: "#0000004D", fontWeight: "700" }}
+          >
+            {label}
+          </Typography>
+        </Grid>
+        <Grid item xs="auto">
+          <Typography sx={{ fontSize: "16px", fontWeight: "700" }}>
+            {content}
+          </Typography>
+        </Grid>
+      </>
+      // <Box className={classes.infobox} mt="5px">
+      //   <Typography
+      //     sx={{ fontSize: "16px", color: "#0000004D", fontWeight: "700" }}
+      //   >
+      //     {label}
+      //   </Typography>
+      //   <Typography sx={{ fontSize: "16px", fontWeight: "700" }}>
+      //     {content}
+      //   </Typography>
+      // </Box>
     );
   }
 
@@ -163,10 +120,57 @@ export default function User() {
     { label: "详情" },
   ];
 
-  const permMap = {
-    1: ["uid", "name", "role", "shop", "phone", "usable"],
-    3: ["name", "role"],
-  };
+  const fields = [
+    {
+      label: "登录账号",
+      type: "uid",
+      content: object.code,
+    },
+    {
+      label: "用户角色",
+      type: "role",
+      content: object.role,
+    },
+    {
+      label: "用户姓名",
+      type: "name",
+      content: object.nome,
+    },
+    {
+      label: "Shop",
+      type: "shop",
+      content: object.shop?.code,
+      variant: "shop",
+      variantObj: {
+        testlist: [
+          { label: "The Shawshank Redemption", year: 1994 },
+          { label: "The Godfather", year: 1972 },
+          { label: "The Godfather: Part II", year: 1974 },
+          { label: "The Dark Knight", year: 2008 },
+          { label: "12 Angry Men", year: 1957 },
+          { label: "Schindler's List", year: 1993 },
+        ],
+      },
+    },
+    {
+      variant: "phone",
+      variantObj: {
+        fields: [
+          { label: "电话", type: "phonePre", content: object.phonePre },
+          {
+            type: "phone",
+            content: object.phone,
+          },
+        ],
+      },
+    },
+    {
+      label: "是否可用",
+      type: "usable",
+      content: object.is_usable,
+      noBox: true,
+    },
+  ];
 
   return (
     <>
@@ -219,70 +223,111 @@ export default function User() {
               object={object}
               flagSlice={flagSlice}
             />
-            <IconButton onClick={() => setEditing(!editing)}>
-              <EditIcon />
+            {editing && (
+              <IconButton onClick={handleSave}>
+                <DoneIcon />
+              </IconButton>
+            )}
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={!editing ? <EditIcon /> : <CancelIcon />}
+              onClick={() => {
+                setEditing(!editing);
+                setForm({});
+              }}
+            >
+              编辑
+            </Button>
+            <IconButton
+              onClick={() => {
+                setEditing(!editing);
+                setForm({});
+              }}
+            >
+              {!editing ? <EditIcon /> : <CancelIcon />}
             </IconButton>
           </div>
         )
       }
 
-      <Box sx={{ width: "50%" }}>
+      <Box sx={{ maxWidth: "70%" }}>
         <Grid
           container
-          columns={2}
+          columns={{ xs: 1, sm: 2 }}
           spacing="17px"
           direction="row"
           justifyContent="flex-start"
           alignItems="center"
         >
-          <InfoBox label="登录账号" type="uid" content={object.code} />
-          <InfoBox label="用户角色" type="role" content={object.role} />
-          <InfoBox label="用户姓名" type="name" content={object.nome} />
-          <InfoBox
-            label="Shop"
-            type="shop"
-            content={object.Shop?.code}
-            variant="shop"
-          />
-          <Grid container columns={2} spacing={1} item xs={1}>
-            <InfoBox
-              label="电话"
-              type="phone"
-              content={object.phonePre}
-              variant="prefix"
-            />
-            <InfoBox type="phone" content={object.phone} />
-          </Grid>
-          <InfoBox
-            label="是否可用"
-            type="usable"
-            content={object.is_usable}
-            noBox
-          />
+          {fields.map((field) => {
+            if (field.variant == "phone") {
+              return (
+                <Grid
+                  container
+                  columns={{ xs: 2, sm: 2 }}
+                  spacing={1}
+                  item
+                  xs={1}
+                  sm={1}
+                >
+                  {field.variantObj.fields.map((variantField) => {
+                    return (
+                      <InfoBox
+                        label={variantField.label}
+                        type={variantField.type}
+                        content={variantField.content}
+                        editing={editing}
+                        form={form}
+                        setForm={setForm}
+                        noBox={variantField.noBox}
+                        variant={field.variant}
+                        variantObj={field.variantObj}
+                        curRole={curRole}
+                      />
+                    );
+                  })}
+                </Grid>
+              );
+            }
+            return (
+              <InfoBox
+                label={field.label}
+                type={field.type}
+                content={field.content}
+                editing={editing}
+                form={form}
+                setForm={setForm}
+                noBox={field.noBox}
+                variant={field.variant}
+                variantObj={field.variantObj}
+                curRole={curRole}
+              />
+            );
+          })}
         </Grid>
-        <Box mt="44px">
+
+        <Grid container mt="44px">
           <FooterBox
             label="最近登录"
             content={object.at_last_login}
             variant="footer"
           />
-        </Box>
+        </Grid>
+
         <Grid container columns={2} spacing="17px">
-          <Grid item xs={1}>
-            <Button variant="contained" fullWidth>
-              SAVE
-            </Button>
-          </Grid>
-          <Grid item xs={1}>
-            <Button variant="contained" color="secondary" fullWidth>
-              CANCEL
-            </Button>
-          </Grid>
-          <Grid item xs={1}>
-            <Button variant="contained" color="error" fullWidth>
-              DELETE
-            </Button>
-          </Grid>
+          {
+            // 如果比自己等级低 可删除
+            curRole < object.role && (
+              <>
+                <Grid item xs={1}>
+                  <Button variant="contained" color="error" fullWidth>
+                    DELETE
+                  </Button>
+                </Grid>
+              </>
+            )
+          }
         </Grid>
       </Box>
       {/* <div className="row mt-3">

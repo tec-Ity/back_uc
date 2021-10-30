@@ -1,25 +1,48 @@
-import { TextField } from "@mui/material";
-import React from "react";
+import { TextField, Autocomplete } from "@mui/material";
 
-export default function VarietyInput({ content, variant, handleChange }) {
+export default function VarietyInput({
+  content,
+  variant,
+  variantObj,
+  setForm,
+  form,
+  type,
+}) {
+  function handleChange(event) {
+    setForm({ ...form, [type]: event.target.value });
+  }
   switch (variant) {
     case "shop":
       return (
-        <TextField
-          id="standard-basic"
-          select
-          variant="standard"
-          defaultValue={content}
-          InputProps={{ disableUnderline: true }}
+        <Autocomplete
+          disablePortal
+          id={type}
+          options={variantObj.testlist}
           fullWidth
+          renderInput={(params) => (
+            <TextField
+              variant="standard"
+              InputProps={{ disableUnderline: true }}
+              {...params}
+              label="Shop"
+            />
+          )}
         />
+        // <TextField
+        //   id="standard-basic"
+        //   select
+        //   variant="standard"
+        //   defaultValue={content}
+        //   InputProps={{ disableUnderline: true }}
+        //   fullWidth
+        // />
       );
     default:
       return (
         <TextField
-          id="standard-basic"
+          id={type}
           variant="standard"
-          value={content}
+          value={form[type] ? form[type] : content}
           onChange={handleChange}
           InputProps={{ disableUnderline: true }}
           fullWidth
