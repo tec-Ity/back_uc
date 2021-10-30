@@ -69,33 +69,31 @@ export default function User() {
 
   const classes = useStyle();
   const [editing, setEditing] = useState(false);
-  const [form, setForm] = useState(() => {
+  const [form, setForm] = useState({});
+
+  useEffect(() => {
+    if (!editing) return;
     const { code, nome, phonePre, phone, role } = object;
     const Shop = object.Shop ? object.Shop._id : null;
-    // if (object.Shop) {
-    //   setfarSearch_Shops(object.Shop.code);
-    // }
-    // roleFilterShops(formdata.role);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    return { code, nome, phonePre, phone, role, Shop };
-  });
+    setForm({ code, nome, phonePre, phone, role });
+  }, [object]);
 
   function handleSave() {
     console.log(form);
-    setEditing(!editing);
+    // setEditing(!editing);
   }
 
   function FooterBox({ label = "label", content = "content", variant, noBox }) {
     return (
       <>
-        <Grid item xs={3}>
+        <Grid item xs={12} sm={3}>
           <Typography
             sx={{ fontSize: "16px", color: "#0000004D", fontWeight: "700" }}
           >
             {label}
           </Typography>
         </Grid>
-        <Grid item xs="auto">
+        <Grid item xs="auto" sm="auto">
           <Typography sx={{ fontSize: "16px", fontWeight: "700" }}>
             {content}
           </Typography>
@@ -105,15 +103,23 @@ export default function User() {
   }
 
   const links = [
-    { label: "主页", to: "/ower/home" },
-    { label: "用户列表", to: "/ower/users" },
+    { label: "主页", to: `/${rolePath}/home` },
+    { label: "用户列表", to: `/${rolePath}/users` },
     { label: "详情" },
   ];
+
+  const permMap = {
+    1: ["code", "name", "shop", "phone", "usable", "phonePre"],
+    3: ["name", "role"],
+    5: ["name"],
+    101: ["name"],
+    105: ["name"],
+  };
 
   const fields = [
     {
       label: "登录账号",
-      type: "uid",
+      type: "code",
       content: object.code,
     },
     {
@@ -165,44 +171,13 @@ export default function User() {
   return (
     <>
       <ListPageHeader links={links} showSearch={false} showAddIcon={false} />
-      {/* <NavBread
-        activePage={
-          <FormattedMessage id="navLabel-user" defaultMessage="user" />
-        }
-      >
-        <Link to={`/${rolePath}/users`}>
-          <FormattedMessage id="navLabel-users" defaultMessage="users" />
-        </Link>
-      </NavBread> */}
       {
         // 数据正确
         object._id && String(object._id) === String(id) && (
           <div className="text-right">
-            {
+            {/* {
               // 如果比自己等级低 可删除
-              curRole < object.role && (
-                <>
-                  <button className="btn btn-danger mx-4" onClick={deleteDB}>
-                    <i className="bx bx-trash"></i>
-                  </button>
-                </>
-              )
-            }
-
-            <button
-              className="btn btn-warning mx-3"
-              onClick={() => setModalPwd(true)}
-            >
-              {" "}
-              <i className="bx bx-lock-open"></i>{" "}
-            </button>
-            <UserPwdModal
-              show={modalPwd}
-              onHide={() => setModalPwd(false)}
-              object={object}
-              flagSlice={flagSlice}
-            />
-
+            } */}
             <button className="btn btn-info" onClick={() => setModalPut(true)}>
               {" "}
               <i className="bx bx-edit-alt"></i>{" "}
@@ -213,35 +188,64 @@ export default function User() {
               object={object}
               flagSlice={flagSlice}
             />
+
+            {editing && curRole < object.role && (
+              <Button variant="contained" color="error" onClick={deleteDB}>
+                删除此用户
+              </Button>
+            )}
+            {editing && (
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => setModalPwd(true)}
+              >
+                修改密码
+              </Button>
+            )}
+            <UserPwdModal
+              show={modalPwd}
+              onHide={() => setModalPwd(false)}
+              object={object}
+              flagSlice={flagSlice}
+            />
             {editing && (
               <IconButton onClick={handleSave}>
                 <DoneIcon />
               </IconButton>
             )}
-            <Button
-              variant="contained"
-              color="primary"
-              startIcon={!editing ? <EditIcon /> : <CancelIcon />}
-              onClick={() => {
-                setEditing(!editing);
-                setForm({});
-              }}
-            >
-              编辑
-            </Button>
-            <IconButton
-              onClick={() => {
-                setEditing(!editing);
-                setForm({});
-              }}
-            >
-              {!editing ? <EditIcon /> : <CancelIcon />}
-            </IconButton>
+            {!editing ? (
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={!editing ? <EditIcon /> : <CancelIcon />}
+                onClick={() => {
+                  //load object to form
+                  const { code, nome, phonePre, phone, role } = object;
+                  const Shop = object.Shop ? object.Shop._id : null;
+                  setForm({ code, nome, phonePre, phone, role });
+
+                  setEditing(!editing);
+                }}
+              >
+                编辑
+              </Button>
+            ) : (
+              <IconButton
+                onClick={() => {
+                  setEditing(!editing);
+                  // setForm({});
+                }}
+              >
+                <CancelIcon />
+              </IconButton>
+            )}
           </div>
         )
       }
 
       <Box sx={{ maxWidth: "70%" }}>
+        {/* main details */}
         <Grid
           container
           columns={{ xs: 1, sm: 2 }}
@@ -274,6 +278,7 @@ export default function User() {
                         variant={field.variant}
                         variantObj={field.variantObj}
                         curRole={curRole}
+                        permMap={permMap}
                       />
                     );
                   })}
@@ -292,32 +297,19 @@ export default function User() {
                 variant={field.variant}
                 variantObj={field.variantObj}
                 curRole={curRole}
+                permMap={permMap}
               />
             );
           })}
         </Grid>
 
+        {/* footer details */}
         <Grid container mt="44px">
           <FooterBox
             label="最近登录"
             content={object.at_last_login}
             variant="footer"
           />
-        </Grid>
-
-        <Grid container columns={2} spacing="17px">
-          {
-            // 如果比自己等级低 可删除
-            curRole < object.role && (
-              <>
-                <Grid item xs={1}>
-                  <Button variant="contained" color="error" fullWidth>
-                    DELETE
-                  </Button>
-                </Grid>
-              </>
-            )
-          }
         </Grid>
       </Box>
       {/* <div className="row mt-3">

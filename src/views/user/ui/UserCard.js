@@ -11,6 +11,11 @@ import {
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 
+const propreties = {
+  height: "220px",
+  width: "180px",
+};
+
 const useStyle = makeStyles({
   imgStyle: {
     height: "160px",
@@ -21,8 +26,8 @@ const useStyle = makeStyles({
   cardBox: {
     position: "relative",
     boxSizing: "border-box",
-    height: "220px",
-    width: "180px",
+    height: propreties.height,
+    width: propreties.width,
     backgroundColor: "#fff",
     margin: "16px",
     boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.1)",

@@ -20,7 +20,7 @@ const useStyle = makeStyles({
     position: "relative",
     boxSizing: "border-box",
     height: "84px",
-    width: "1135px",
+    width: "100%",
     marginBottom: "25px",
     backgroundColor: "#fff",
     boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.1)",
@@ -54,6 +54,10 @@ const useStyle = makeStyles({
       height: "1.5em",
     },
   },
+  card: {
+    padding: "10px",
+    display: "flex",
+  },
 });
 
 export default function UserRow(props) {
@@ -76,13 +80,7 @@ export default function UserRow(props) {
               className={classes.innerbox}
               onClick={clickEvent && clickEvent(object)}
             >
-              <Box
-                disableGutters
-                sx={{
-                  padding: "10px",
-                  display: "flex",
-                }}
-              >
+              <Box disableGutters className={classes.card}>
                 <CardMedia
                   component="img"
                   sx={{ width: "64px" }}

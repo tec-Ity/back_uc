@@ -2,11 +2,6 @@ import React from "react";
 import { Typography, Grid, Box } from "@mui/material";
 import VarietyInput from "./VarietyInput";
 
-const permMap = {
-  1: ["uid", "name", "role", "shop", "phone", "usable", "phonePre"],
-  3: ["name", "role"],
-};
-
 export default function InfoBox({
   label,
   content,
@@ -18,13 +13,15 @@ export default function InfoBox({
   form,
   setForm,
   curRole,
+  permMap,
 }) {
   const { [curRole]: userPerms } = permMap;
+  let editable = editing && userPerms.includes(type);
   return (
     <Grid item xs={1} sm={1}>
       <Box
         sx={{
-          border: noBox || !(editing && userPerms.includes(type)) ? 0 : 1,
+          border: noBox || !editable ? 0 : 1,
           p: "10px",
           mt: "10px",
           position: "relative",
@@ -43,7 +40,7 @@ export default function InfoBox({
         >
           {label}
         </Typography>
-        {editing && userPerms.includes(type) ? (
+        {editable ? (
           <VarietyInput
             content={content}
             variant={variant}
@@ -56,6 +53,7 @@ export default function InfoBox({
           <Typography sx={{ fontSize: "16px", fontWeight: "700" }}>
             {content}
           </Typography>
+          // <div></div>
         )}
       </Box>
     </Grid>
