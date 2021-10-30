@@ -4,13 +4,17 @@ import { FormattedMessage } from "react-intl";
 import {
   Card,
   CardActionArea,
-  CardContent,
   CardMedia,
   Typography,
   Container,
   Box,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+
+const propreties = {
+  height: "220px",
+  width: "180px",
+};
 
 const useStyle = makeStyles({
   imgStyle: {
@@ -22,8 +26,8 @@ const useStyle = makeStyles({
   cardBox: {
     position: "relative",
     boxSizing: "border-box",
-    height: "220px",
-    width: "180px",
+    height: propreties.height,
+    width: propreties.width,
     backgroundColor: "#fff",
     margin: "16px",
     boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.1)",
@@ -73,7 +77,7 @@ export default function UserCard(props) {
     <>
       {object ? (
         <Box className={classes.cardBox}>
-          <Card>
+          <Card elevation={0}>
             <CardActionArea
               className={classes.innerbox}
               onClick={clickEvent && clickEvent(object)}

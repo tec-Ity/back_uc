@@ -28,14 +28,6 @@ export default function VarietyInput({
             />
           )}
         />
-        // <TextField
-        //   id="standard-basic"
-        //   select
-        //   variant="standard"
-        //   defaultValue={content}
-        //   InputProps={{ disableUnderline: true }}
-        //   fullWidth
-        // />
       );
     default:
       return (

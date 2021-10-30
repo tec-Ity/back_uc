@@ -3,10 +3,8 @@ import { FormattedMessage } from "react-intl";
 import {
   Card,
   CardActionArea,
-  CardContent,
   CardMedia,
   Typography,
-  Container,
   Box,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
@@ -22,7 +20,7 @@ const useStyle = makeStyles({
     position: "relative",
     boxSizing: "border-box",
     height: "84px",
-    width: "1135px",
+    width: "100%",
     marginBottom: "25px",
     backgroundColor: "#fff",
     boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.1)",
@@ -33,12 +31,12 @@ const useStyle = makeStyles({
     width: "100%",
   },
   title: {
-    fontSize: "12px",
+    fontSize: "20px",
     fontWeight: "700",
     overflowWrap: "break-word",
   },
   desc: {
-    fontSize: "12px",
+    fontSize: "20px",
     fontWeight: "400",
     color: "#0000004D",
     height: "1.5em",
@@ -55,6 +53,10 @@ const useStyle = makeStyles({
       color: "#00000080",
       height: "1.5em",
     },
+  },
+  card: {
+    padding: "10px",
+    display: "flex",
   },
 });
 
@@ -73,33 +75,29 @@ export default function UserRow(props) {
     <>
       {object ? (
         <Box className={classes.cardBox}>
-          <Card className={classes.cardBox}>
+          <Card className={classes.cardBox} elevation={0}>
             <CardActionArea
               className={classes.innerbox}
               onClick={clickEvent && clickEvent(object)}
             >
-              <Box
-                disableGutters
-                sx={{
-                  padding: "10px",
-                }}
-                sx={{ display: "flex" }}
-              >
+              <Box disableGutters className={classes.card}>
                 <CardMedia
                   component="img"
                   sx={{ width: "64px" }}
                   image={img_url}
                   alt={object.code}
                 />
-                <Typography variant="h" className={classes.title}>
-                  {object.code + (object.nome && `[${object.nome}]`)}
-                </Typography>
-                <Typography variant="body2" className={classes.desc}>
-                  <FormattedMessage
-                    id={`role-${object.role}`}
-                    defaultMessage={object.role}
-                  />
-                </Typography>
+                <Box sx={{ ml: "32px" }}>
+                  <Typography variant="h" className={classes.title}>
+                    {object.code + (object.nome && `[${object.nome}]`)}
+                  </Typography>
+                  <Typography variant="body2" className={classes.desc}>
+                    <FormattedMessage
+                      id={`role-${object.role}`}
+                      defaultMessage={object.role}
+                    />
+                  </Typography>
+                </Box>
               </Box>
             </CardActionArea>
           </Card>
