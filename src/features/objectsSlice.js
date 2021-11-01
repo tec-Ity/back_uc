@@ -28,6 +28,7 @@ export const getObjects = createAsyncThunk(
       // console.log(objects);
       return { flagSlice, objects, pageNum };
     } else {
+      alert("faild to load");
       return rejectWithValue("getObjects error info");
       // return rejectWithValue({flagSlice, info:'my error info'});
     }
@@ -41,6 +42,7 @@ export const getObject = createAsyncThunk(
       const object = res.data.object;
       return { flagSlice, object };
     } else {
+      alert("faild to load");
       return rejectWithValue("getObject error info");
       // return rejectWithValue({flagSlice, info:'my error info'});
     }
@@ -63,7 +65,7 @@ export const postObject = createAsyncThunk(
   async ({ flagSlice, api, data }, { getState, rejectWithValue }) => {
     const post_res = await axios_Prom(api, "POST", data);
     if (post_res.status === 200) {
-      alert("同步成功");
+      alert("post successfully");
       return { flagSlice, object: post_res.data.object };
       //   const objs = [...getState().objects[flagSlice]?.objects] || [];
       //   const newObj = post_res.data.object;
@@ -115,9 +117,10 @@ export const putObject = createAsyncThunk(
     console.log(put_res);
     if (put_res.status === 200) {
       const object = put_res.data.object;
-      alert("修改成功");
+      alert("put successfully");
       return { flagSlice, object, isList };
     } else {
+      alert(put_res.message);
       return rejectWithValue("putObject error info");
       // return rejectWithValue({flagSlice, info:'my error info'});
     }
@@ -145,7 +148,7 @@ export const deleteObject = createAsyncThunk(
     // console.log(api)
     const res = await fetch_Prom(api, "DELETE");
     if (res.status === 200) {
-      alert("删除成功");
+      alert("deleted successfully");
       return { flagSlice, id, isList };
     } else {
       alert(res.message);
@@ -247,7 +250,6 @@ export const objectsSlice = createSlice({
       state[flagSlice].objects = objects;
     },
     [postObject.rejected]: (state, action) => {
-      alert(action.error.message);
       state.errMsg = action.error.message;
     },
 
