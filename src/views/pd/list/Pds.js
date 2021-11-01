@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 // import { FormattedMessage } from "react-intl";
 import { useSelector, useDispatch } from "react-redux";
@@ -11,6 +11,7 @@ import UiVariety from "../../../components/ui/UiVariety";
 import PdCard from "../ui/PdCard";
 import PdRow from "../ui/PdRow";
 import PageNave from "../../../components/universal/query/PageNav";
+import PdPostModal from "../modal/PdPostModal";
 
 const links = [{ label: "主页", to: "/home" }, { label: "产品列表" }];
 
@@ -21,7 +22,7 @@ export default function Pds(props) {
   const api = "/Pds";
   const rolePath = getRolePath();
   const hist = useHistory();
-
+  const [addNew, setAddNew] = useState(false);
   const objects = useSelector(selectObjects(flagSlice));
   const clickEvent = (obj) => (e) => {
     hist.push(`/${rolePath}/pd/${obj._id}`);
@@ -38,9 +39,10 @@ export default function Pds(props) {
         flagSlice={flagSlice}
         api={api}
         links={links}
-        showAddIcon={false}
+        addLabel="添加产品"
+        showAddNew={() => setAddNew(true)}
       />
-      <div className='mt-4'>
+      <div className="mt-4">
         <UiVariety
           propsCard={PdCard}
           UiRow={PdRow}
@@ -48,10 +50,9 @@ export default function Pds(props) {
           clickEvent={clickEvent}
         />
       </div>
-      <PageNave
-        flagSlice={flagSlice}
-        api={api}
-      />
+      <PageNave flagSlice={flagSlice} api={api} />
+
+      <PdPostModal show={addNew} handleClose={() => setAddNew(false)} />
     </>
   );
 }

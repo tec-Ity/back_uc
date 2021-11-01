@@ -84,6 +84,7 @@ export const postObject = createAsyncThunk(
       //   // objects.sort(sortBy("role"));
       //   return { flagSlice, objects };
     } else {
+      alert(post_res.message);
       return rejectWithValue("postObject error info");
     }
   }
@@ -246,6 +247,7 @@ export const objectsSlice = createSlice({
       state[flagSlice].objects = objects;
     },
     [postObject.rejected]: (state, action) => {
+      alert(action.error.message);
       state.errMsg = action.error.message;
     },
 
