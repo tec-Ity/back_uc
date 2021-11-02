@@ -1,5 +1,6 @@
 import React from "react";
-import { Breadcrumbs, Link, Typography } from "@mui/material";
+import { Breadcrumbs, Link as MuiLink, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
 import makeStyles from "@mui/styles/makeStyles";
 import SearchInput from "../universal/query/SearchInput";
 import { ReactComponent as AddIcon } from "../icon/addIconWhite.svg";
@@ -40,6 +41,17 @@ const useStyle = makeStyles({
     height: "12px",
     width: "12px",
   },
+  linkStyle: {
+    color: "#1d1d38",
+    textDecoration: "none",
+    "&visited": {
+      color: "#1d1d38",
+    },
+    "&:hover": {
+      color: "#1d1d38",
+      textDecoration: "underline",
+    },
+  },
 });
 export default function ListPageHeader({
   showAddNew,
@@ -60,11 +72,7 @@ export default function ListPageHeader({
               {link.label}
             </Typography>
           ) : (
-            <Link
-              key={index}
-              underline='hover'
-              color={"inherit"}
-              href={link.to}>
+            <Link to={link.to} className={classes.linkStyle}>
               {link.label}
             </Link>
           )
@@ -72,7 +80,7 @@ export default function ListPageHeader({
       </Breadcrumbs>
       <div className={classes.searchSection}>
         {showSearch === true && <SearchInput flagSlice={flagSlice} api={api} />}
-        {showAddIcon === true && (
+        {showAddIcon === true && addLabel && (
           <div onClick={showAddNew} className={classes.addButton}>
             <AddIcon className={classes.AddIconStyle} />
             {addLabel}

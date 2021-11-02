@@ -14,7 +14,7 @@ import { statusName, statusCode } from "../../../js/conf/confOrder";
 import { useHistory } from "react-router";
 import { getRolePath } from "../../../js/conf/confUser";
 import makeStyles from "@mui/styles/makeStyles";
-import { Grid } from "@mui/material";
+import { Card, CardActionArea, Grid } from "@mui/material";
 import ListPageHeader from "../../../components/basic/ListPageHeader";
 const useStyle = makeStyles({
   root: {},
@@ -35,6 +35,7 @@ const useStyle = makeStyles({
     "& > :last-child": {
       textAlign: "start",
     },
+    cursor: "pointer",
   },
   alertStyle: {
     position: "absolute",
@@ -121,53 +122,65 @@ export default function Orders() {
               ? "#FFBF44"
               : order.status === 700
               ? "#C0E57B"
-              : "#fff";
+              : "";
           return (
             <Grid
               container
               item
               xs={12}
               key={order._id}
-              style={{ cursor: "pointer" }}
-              className={classes.orderListItemContainer}
-              onClick={() => hist.push(`/${rolePath}/order/${order._id}`)}>
-              <Grid
-                container
-                item
-                xs={12}
-                className={classes.orderListItemStyle}>
-                <Grid item xs={1}>
-                  {order.Shop?.code}
-                </Grid>
-                <Grid item xs={2}>
-                  {order.code}
-                </Grid>
-                <Grid item xs={2}>
-                  {moment(order.at_crt).format("DD/MM/YYYY HH:mm")}
-                </Grid>
-                <Grid item xs={2}>
-                  {order.Client?.code}
-                </Grid>
-                <Grid item xs={1}>
-                  €{order.imp?.toFixed(2)}
-                </Grid>
-                <Grid
-                  item
-                  xs={3}
-                  style={{
-                    fontWeight:
-                      (order.status === 200 ||
-                        order.status === 400 ||
-                        order.status === 700) &&
-                      "700",
-                  }}>
-                  {statusName[statusCode[order.status]]}
-                </Grid>
-              </Grid>
-              <div className={classes.alertStyle}>
-                <div style={{ backgroundColor: colorStyle }}>!</div>
-                <div style={{ backgroundColor: colorStyle }}></div>
-              </div>
+              className={classes.orderListItemContainer}>
+              <Card
+                elevation={0}
+                style={{
+                  width: "100%",
+                  boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.1)",
+                }}>
+                <CardActionArea>
+                  <Grid
+                    container
+                    item
+                    xs={12}
+                    className={classes.orderListItemStyle}
+                    onClick={() =>
+                      hist.push(`/${rolePath}/order/${order._id}`)
+                    }>
+                    <Grid item xs={1}>
+                      {order.Shop?.code}
+                    </Grid>
+                    <Grid item xs={2}>
+                      {order.code}
+                    </Grid>
+                    <Grid item xs={2}>
+                      {moment(order.at_crt).format("DD/MM/YYYY HH:mm")}
+                    </Grid>
+                    <Grid item xs={2}>
+                      {order.Client?.code}
+                    </Grid>
+                    <Grid item xs={1}>
+                      €{order.imp?.toFixed(2)}
+                    </Grid>
+                    <Grid
+                      item
+                      xs={3}
+                      style={{
+                        fontWeight:
+                          (order.status === 200 ||
+                            order.status === 400 ||
+                            order.status === 700) &&
+                          "700",
+                      }}>
+                      {statusName[statusCode[order.status]]}
+                    </Grid>
+                  </Grid>
+                </CardActionArea>
+              </Card>
+              {colorStyle && (
+                <div className={classes.alertStyle}>
+                  <div style={{ backgroundColor: colorStyle }}>!</div>
+                  <div style={{ backgroundColor: colorStyle }}></div>
+                </div>
+              )}
             </Grid>
           );
         })}

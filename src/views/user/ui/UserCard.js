@@ -10,7 +10,7 @@ import {
   Box,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-
+import { default as userProfile } from "../../../components/icon/userProfileLightGrey.svg";
 const propreties = {
   height: "220px",
   width: "180px",
@@ -67,7 +67,7 @@ export default function UserCard(props) {
   const { object, clickEvent } = props;
   const classes = useStyle();
 
-  let img_url = `${process.env.PUBLIC_URL}/img/icon/userProfile.svg`;
+  let img_url = userProfile;
   if (object?.img_url) {
     img_url = get_DNS() + object.img_url;
   } else if (object?.img_urls?.length > 0) {
@@ -80,24 +80,22 @@ export default function UserCard(props) {
           <Card elevation={0}>
             <CardActionArea
               className={classes.innerbox}
-              onClick={clickEvent && clickEvent(object)}
-            >
+              onClick={clickEvent && clickEvent(object)}>
               <Container
                 disableGutters
                 sx={{
                   padding: "10px",
-                }}
-              >
+                }}>
                 <CardMedia
-                  component="img"
-                  height="160px"
+                  component='img'
+                  height='160px'
                   image={img_url}
                   alt={object.code}
                 />
-                <Typography variant="h" className={classes.title}>
+                <Typography variant='h' className={classes.title}>
                   {object.code + (object.nome && `[${object.nome}]`)}
                 </Typography>
-                <Typography variant="body2" className={classes.desc}>
+                <Typography variant='body2' className={classes.desc}>
                   <FormattedMessage
                     id={`role-${object.role}`}
                     defaultMessage={object.role}
@@ -108,7 +106,7 @@ export default function UserCard(props) {
           </Card>
         </Box>
       ) : (
-        <h3 className="text-danger"> UserCard parameter Error! </h3>
+        <h3 className='text-danger'> UserCard parameter Error! </h3>
       )}
     </>
   );

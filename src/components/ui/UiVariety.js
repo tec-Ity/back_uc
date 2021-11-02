@@ -13,12 +13,14 @@ const useStyle = makeStyles({
   btnStyle: {
     corlor: "#000",
     opacity: "0.3",
+    cursor: "pointer",
     "&:hover": {
       opacity: "0.8",
     },
   },
   activeBtnStyle: {
     opacity: 1,
+    cursor: "default",
   },
 });
 
@@ -75,14 +77,8 @@ export default function UiVariety(props) {
             classes.btnStyle,
             activeBtn === 0 && classes.activeBtnStyle
           )}
-          onClick={() => changeUi(0)}
-        >
-          <GridView
-            // src={gridView}
-            // className='img-neat'
-            // alt={"gridView"}
-            style={{ width: "21px", height: "21px" }}
-          />
+          onClick={() => changeUi(0)}>
+          <GridView style={{ width: "21px", height: "21px" }} />
         </div>
         <div
           className={clsx(
@@ -90,17 +86,11 @@ export default function UiVariety(props) {
             activeBtn === 1 && classes.activeBtnStyle
           )}
           style={{ marginLeft: "30px" }}
-          onClick={() => changeUi(1)}
-        >
-          <ListView
-            // src={listView}
-            // className='img-neat'
-            // alt={"listView"}
-            style={{ width: "21px", height: "21px" }}
-          />
+          onClick={() => changeUi(1)}>
+          <ListView style={{ width: "21px", height: "21px" }} />
         </div>
       </div>
-      <div className="mt-5">{componentUI()}</div>
+      <div className='mt-5'>{componentUI()}</div>
     </>
   );
 }

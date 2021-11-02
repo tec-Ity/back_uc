@@ -16,6 +16,7 @@ import CusInput from "../../../../components/basic/CusInput";
 import api_DNS from "../../../../js/_dns";
 import CusBtnGroup from "../../../../components/basic/CusBtnGroup";
 import { getRolePath } from "../../../../js/conf/confUser";
+import ListPageHeader from "../../../../components/basic/ListPageHeader";
 const useStyle = makeStyles({
   root: {},
   //header
@@ -134,7 +135,8 @@ export default function Areas() {
 
   return (
     <Container>
-      <ListPageHeader showAddNew={() => setAddNew(true)} />
+      <ListPageHeader  links={links} />
+
       <CityList addNew={addNew} closeAddNew={() => setAddNew(false)} />
     </Container>
   );
@@ -279,11 +281,13 @@ function CityListItem({ area, index, addNew = false, closeAddNew }) {
         {modifying === false ? (
           <>
             {/* bg img */}
-            <img
-              src={api_DNS + area.img_url}
-              alt={areaUpdateData.name}
-              className={classes.areaBg}
-            />
+            {area.img_url && (
+              <img
+                src={api_DNS + area.img_url}
+                alt={areaUpdateData.name}
+                className={classes.areaBg}
+              />
+            )}
             {/* gateg code */}
             <div className={classes.areaCode}>
               {(index + 1).toFixed(1) + " " + areaUpdateData.name}
@@ -418,34 +422,5 @@ function CityListItem({ area, index, addNew = false, closeAddNew }) {
         </Grid>
       )}
     </>
-  );
-}
-
-function ListPageHeader({ showAddNew }) {
-  const classes = useStyle();
-  return (
-    <div className={classes.headerContainer}>
-      <Breadcrumbs>
-        {links?.map((link, index) =>
-          index === links.length - 1 ? (
-            <Typography key={index} color='text.primary'>
-              {link.label}
-            </Typography>
-          ) : (
-            <Link
-              key={index}
-              underline='hover'
-              color={"inherit"}
-              href={link.to}>
-              {link.label}
-            </Link>
-          )
-        )}
-      </Breadcrumbs>
-
-      <SearchInput flagSlice={flagSlice} />
-
-      {/* <div onClick={showAddNew}>添加分类</div> */}
-    </div>
   );
 }

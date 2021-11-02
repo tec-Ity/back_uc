@@ -42,7 +42,11 @@ const useStyle = makeStyles({
     "&:focus": { borderColor: "#000", borderRadius: "0" },
   },
 });
-
+/**
+ *
+ * @param {*} props
+ * @returns
+ */
 export default function SearchInput(props) {
   const classes = useStyle();
   const {
@@ -55,7 +59,7 @@ export default function SearchInput(props) {
   } = props;
   const dispatch = useDispatch();
   const search = useSelector(selectQuery(flagSlice))?.search || "";
-
+console.log(flagSlice,api)
   const onChangeSearch = (e) => {
     const val = e.target.value;
     dispatch(
@@ -66,7 +70,9 @@ export default function SearchInput(props) {
   };
   // 根据本身 filter 的变化, 更新 reducer 中对应查找的数据 (如果加载此组件， 则不用在父组件中加载)
   useEffect(() => {
-    dispatch(getObjects({ flagSlice, api, isReload: true }));
+    flagSlice &&
+      api &&
+      dispatch(getObjects({ flagSlice, api, isReload: true }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
   // 根据父组件 farSearch 的变化 及时更新 recucer 中的 filter, (比如点击卡片 search input 会变为 obj.code)

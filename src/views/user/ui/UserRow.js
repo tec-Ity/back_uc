@@ -8,6 +8,7 @@ import {
   Box,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+import { default as userProfile } from "../../../components/icon/userProfileLightGrey.svg";
 
 const useStyle = makeStyles({
   imgStyle: {
@@ -64,7 +65,7 @@ export default function UserRow(props) {
   const { object, clickEvent } = props;
   const classes = useStyle();
 
-  let img_url = `${process.env.PUBLIC_URL}/favicon.ico`;
+  let img_url = userProfile;
   if (object?.img_url) {
     img_url = get_DNS() + object.img_url;
   } else if (object?.img_urls?.length > 0) {

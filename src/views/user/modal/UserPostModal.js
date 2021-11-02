@@ -29,7 +29,7 @@ export default function UserPostModal(props) {
     code: "",
     nome: "",
     role: "",
-    pwd: "111111",
+    pwd: "",
     phonePre: "0039",
     phone: "",
   }); // 创建的数据

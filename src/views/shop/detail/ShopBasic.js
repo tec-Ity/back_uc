@@ -4,13 +4,15 @@ import makeStyles from "@mui/styles/makeStyles";
 import { Container } from "@mui/material";
 import CusInput from "../../../components/basic/CusInput";
 import clsx from "clsx";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
+  deleteObject,
   // deleteObject,
   putObject,
 } from "../../../features/objectsSlice";
 
 import shopDefaul from "../../../components/icon/Shop.jpg";
+import { getRolePath } from "../../../js/conf/confUser";
 
 const useStyle = makeStyles({
   root: {},
@@ -32,8 +34,12 @@ const useStyle = makeStyles({
 export default function ShopBasic(props) {
   const { Shop, flagSlice, api } = props;
   const classes = useStyle();
+  const rolePath = getRolePath();
   const dispatch = useDispatch();
   const ref = useRef();
+  const status = useSelector((state) => state.objects.status);
+  const [justSubmitted, setJustSubmitted] = useState(null);
+
   //local img path for display on change
   const [imgLocal, setImgLocal] = useState(null);
   // console.log(Shop);
@@ -82,11 +88,20 @@ export default function ShopBasic(props) {
         data: formData,
       })
     );
+    setJustSubmitted("UPDATE");
   };
 
-  // const handleDelete = React.useCallback(() => {
-  //   dispatch(deleteObject({ flagSlice, api }));
-  // });
+  const handleDelete = () => {
+    dispatch(deleteObject({ flagSlice, api }));
+    setJustSubmitted("DELETE");
+  };
+
+  React.useEffect(() => {
+    if (justSubmitted === "DELETE" && status === "succeed") {
+      window.location.replace(`/${rolePath}/shops`);
+    }
+  });
+
   return (
     <Container className={classes.root}>
       <div className={clsx(classes.formItem, classes.flexStyle)}>
@@ -123,7 +138,9 @@ export default function ShopBasic(props) {
                 onClick={() => setModifying(true)}>
                 Edit
               </button>
-              <button className={clsx("btn mx-3 btn-danger", classes.btnStyle)}>
+              <button
+                className={clsx("btn mx-3 btn-danger", classes.btnStyle)}
+                onClick={handleDelete}>
                 Delete
               </button>
             </>

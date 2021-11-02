@@ -16,6 +16,7 @@ import {
 import api_DNS from "../../../../js/_dns";
 import CusBtnGroup from "../../../../components/basic/CusBtnGroup";
 import { getRolePath } from "../../../../js/conf/confUser";
+import ListPageHeader from "../../../../components/basic/ListPageHeader";
 const useStyle = makeStyles({
   root: {},
   //header
@@ -121,18 +122,19 @@ const links = [
   { label: "设置", to: `/${rolePath}/setting` },
   { label: "国家列表" },
 ];
-const flagSlice = "areas";
+const flagSlice = "nations";
 const api = "/Nations";
 export default function Nations() {
   const dispatch = useDispatch();
   const [addNew, setAddNew] = useState(false);
   useEffect(() => {
+    //   console.log(api)
     dispatch(getObjects({ flagSlice, api }));
   }, [dispatch]);
 
   return (
     <Container>
-      <ListPageHeader showAddNew={() => setAddNew(true)} />
+      <ListPageHeader links={links} />
       <CityList addNew={addNew} closeAddNew={() => setAddNew(false)} />
     </Container>
   );
@@ -141,7 +143,7 @@ export default function Nations() {
 function CityList(props) {
   const { addNew, closeAddNew } = props;
   const classes = useStyle();
-  const areas = useSelector((state) => state.objects[flagSlice]?.objects);
+  const nations = useSelector((state) => state.objects[flagSlice]?.objects);
   return (
     <Grid container className={classes.listGridContainer}>
       {addNew === true && (
@@ -152,7 +154,7 @@ function CityList(props) {
           area={{}}
         />
       )}
-      {areas?.map((area, index) => (
+      {nations?.map((area, index) => (
         <CityListItem area={area} index={index} key={area._id} />
       ))}
     </Grid>
@@ -277,11 +279,13 @@ function CityListItem({ area, index, addNew = false, closeAddNew }) {
         {modifying === false ? (
           <>
             {/* bg img */}
-            <img
-              src={api_DNS + area.img_url}
-              alt={areaUpdateData.name}
-              className={classes.areaBg}
-            />
+            {area.img_url && (
+              <img
+                src={api_DNS + area.img_url}
+                alt={areaUpdateData.name}
+                className={classes.areaBg}
+              />
+            )}
             {/* gateg code */}
             <div className={classes.areaCode}>
               {(index + 1).toFixed(1) + " " + areaUpdateData.name}
@@ -328,26 +332,6 @@ function CityListItem({ area, index, addNew = false, closeAddNew }) {
             handleDelete={handleDelete}
             handleEdit={handleEdit}
           />
-          {/* {modifying === true ? (
-            <>
-              <div onClick={handleSubmit}>Done</div>
-              <div onClick={handleCancel}>Cancle</div>
-              <div onClick={handleDelete}>Del</div>
-            </>
-          ) : (
-            <>
-              <div
-                onClick={(e) => {
-                  setModifying(true);
-                  setShowChild(false);
-                  setImgLocal([]);
-                  e.stopPropagation();
-                }}>
-                edit
-              </div>
-              <div onClick={handleDelete}>del</div>
-            </>
-          )} */}
         </div>
       </Grid>
 
@@ -414,34 +398,5 @@ function CityListItem({ area, index, addNew = false, closeAddNew }) {
         </Grid>
       )}
     </>
-  );
-}
-
-function ListPageHeader({ showAddNew }) {
-  const classes = useStyle();
-  return (
-    <div className={classes.headerContainer}>
-      <Breadcrumbs>
-        {links?.map((link, index) =>
-          index === links.length - 1 ? (
-            <Typography key={index} color='text.primary'>
-              {link.label}
-            </Typography>
-          ) : (
-            <Link
-              key={index}
-              underline='hover'
-              color={"inherit"}
-              href={link.to}>
-              {link.label}
-            </Link>
-          )
-        )}
-      </Breadcrumbs>
-
-      <SearchInput flagSlice={flagSlice} />
-
-      {/* <div onClick={showAddNew}>添加分类</div> */}
-    </div>
   );
 }
