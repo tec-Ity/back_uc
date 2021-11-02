@@ -24,6 +24,7 @@ const useStyle = makeStyles({
     top: 0,
     left: "10px",
     fontWeight: "700",
+    fontSize: "14px",
     color: "#1d1d384d",
   },
   inputStyle: {

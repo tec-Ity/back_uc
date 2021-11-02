@@ -3,6 +3,7 @@ import { get_DNS } from "../../../js/api";
 import makeStyles from "@mui/styles/makeStyles";
 import { Container } from "@mui/material";
 import CusInput from "../../../components/basic/CusInput";
+import CusSelectSearch from "../../../components/basic/CusSelectSearch";
 import clsx from "clsx";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -42,14 +43,13 @@ export default function ShopBasic(props) {
 
   //local img path for display on change
   const [imgLocal, setImgLocal] = useState(null);
-  // console.log(Shop);
   const [infoUpdate, setInfoUpdate] = useState({
     code: "",
     name: "",
     city: "",
     addr: "",
     zip: "",
-    img_url: "",
+    img: "",
   });
   const [modifying, setModifying] = useState(false);
   React.useEffect(() => {
@@ -59,7 +59,7 @@ export default function ShopBasic(props) {
       city: Shop?.Cita || "",
       addr: Shop?.addr || "",
       zip: Shop?.zip || "",
-      img_url: Shop?.img_url || "",
+      img: Shop?.img_url || "",
     });
   }, [
     Shop?.Cita,
@@ -70,6 +70,8 @@ export default function ShopBasic(props) {
     Shop?.zip,
   ]);
 
+  console.log(infoUpdate.img);
+
   const handleSubmit = () => {
     const formData = new FormData();
     formData.append(
@@ -78,6 +80,7 @@ export default function ShopBasic(props) {
         code: infoUpdate.code,
         nome: infoUpdate.name,
         zip: infoUpdate.zip,
+        Cita: infoUpdate.city?._id,
       })
     );
     formData.append("img", infoUpdate.img);
@@ -106,14 +109,14 @@ export default function ShopBasic(props) {
     <Container className={classes.root}>
       <div className={clsx(classes.formItem, classes.flexStyle)}>
         {/* img component */}
-        <div onClick={() => ref.current.click()}>
+        <div onClick={() => modifying === true && ref.current.click()}>
           <img
             alt={infoUpdate.code}
             src={
               imgLocal
                 ? imgLocal
-                : infoUpdate.img_url
-                ? get_DNS() + infoUpdate.img_url
+                : Shop?.img_url
+                ? get_DNS() + Shop?.img_url
                 : shopDefaul
             }
             className={classes.mainImg}
@@ -184,13 +187,29 @@ export default function ShopBasic(props) {
         />
       </div>
       <div className={classes.formItem}>
-        <CusInput
+        {/* <CusInput
           label='City'
           disabled
           value={infoUpdate.city?.code + " (" + infoUpdate.city?.nome + ")"}
           handleChange={(e) =>
             setInfoUpdate((prev) => ({ ...prev, city: e.target.value }))
           }
+        /> */}
+
+        <CusSelectSearch
+          disabled={!modifying}
+          label='City'
+          flagSlice='Citas'
+          api='/Citas'
+          defaultSel={infoUpdate.city?.code}
+          handleSelect={(val) => {
+            console.log(val);
+            val &&
+              setInfoUpdate((prev) => ({
+                ...prev,
+                city: { ...prev.city, code: val.label, _id: val.id },
+              }));
+          }}
         />
       </div>
       <div className={classes.formItem}>

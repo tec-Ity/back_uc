@@ -118,17 +118,20 @@ const useStyle = makeStyles({
   addNewBox: {
     width: "100%",
     height: "40px",
-    backgroundColor: "#0000004d",
+    backgroundColor: "#000000",
     color: "#fff",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     cursor: "pointer",
+    '&:hover':{
+        backgroundColor: "#000000cc",
+    }
   },
   addNewLabel: {
     display: "flex",
     alignItems: "center",
-    color: "#0000004d",
+    color: "#000000",
     fontWeight: "700",
   },
 });
