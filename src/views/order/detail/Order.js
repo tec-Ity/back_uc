@@ -11,10 +11,12 @@ import {
   getObject,
   selectObject,
   cleanField,
+  putObject,
 } from "../../../features/objectsSlice";
 import moment from "moment";
 import { ReactComponent as ViewMore } from "../../../components/icon/orderDetailViewMore.svg";
 import { ReactComponent as ViewLess } from "../../../components/icon/orderDetailViewLess.svg";
+import ListPageHeader from "../../../components/basic/ListPageHeader";
 
 const useStyle = makeStyles({
   root: { fontFamily: "Montserrat", paddingBottom: "100px" },
@@ -111,6 +113,22 @@ const useStyle = makeStyles({
       color: "rgba(0, 0, 0, 0.5)",
     },
   },
+  //order status
+  takeOrderBtnStyle: {
+    boxSizing: "border-box",
+    height: "30px",
+    width: "84px",
+    border: "2px solid #D83535",
+    borderRadius: "4px",
+    fontSize: "14px",
+    color: "#D83535",
+    fontWeight: 600,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#D835351A",
+    cursor: "pointer",
+  },
 
   //orderProds
 });
@@ -140,6 +158,11 @@ const populateObjs = [
   },
   { path: "ship_info", select: "Cita.code" },
 ];
+const links = [
+  { label: "主页", to: "/home" },
+  { label: "订单列表", to: `/${rolePath}/orders` },
+  { label: "订单详情" },
+];
 ////////////////////////////////////////////////////////////////
 export default function Order() {
   const classes = useStyle();
@@ -147,7 +170,7 @@ export default function Order() {
   const { id } = useParams();
   const api = `/Order/${id}`;
   const order = useSelector(selectObject(flagSlice));
-
+  console.log(order);
   useEffect(() => {
     dispatch(
       getObject({
@@ -159,15 +182,14 @@ export default function Order() {
       dispatch(cleanField({ flagSlice, flagField }));
     };
   }, [api, dispatch]);
+
   return (
-    <Container className={classes.root}>
+    <Container className={classes.root} disableGutters>
       {/* bread */}
-      <NavBread activePage='OrderDetail'>
-        <Link to={`/${rolePath}/orders`}>Orders</Link>
-      </NavBread>
+      <ListPageHeader links={links} showSearch={false} />
       {/* order status */}
       <div className={classes.containerItem}>
-        <OrderStatusSection orderStatus={order.status} />
+        <OrderStatusSection orderStatus={order.status} id={id} />
       </div>
       {/* order info */}
       <div className={classes.containerItem}>
@@ -217,11 +239,42 @@ const orderStatusObjs = [
 ];
 
 function OrderStatusSection(props) {
-  const { orderStatus } = props;
+  const { orderStatus, id } = props;
+  const classes = useStyle();
+  const status = useSelector((state) => state.objects.status);
+  const [justSubmitted, setJustSubmitted] = useState();
+  const dispatch = useDispatch();
+  const curRole = localStorage.getItem("role");
+  const handleChangeOrderStatus = (action) => () => {
+    //立即接单-CONFIRM
+    console.log(action);
+    action &&
+      dispatch(
+        putObject({
+          flagSlice,
+          api: "/Order_change_status/" + id,
+          data: { action },
+        })
+      );
+    setJustSubmitted(true);
+  };
+
+  useEffect(() => {
+    if (justSubmitted === true && status === "succeed") {
+      window.location.reload();
+    }
+  });
+
   return (
     <SectionHeader label='订单状态'>
-      <>
-        <div style={{ display: "flex", width: "100%" }}>
+      <div
+        style={{
+          display: "flex",
+          width: "100%",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}>
+        <div style={{ display: "flex", width: "80%" }}>
           {orderStatusObjs.map((oStatus) => (
             <OrderStatusProgressBar
               label={oStatus.label}
@@ -230,7 +283,29 @@ function OrderStatusSection(props) {
             />
           ))}
         </div>
-      </>
+        {curRole > 100 &&
+          (orderStatus === 200 ? (
+            <div
+              className={classes.takeOrderBtnStyle}
+              onClick={handleChangeOrderStatus("CONFIRM")}>
+              立即接单
+            </div>
+          ) : orderStatus === 400 ? (
+            <div
+              className={classes.takeOrderBtnStyle}
+              onClick={handleChangeOrderStatus("DONE")}>
+              立即发货
+            </div>
+          ) : orderStatus === 700 ? (
+            <div
+              className={classes.takeOrderBtnStyle}
+              onClick={handleChangeOrderStatus("COMPLETE")}>
+              确认送达
+            </div>
+          ) : (
+            ""
+          ))}
+      </div>
     </SectionHeader>
   );
 }
@@ -269,7 +344,15 @@ function OrderInfoSection({ order }) {
           key: "预计收货时间",
           value: moment(order.at_schedule).format("DD/MM/YYYY HH:mm"),
         },
-        { key: "订单类型", value: order.type_Order },
+        {
+          key: "订单类型",
+          value:
+            order.type_Order === -1
+              ? "采购订单"
+              : order.type_Order === 1
+              ? "销售订单"
+              : "",
+        },
         { key: "初始总额", value: "€" + order.total_regular?.toFixed(2) },
         {
           key: "确认订单时间",
@@ -310,11 +393,11 @@ function OrderInfoSection({ order }) {
           <div>{order?.code}</div>
           {showMore === true ? (
             <div onClick={() => setShowMore(false)}>
-              <ViewLess />
+              <ViewLess style={{ cursor: "pointer" }} />
             </div>
           ) : (
             <div onClick={() => setShowMore(true)}>
-              <ViewMore />
+              <ViewMore style={{ cursor: "pointer" }} />
             </div>
           )}
         </>

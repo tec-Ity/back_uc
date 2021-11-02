@@ -14,6 +14,7 @@ import Pds from "../views/pd/list/Pds";
 import Pd from "../views/pd/detail/Pd";
 
 import Reload from "../views/_index/Reload"; // 重新加载页面
+import Order from "../views/order/detail/Order";
 
 export default function WkerRouter() {
   return (
@@ -40,12 +41,15 @@ export default function WkerRouter() {
         <Route path='/wker/orders'>
           <Orders />
         </Route>
+        <Route path='/wker/order/:id'>
+          <Order />
+        </Route>
 
         <Route path='/wker/pds'>
           <Pds />
         </Route>
         <Route path='/wker/pd/:id'>
-          <Pd/>
+          <Pd />
         </Route>
 
         <Route path='/wker/reload'>
