@@ -70,8 +70,6 @@ export default function ShopBasic(props) {
     Shop?.zip,
   ]);
 
-  console.log(infoUpdate.img);
-
   const handleSubmit = () => {
     const formData = new FormData();
     formData.append(
@@ -81,6 +79,7 @@ export default function ShopBasic(props) {
         nome: infoUpdate.name,
         zip: infoUpdate.zip,
         Cita: infoUpdate.city?._id,
+        addr: infoUpdate.addr,
       })
     );
     formData.append("img", infoUpdate.img);
@@ -215,7 +214,7 @@ export default function ShopBasic(props) {
       <div className={classes.formItem}>
         <CusInput
           label='Address'
-          disabled
+          disabled={!modifying}
           value={infoUpdate.addr}
           handleChange={(e) =>
             setInfoUpdate((prev) => ({ ...prev, addr: e.target.value }))
