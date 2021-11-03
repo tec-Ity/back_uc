@@ -52,7 +52,7 @@ const confUser = {
       roleNav: [
         { icon: "bx bxs-package", label: "prods", to: "/wker/prods" },
         { icon: "bx bx-list-ul", label: "orders", to: "/wker/orders" },
-        { icon: "bx bx-package", label: "pds", to: "/bser/pds" },
+        { icon: "bx bx-package", label: "pds", to: "/wker/pds" },
       ],
     },
   },

@@ -14,6 +14,7 @@ import PageNave from "../../../components/universal/query/PageNav";
 import PdPostModal from "../modal/PdPostModal";
 
 const links = [{ label: "主页", to: "/home" }, { label: "产品列表" }];
+const populateObjs = [{ path: "Prods", select: "code Shop" }];
 
 export default function Pds(props) {
   // const {isShop} = props
@@ -29,7 +30,13 @@ export default function Pds(props) {
   };
 
   useEffect(() => {
-    dispatch(getObjects({ flagSlice, api, isReload: true }));
+    dispatch(
+      getObjects({
+        flagSlice,
+        api: api + "?populateObjs=" + JSON.stringify(populateObjs),
+        isReload: true,
+      })
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -39,10 +46,10 @@ export default function Pds(props) {
         flagSlice={flagSlice}
         api={api}
         links={links}
-        addLabel="添加产品"
+        addLabel='添加产品'
         showAddNew={() => setAddNew(true)}
       />
-      <div className="mt-4">
+      <div className='mt-4'>
         <UiVariety
           propsCard={PdCard}
           UiRow={PdRow}
