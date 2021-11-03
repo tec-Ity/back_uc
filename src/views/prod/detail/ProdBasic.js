@@ -9,6 +9,7 @@ import {
 } from "react-redux";
 import { deleteObject, putObject } from "../../../features/objectsSlice";
 import api_DNS from "../../../js/_dns";
+import { getRolePath } from "../../../js/conf/confUser";
 // import CusTextArea from "../../../components/basic/CusTextArea";
 
 const useStyle = makeStyles({
@@ -20,6 +21,7 @@ const useStyle = makeStyles({
 export default function ProdBasic({ Prod, flagSlice, api }) {
   console.log(Prod);
   const classes = useStyle();
+  const rolePath = getRolePath();
   const dispatch = useDispatch();
   const [justSubmitted, setjustSubmitted] = useState(false);
   const status = useSelector((state) => state.objects.status);
@@ -71,7 +73,9 @@ export default function ProdBasic({ Prod, flagSlice, api }) {
   };
 
   useEffect(() => {
-    justSubmitted === true && status === "succeed" && window.location.reload();
+    justSubmitted === true &&
+      status === "succeed" &&
+      window.location.replace(`/${rolePath}/prods`);
   });
 
   return (
