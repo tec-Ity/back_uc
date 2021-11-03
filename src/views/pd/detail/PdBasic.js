@@ -84,41 +84,54 @@ export default function PdBasic({ Pd, flagSlice, api }) {
   const [imgsUpdate, setImgsUpdate] = useState();
   const [imgLocal, setImgLocal] = useState([]);
   const [showImgDeleteBtn, setShowImgDeleteBtn] = useState(false);
-  const [modifying] = useState(false);
+  const [modifying, setModifying] = useState(false);
   //   console.log(imgsUpdate);
   return (
     <Grid container className={classes.root}>
-      <button className='btn btn-success mx-3' onClick={handleSubmit}>
-        提交修改
-      </button>
-      <button
-        className='btn btn-success mx-3'
-        onClick={handleSubmitImg}
-        disabled={!imgsUpdate}>
-        修改图片
-      </button>
-
-      <button
-        className='btn btn-danger mx-3'
-        onClick={() => setShowImgDeleteBtn(true)}>
-        删除图片
-      </button>
-      {setShowImgDeleteBtn === false && (
+      {modifying === false && (
         <button
-          className='btn btn-warning mx-3'
-          onClick={() => setShowImgDeleteBtn(false)}>
-          完成删除
+          className='btn btn-success mx-3'
+          onClick={() => setModifying(true)}>
+          修改
         </button>
+      )}
+      {modifying === true && (
+        <>
+          <button className='btn btn-success mx-3' onClick={handleSubmit}>
+            提交修改信息
+          </button>
+          <button
+            className='btn btn-success mx-3'
+            onClick={handleSubmitImg}
+            disabled={!imgsUpdate}>
+            提交图片
+          </button>
+
+          {showImgDeleteBtn === false && (
+            <button
+              className='btn btn-danger mx-3'
+              onClick={() => setShowImgDeleteBtn(true)}>
+              删除图片
+            </button>
+          )}
+          {showImgDeleteBtn === true && (
+            <button
+              className='btn btn-warning mx-3'
+              onClick={() => setShowImgDeleteBtn(false)}>
+              完成删除
+            </button>
+          )}
+        </>
       )}
 
       {/* imgs */}
       <Grid container item xs={12} justifyContent='space-between'>
-        <Grid item xs={2}>
+        {/* <Grid item xs={2}>
           产品图片
         </Grid>
         <Grid item xs={2}>
           编辑
-        </Grid>
+        </Grid> */}
       </Grid>
       <Grid
         item
