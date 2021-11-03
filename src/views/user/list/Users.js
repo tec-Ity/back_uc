@@ -16,6 +16,7 @@ import ListPageHeader from "../../../components/basic/ListPageHeader";
 
 const links = [{ label: "主页", to: "/home" }, { label: "用户列表" }];
 // const UserPostModal = lazy(() => import("../modal/UserPostModal"));
+const populateObjs = [{ path: "Shop", select: "code" }];
 export default function Users(props) {
   const dispatch = useDispatch();
   const flagSlice = "user";
@@ -37,7 +38,13 @@ export default function Users(props) {
   };
 
   useEffect(() => {
-    dispatch(getObjects({ flagSlice, api, isReload: true }));
+    dispatch(
+      getObjects({
+        flagSlice,
+        api: api + "?populateObjs=" + JSON.stringify(populateObjs),
+        isReload: true,
+      })
+    );
   }, [dispatch]);
 
   return (
@@ -47,7 +54,7 @@ export default function Users(props) {
         api={api}
         links={links}
         showAddNew={() => setModalShow(true)}
-        addLabel="添加用户"
+        addLabel='添加用户'
       />
       <UserPostModal
         flagSlice={flagSlice}
@@ -55,7 +62,7 @@ export default function Users(props) {
         onHide={() => setModalShow(false)}
       />
       <UiVariety
-        cols="col-6 col-md-4 col-lg-3 col-xl-2"
+        cols='col-6 col-md-4 col-lg-3 col-xl-2'
         propsCard={UserCard}
         UiRow={UserRow}
         objects={objects}

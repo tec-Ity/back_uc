@@ -73,6 +73,7 @@ export default function UserCard(props) {
   } else if (object?.img_urls?.length > 0) {
     img_url = get_DNS() + object.img_urls[0];
   }
+  console.log(object);
   return (
     <>
       {object ? (
@@ -100,6 +101,11 @@ export default function UserCard(props) {
                     id={`role-${object.role}`}
                     defaultMessage={object.role}
                   />
+                  {object.role > 100 && (
+                    <Typography variant='string' className={classes.desc}>
+                      &nbsp;&nbsp; {object.Shop?.code}
+                    </Typography>
+                  )}
                 </Typography>
               </Container>
             </CardActionArea>

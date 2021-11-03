@@ -49,9 +49,10 @@ export default function PdPostModal({ show, handleClose, timeout = 500 }) {
   useEffect(() => {
     if (justSubmitted === true && status === "succeed") {
       handleClose();
+      window.location.reload();
       setJustSubmitted(false);
     }
-  }, [justSubmitted, status]);
+  }, [handleClose, justSubmitted, status]);
 
   const handleSubmit = () => {
     console.log(111);
