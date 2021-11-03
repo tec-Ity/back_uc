@@ -25,7 +25,7 @@ export default function CusInputWithExtLabel({
   label,
   //   value,
   //   handleChange,
-  //   disabled,
+  disabled,
   endIcon,
   handleEndIcon,
   ...inputProps
@@ -38,7 +38,7 @@ export default function CusInputWithExtLabel({
       </Grid>
       <Grid item xs={1} />
       <Grid item xs={8} style={{ position: "relative" }}>
-        <CusInput label='' {...inputProps} />
+        <CusInput label='' {...inputProps} disabled={disabled} />
         {endIcon && (
           <img
             src={endIcon}

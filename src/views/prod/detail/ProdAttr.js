@@ -79,9 +79,7 @@ function AttrRow({
     isNew === false &&
       setAttrUpdate({ nome: attr?.nome || "", options: attr?.options || [] });
   }, [attr?.nome, attr?.options, isNew]);
-  //   console.log(attr.options);
-  //   console.log(attrUpdate.options);
-  console.log(newOption);
+
   ///attr functions
   const handleSubmit = () => {
     if (isNew === true) {
@@ -176,6 +174,7 @@ function AttrRow({
         </Grid>
         <Grid item xs={3}>
           <CusInputWithExtLabel
+            disabled={!modifying && !isNew}
             label='商品属性'
             value={attr?.nome}
             handleChange={(e) =>
@@ -186,6 +185,7 @@ function AttrRow({
         <Grid item xs={1} />
         <Grid item xs={4}>
           <CusInputWithExtLabel
+            disabled={!modifying && !isNew}
             label={
               isNew === false && modifying === true ? `属性值${1}` : "属性值"
             }

@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { useHistory, useLocation, useParams } from "react-router";
+import { useLocation, useParams } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
-import CusSwitchBtn from "../../../components/basic/CusSwitchBtn";
 import {
   getObject,
   selectObject,
   cleanField,
 } from "../../../features/objectsSlice";
-import ListPageHeader from '../../../components/basic/ListPageHeader'
+import ListPageHeader from "../../../components/basic/ListPageHeader";
 import PdBasic from "./PdBasic";
 import PdProds from "./PdProds";
 import { getRolePath } from "../../../js/conf/confUser";
+import CusSwitchTabs from "../../../components/basic/CusSwitchTabs";
 
 const flagSlice = "pd";
 const flagField = "object";
@@ -24,12 +24,25 @@ const populateObjs = [
   { path: "Nation", select: "code nome" },
   { path: "Prods", populate: { path: "Shop", select: "code nome" } },
 ];
+
+const switchList = [
+  {
+    selKey: 1,
+    label: "Basic",
+    url: "basic",
+  },
+  {
+    selKey: 2,
+    label: "Products",
+    url: "products",
+  },
+];
+
 export default function Pd(props) {
   const { id } = useParams();
   const dispatch = useDispatch();
   const rolePath = getRolePath();
   const api = `/pd/${id}`;
-  const hist = useHistory();
   const param = new URLSearchParams(useLocation().search);
   const section = param.get("section");
   const Pd = useSelector(selectObject(flagSlice));
@@ -57,10 +70,6 @@ export default function Pd(props) {
     }
   }, [section]);
 
-  const setComponentKey = (value) => {
-    setKey(value);
-  };
-
   useEffect(() => {
     dispatch(
       getObject({
@@ -72,9 +81,10 @@ export default function Pd(props) {
       dispatch(cleanField({ flagSlice, flagField }));
     };
   }, [api, dispatch]);
-  
-  return (<>
-        <ListPageHeader
+
+  return (
+    <>
+      <ListPageHeader
         flagSlice={flagSlice}
         api={api}
         links={[
@@ -85,26 +95,14 @@ export default function Pd(props) {
         showAddIcon={false}
         showSearch={false}
       />
-    <div>
-      <div className='form-inline my-3'>
-        <CusSwitchBtn
-          label='Basic'
-          selected={Key === 1}
-          handleClick={() => {
-            setComponentKey(1);
-            hist.push("?section=basic");
-          }}
+      <div>
+        <CusSwitchTabs
+          switchList={switchList}
+          setSel={(section) => setKey(section)}
+          selected={Key}
         />
-        <CusSwitchBtn
-          label='Products'
-          selected={Key === 2}
-          handleClick={() => {
-            setComponentKey(2);
-            hist.push("?section=products");
-          }}
-        />
+        {routeFunc()}
       </div>
-      {routeFunc()}
-    </div></>
+    </>
   );
 }

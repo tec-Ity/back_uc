@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useLocation, useHistory } from "react-router";
+import { useParams, useLocation, } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
-import CusSwitchBtn from "../../../components/basic/CusSwitchBtn";
 import { getRolePath } from "../../../js/conf/confUser";
-import { makeStyles } from "@mui/styles";
-import clsx from "clsx";
 import {
   getObject,
   selectObject,
@@ -14,6 +11,7 @@ import ShopBasic from "./ShopBasic";
 import ShopAreas from "./ShopAreas";
 import ShopProds from "./ShopProds";
 import ListPageHeader from "../../../components/basic/ListPageHeader";
+import CusSwitchTabs from "../../../components/basic/CusSwitchTabs";
 
 const populateObjs = [
   { path: "serve_Citas.Cita", select: "code nome" },
@@ -23,8 +21,6 @@ const populateObjs = [
 export default function Shop() {
   const rolePath = getRolePath();
   const dispatch = useDispatch();
-  const classes = useStyle();
-  const hist = useHistory();
   const { id } = useParams();
   const flagSlice = "shop";
   const flagField = "object";
@@ -34,12 +30,7 @@ export default function Shop() {
   const section = param.get("section");
   //   console.log(section);
   const Shop = useSelector(selectObject(flagSlice));
-  //   console.log(Shop);
-  // const Shop = useSelector((state) => state.objects[flagSlice]?.object);
-  const setKeyComp = (key) => {
-    setComp(Number(key));
-  };
-  //   console.log(populateObjs);
+
   useEffect(() => {
     dispatch(
       getObject({
@@ -58,7 +49,7 @@ export default function Shop() {
       case "basic":
         setComp(1);
         break;
-      case "serviceArea":
+      case "serviceAreas":
         setComp(2);
         break;
       case "products":
@@ -69,6 +60,24 @@ export default function Shop() {
         break;
     }
   }, [section]);
+
+  const switchList = [
+    {
+      selKey: 1,
+      label: "Basic",
+      url: "basic",
+    },
+    {
+      selKey: 2,
+      label: "Service Areas",
+      url: "serviceAreas",
+    },
+    {
+      selKey: 3,
+      label: "Products",
+      url: "products",
+    },
+  ];
 
   return (
     <>
@@ -84,68 +93,11 @@ export default function Shop() {
         showSearch={false}
       />
       <div>
-        {/* <div className='form-inline my-3'>
-          <CusSwitchBtn
-            label='Basic'
-            selected={Boolean(Comp === 1)}
-            handleClick={() => {
-              setKeyComp(1);
-              hist.push("?section=basic");
-            }}
-          />
-          <CusSwitchBtn
-            label='Service Areas'
-            selected={Boolean(Comp === 2)}
-            handleClick={() => {
-              setKeyComp(2);
-              hist.push("?section=serviceArea");
-            }}
-          />
-          <CusSwitchBtn
-            label='Products'
-            selected={Boolean(Comp === 3)}
-            handleClick={() => {
-              setKeyComp(3);
-              hist.push("?section=products");
-            }}
-          />
-        </div> */}
-
-        <div className={classes.tabBox}>
-          <div
-            className={clsx(
-              classes.tabStyle,
-              Comp === 1 ? classes.selectedStyle : classes.notSelectedStyle
-            )}
-            onClick={() => {
-              setKeyComp(1);
-              hist.push("?section=basic");
-            }}>
-            Basic
-          </div>
-          <div
-            className={clsx(
-              classes.tabStyle,
-              Comp === 2 ? classes.selectedStyle : classes.notSelectedStyle
-            )}
-            onClick={() => {
-              setKeyComp(2);
-              hist.push("?section=serviceArea");
-            }}>
-            Service Areas
-          </div>
-          <div
-            className={clsx(
-              classes.tabStyle,
-              Comp === 3 ? classes.selectedStyle : classes.notSelectedStyle
-            )}
-            onClick={() => {
-              setKeyComp(3);
-              hist.push("?section=products");
-            }}>
-            Products
-          </div>
-        </div>
+        <CusSwitchTabs
+          switchList={switchList}
+          setSel={(section) => setComp(section)}
+          selected={Comp}
+        />
 
         {Comp === 1 ? (
           <ShopBasic Shop={Shop} flagSlice={flagSlice} api={api} />
@@ -158,35 +110,3 @@ export default function Shop() {
     </>
   );
 }
-
-const useStyle = makeStyles({
-  tabBox: {
-    // border: "1px solid",
-    boxSizing: "border-box",
-    width: "100%",
-    height: "30px",
-    borderBottom: "2px solid",
-  },
-  tabStyle: {
-    margin: "0",
-    display: "inline-block",
-    boxSizing: "border-box",
-    height: "30px",
-    // lineHeight:'30px',
-    width: "180px",
-    borderRadius: "5px 5px 0 0",
-    textAlign: "center",
-    marginLeft: "30px",
-  },
-  notSelectedStyle: {
-    backgroundColor: "#0000001a",
-    cursor: "pointer",
-    height: "28px",
-  },
-  selectedStyle: {
-    border: "2px solid",
-    borderBottom: 0,
-    backgroundColor: "#fff",
-    cursor: "default",
-  },
-});

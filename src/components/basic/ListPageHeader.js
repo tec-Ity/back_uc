@@ -72,7 +72,7 @@ export default function ListPageHeader({
               {link.label}
             </Typography>
           ) : (
-            <Link to={link.to} className={classes.linkStyle}>
+            <Link key={index} to={link.to} className={classes.linkStyle}>
               {link.label}
             </Link>
           )

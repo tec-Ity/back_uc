@@ -66,6 +66,7 @@ const SkuRow = ({
   handleChangeExpand,
   isNew = false,
 }) => {
+  const isDefault = index === 0;
   const flagSlice = "prodSku";
   const hist = useHistory();
   const dispatch = useDispatch();
@@ -83,14 +84,11 @@ const SkuRow = ({
     purchase_note: sku?.purchase_note || "",
   });
   const [attrsUpdate, setAttrsUpdate] = useState([]);
-  //   console.log(attrsUpdate);
-  console.log(skuUpdate);
-  //   console.log(sku);
-  //   console.log(attrs);
+
   const reloadAfterModified = React.useCallback(() => {
     hist.push(`/${rolePath}/reload`);
   }, [hist]);
-  
+
   useEffect(() => {
     justSubmitted === true && status === "succeed" && reloadAfterModified();
   }, [justSubmitted, reloadAfterModified, status]);
@@ -101,7 +99,6 @@ const SkuRow = ({
       const sAttr = sku?.attrs[i];
       attrsTemp.push({ nome: sAttr.nome, option: sAttr.option });
     }
-    console.log(attrsTemp);
     setAttrsUpdate(attrsTemp);
 
     setSkuUpdate({
@@ -122,15 +119,14 @@ const SkuRow = ({
       initAttrs();
     }
   }, [initAttrs, isNew]);
-
   //btn group functions
   const handleSubmit = (e) => {
     e.stopPropagation();
     const obj = {};
     obj.Prod = attrs[0].Prod;
     obj.attrs = attrsUpdate;
-    obj.price_regular = parseInt(skuUpdate.price_regular);
-    obj.price_sale = parseInt(skuUpdate.price_sale);
+    obj.price_regular = parseFloat(skuUpdate.price_regular);
+    obj.price_sale = parseFloat(skuUpdate.price_sale);
     obj.limit_quantity = parseInt(skuUpdate.limit_quantity);
     obj.purchase_note = skuUpdate.purchase_note;
     obj.is_controlStock = Boolean(skuUpdate.is_controlStock);
@@ -138,7 +134,6 @@ const SkuRow = ({
     obj.quantity_alert = parseInt(skuUpdate.quantity_alert);
     obj.quantity = parseInt(skuUpdate.quantity);
     obj.is_usable = Boolean(skuUpdate.is_usable);
-
     if (isNew === true) {
       dispatch(postObject({ flagSlice, api: "/Sku", data: { general: obj } }));
     } else if (isNew === false) {
@@ -164,7 +159,6 @@ const SkuRow = ({
     e.stopPropagation();
     dispatch(deleteObject({ flagSlice, api: `/Sku/${sku?._id}` }));
     setJustSubmitted(true);
-
   };
 
   //autoComplete select
@@ -215,7 +209,7 @@ const SkuRow = ({
             <span style={{ marginRight: "30px" }}>
               {isNew === true
                 ? "新增商品属性"
-                : index === 0
+                : isDefault
                 ? "默认SKU"
                 : "SKU" + (index + 1)}
             </span>
@@ -253,38 +247,41 @@ const SkuRow = ({
       <AccordionDetails>
         <Container>
           <Grid container>
-            {/* 商品属性 */}
-            <Grid container item xs={12}>
-              <Grid item xs={12}>
-                <h4>商品属性</h4>
+            {/* 商品属性 尽在非默认sku显示 */}
+            {!isDefault && (
+              <Grid container item xs={12}>
+                <Grid item xs={12}>
+                  <h4>商品属性</h4>
+                </Grid>
+
+                {attrs?.map((attr) => {
+                  let value = "";
+                  if (attrsUpdate?.length > 0) {
+                    value =
+                      attrsUpdate.find((sAttr) => sAttr.nome === attr.nome)
+                        ?.option || "";
+                  }
+                  return (
+                    <React.Fragment key={attr?.nome}>
+                      <Grid item xs={2} key={attr.nome}>
+                        <CusSelectList
+                          disabled={!modifying && !isNew}
+                          label={attr.nome}
+                          options={attr.options?.map((op) => ({
+                            label: op,
+                            id: op,
+                          }))}
+                          handleSelect={handleSelectAttr(attr.nome)}
+                          value={value}
+                          placeholder='请选择属性'
+                        />
+                      </Grid>
+                      <Grid item xs={1} />
+                    </React.Fragment>
+                  );
+                })}
               </Grid>
-              {attrs?.map((attr) => {
-                let value = "";
-                if (attrsUpdate?.length > 0) {
-                  value =
-                    attrsUpdate.find((sAttr) => sAttr.nome === attr.nome)
-                      ?.option || "";
-                }
-                return (
-                  <>
-                    <Grid item xs={2} key={attr.nome}>
-                      <CusSelectList
-                        disabled={!modifying && !isNew}
-                        label={attr.nome}
-                        options={attr.options?.map((op) => ({
-                          label: op,
-                          id: op,
-                        }))}
-                        handleSelect={handleSelectAttr(attr.nome)}
-                        value={value}
-                        placeholder='请选择属性'
-                      />
-                    </Grid>
-                    <Grid item xs={1} />
-                  </>
-                );
-              })}
-            </Grid>
+            )}
             {/* 购买设置 */}
             <Grid container item xs={12}>
               <Grid item xs={12}>
