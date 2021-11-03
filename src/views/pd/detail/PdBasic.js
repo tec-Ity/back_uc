@@ -84,7 +84,7 @@ export default function PdBasic({ Pd, flagSlice, api }) {
   const [imgsUpdate, setImgsUpdate] = useState();
   const [imgLocal, setImgLocal] = useState([]);
   const [showImgDeleteBtn, setShowImgDeleteBtn] = useState(false);
-  const [modifying, ] = useState(false);
+  const [modifying] = useState(false);
   //   console.log(imgsUpdate);
   return (
     <Grid container className={classes.root}>
@@ -112,6 +112,14 @@ export default function PdBasic({ Pd, flagSlice, api }) {
       )}
 
       {/* imgs */}
+      <Grid container item xs={12} justifyContent='space-between'>
+        <Grid item xs={2}>
+          产品图片
+        </Grid>
+        <Grid item xs={2}>
+          编辑
+        </Grid>
+      </Grid>
       <Grid
         item
         container

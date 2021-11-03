@@ -5,8 +5,9 @@ import CusInput from "../../../components/basic/CusInput";
 import {
   // useSelector,
   useDispatch,
+  useSelector,
 } from "react-redux";
-import {  putObject } from "../../../features/objectsSlice";
+import { deleteObject, putObject } from "../../../features/objectsSlice";
 import api_DNS from "../../../js/_dns";
 // import CusTextArea from "../../../components/basic/CusTextArea";
 
@@ -20,6 +21,8 @@ export default function ProdBasic({ Prod, flagSlice, api }) {
   console.log(Prod);
   const classes = useStyle();
   const dispatch = useDispatch();
+  const [justSubmitted, setjustSubmitted] = useState(false);
+  const status = useSelector((state) => state.objects.status);
   const [prodInfo, setProdInfo] = useState({
     code: Prod.code || "",
     name: Prod.nome || "",
@@ -62,10 +65,22 @@ export default function ProdBasic({ Prod, flagSlice, api }) {
     dispatch(putObject({ flagSlice, api, data: { general } }));
   };
 
+  const handleDelete = () => {
+    dispatch(deleteObject({ flagSlice, api, id: Prod._id }));
+    setjustSubmitted(true);
+  };
+
+  useEffect(() => {
+    justSubmitted === true && status === "succeed" && window.location.reload();
+  });
+
   return (
     <Grid container className={classes.root}>
       <button className='btn btn-success mx-3' onClick={handleSubmit}>
         修改
+      </button>
+      <button className='btn btn-danger mx-3' onClick={handleDelete}>
+        删除
       </button>
 
       {/* imgs */}

@@ -83,8 +83,8 @@ export default function Prod(props) {
         api={api}
         links={[
           { label: "主页", to: "/home" },
-          { label: "产品列表", to: `/${rolePath}/pds` },
-          { label: "产品详情" },
+          { label: "商品列表", to: `/${rolePath}/prods` },
+          { label: "商品详情" },
         ]}
         showAddIcon={false}
         showSearch={false}
