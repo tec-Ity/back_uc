@@ -4,6 +4,11 @@ import { ReactComponent as Confirm } from "../icon/confirm.svg";
 import { ReactComponent as Cancel } from "../icon/cancel.svg";
 import { ReactComponent as Delete } from "../icon/delete.svg";
 import { ReactComponent as Edit } from "../icon/edit.svg";
+import { ReactComponent as ConfirmSec } from "../icon/doneBlack.svg";
+import { ReactComponent as CancelSec } from "../icon/cancelBlack.svg";
+import { ReactComponent as DeleteSec } from "../icon/deleteBlack.svg";
+import { ReactComponent as EditSec } from "../icon/editBlack.svg";
+import clsx from "clsx";
 
 const useStyle = makeStyles({
   btnGroup: {
@@ -12,6 +17,7 @@ const useStyle = makeStyles({
     paddingRight: "5px",
     width: "255px",
     "& > div": {
+      //   border: "1px solid yellow",
       cursor: "pointer",
       height: "30px",
       width: "74px",
@@ -30,9 +36,14 @@ const useStyle = makeStyles({
     backgroundColor: "#000",
     color: "#fff",
   },
-  redMain: {
-    backgroundColor: "#d83535",
-    color: "#fff",
+  blackSec: {
+    // "&>:nth-child(1)": { marginRight: "5px" },
+  },
+  redSec: {
+    color: "#d83535",
+    '& line':{stroke:'#d83535'},
+    '& path':{stroke:'#d83535'},
+    '& ellipse':{stroke:'#d83535',fill:'#d83535'},
   },
 });
 
@@ -49,23 +60,20 @@ export default function CusBtnGroup(props) {
     <div className={classes.btnGroup}>
       {modifying === true ? (
         <>
-          <div onClick={handleDelete} className={classes.redMain}>
-            <Delete className={classes.deleteRed} />
-
+          <div onClick={handleDelete} className={classes.redSec}>
+            <DeleteSec />
             <div>删除</div>
           </div>
-          <div onClick={handleSubmit} className={classes.blackMain}>
-            <Confirm />
-            <div>确认</div>
+          <div onClick={handleSubmit}>
+            <ConfirmSec />
           </div>
-          <div onClick={handleCancel} className={classes.blackMain}>
-            <Cancel />
-            <div>取消</div>
+          <div onClick={handleCancel}>
+            <CancelSec />
           </div>
         </>
       ) : (
-        <div onClick={handleEdit} className={classes.blackMain}>
-          <Edit />
+        <div onClick={handleEdit} className={classes.blackSec}>
+          <EditSec />
           <div>编辑</div>
         </div>
       )}

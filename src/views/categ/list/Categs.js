@@ -15,6 +15,7 @@ import {
 } from "../../../features/objectsSlice";
 import api_DNS from "../../../js/_dns";
 import CusBtnGroup from "../../../components/basic/CusBtnGroup";
+import CusBtnGroupSecondary from "../../../components/basic/CusBtnGroupSecondary";
 const useStyle = makeStyles({
   root: {},
   //header
@@ -68,7 +69,9 @@ const useStyle = makeStyles({
   categCode: {
     width: "fit-content",
     height: "fit-content",
-    backgroundColor: "#fff",
+    // backgroundColor: "#fff",
+    color: "#fff",
+    textShadow: '2px 2px 5px black',
     fontSize: "30px",
     fontWeight: "700",
     borderRadius: "10px",
@@ -80,7 +83,7 @@ const useStyle = makeStyles({
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "column",
-    color:'#000000',
+    color: "#000000",
     "& > :nth-child(1)": {
       transform: "rotate(90deg)",
     },
@@ -655,8 +658,7 @@ function CategListItemChild({
           justifyContent='center'
           style={{ position: "static" }}
           className={classes.btnGroup}>
-          <CusBtnGroup
-            secondary
+          <CusBtnGroupSecondary
             modifying={modifying}
             handleSubmit={handleSubmit}
             handleCancel={handleCancel}
