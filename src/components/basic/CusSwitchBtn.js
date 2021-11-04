@@ -1,5 +1,5 @@
 import React from "react";
-export default function SwitchBtn({ label, handleClick, selected }) {
+export default function CusSwitchBtn({ label, handleClick, selected }) {
   return (
     <button
       className={

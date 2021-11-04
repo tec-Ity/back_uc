@@ -56,7 +56,7 @@ export const getObject = createAsyncThunk(
 export const fetchOngoingOrderCount = createAsyncThunk(
   "objects/fetchOngoingOrderCount",
   async (foo = null, { rejectWithValue }) => {
-    const res = await fetch_Prom("/Orders?status=[200,400,700]");
+    const res = await fetch_Prom("/Orders?status=[200]");
     // console.log(res);
     if (res.status === 200) {
       return res.data.count;

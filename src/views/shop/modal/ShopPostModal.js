@@ -10,7 +10,11 @@ import UiCards from "../../../components/ui/UiCards";
 import CitaCard from "../../../views/setting/city/ui/CitaCard";
 import SearchInput from "../../../components/universal/query/SearchInput";
 
-import { selectObjects, postObject, setQueryFixed } from "../../../features/objectsSlice";
+import {
+  selectObjects,
+  postObject,
+  setQueryFixed,
+} from "../../../features/objectsSlice";
 
 export default function ShopPostModal(props) {
   const { flagSlice, show, onHide } = props; // 模板的显示隐藏
@@ -42,36 +46,41 @@ export default function ShopPostModal(props) {
 
   const iptFormdata = (type) => (e) =>
     setFormdata((pre) => ({ ...pre, [type]: e.target.value }));
-    
-// 判断所输入的code是否与城市相同
+
+  // 判断所输入的code是否与城市相同
   const matchSearchCode_Cita = (mCode) => {
-	  let i=0;
-	  for(; i<Citas.length; i++) {
-		if (Citas[i].code === mCode.toUpperCase()) break;
-	  }
-	  if(i<Citas.length) {
-		setFormdata((pre) => ({ ...pre, Cita: Citas[i]._id }));
-	  } else {
-		if (formdata.Cita) {
-			const temp = { ...formdata };
-			temp.Cita = null;
-			setFormdata(temp);
-		}
-	  }
+    let i = 0;
+    for (; i < Citas.length; i++) {
+      if (Citas[i].code === mCode.toUpperCase()) break;
+    }
+    if (i < Citas.length) {
+      setFormdata((pre) => ({ ...pre, Cita: Citas[i]._id }));
+    } else {
+      if (formdata.Cita) {
+        const temp = { ...formdata };
+        temp.Cita = null;
+        setFormdata(temp);
+      }
+    }
   };
 
   const postSubmit = () => {
-	  const formData = new FormData();
-	  formData.append('obj', JSON.stringify(formdata))
+    const formData = new FormData();
+    formData.append("obj", JSON.stringify(formdata));
     dispatch(postObject({ flagSlice, api, data: formData }));
-//     dispatch(postObject({ flagSlice, api, data: { obj: formdata } }));
+    //     dispatch(postObject({ flagSlice, api, data: { obj: formdata } }));
     onHide();
   };
   // 为搜索Citas做条目数限制
   const queryFixed_Citas = "&pagesize=8";
   useEffect(() => {
-	dispatch( setQueryFixed({ flagSlice: flagSlice_Citas, queryFixed: queryFixed_Citas, }) );
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+    dispatch(
+      setQueryFixed({
+        flagSlice: flagSlice_Citas,
+        queryFixed: queryFixed_Citas,
+      })
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <Modal
@@ -96,7 +105,7 @@ export default function ShopPostModal(props) {
               onChange={iptFormdata("code")}
               label='Codice'
               value={formdata.code}
-	      placeholder='字母和数字的4位'
+              placeholder='字母和数字的4位'
             />
             <input
               type='text'
@@ -109,15 +118,36 @@ export default function ShopPostModal(props) {
           </RowIpt>
 
           <RowIpt rowClass={`my-3 ${text_flow}`}>
-            <input type='text' className='form-control' id='zip-ipt' onChange={iptFormdata("zip")} label='邮编' value={formdata.zip} />
-            <input type='text' className='form-control' id='price_ship-ipt' onChange={iptFormdata("price_ship")} label='运费' value={formdata.price_ship} />
+            <input
+              type='text'
+              className='form-control'
+              id='zip-ipt'
+              onChange={iptFormdata("zip")}
+              label='邮编'
+              value={formdata.zip}
+            />
+            <input
+              type='text'
+              className='form-control'
+              id='price_ship-ipt'
+              onChange={iptFormdata("price_ship")}
+              label='运费'
+              value={formdata.price_ship}
+            />
           </RowIpt>
 
           <RowIpt rowClass={`my-3 ${text_flow}`}>
-            <input type='text' className='form-control' id='addr-ipt' onChange={iptFormdata("addr")} label='Address' value={formdata.addr} />
+            <input
+              type='text'
+              className='form-control'
+              id='addr-ipt'
+              onChange={iptFormdata("addr")}
+              label='Indirizzo'
+              value={formdata.addr}
+            />
           </RowIpt>
-		{
-			/*
+          {
+            /*
 			<hr/>
 			<div className="row">
 				<label className='col-md-2 col-form-label '> 主店 </label>
@@ -130,18 +160,23 @@ export default function ShopPostModal(props) {
 			</div>
 			<hr/>
 			*/
-			// is_main: {type: Boolean, default: false},	// 是否为精品店
-			// is_boutique: {type: Boolean, default: false},	// 是否为精品店
-			// is_usable: { type: Boolean, default: true },	// 是否可用
-			// sort: Number,									// 排序
-		}
+            // is_main: {type: Boolean, default: false},	// 是否为精品店
+            // is_boutique: {type: Boolean, default: false},	// 是否为精品店
+            // is_usable: { type: Boolean, default: true },	// 是否可用
+            // sort: Number,									// 排序
+          }
           <div className={`row ${text_flow}`}>
-            <label className={`col-md-2 col-form-label ${ formdata.Cita && "text-success" }`}> Cita </label>
+            <label
+              className={`col-md-2 col-form-label ${
+                formdata.Cita && "text-success"
+              }`}>
+              Citta
+            </label>
             <div className='col-md-10'>
               <SearchInput
                 flagSlice={flagSlice_Citas}
                 api={api_Citas}
-                farSearch={farQuery_Citas}
+                farSearch={farQuery_Citas?.val}
                 matchSearchCode={matchSearchCode_Cita}
               />
             </div>

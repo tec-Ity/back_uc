@@ -12,7 +12,13 @@ export default function PdRow(props) {
   return (
     <>
       {object ? (
-        <div className='row mt-3 align-middle' key={object._id}>
+        <div
+          className='row mt-3 align-middle'
+          key={object._id}
+          style={{
+            boxShadow: " 0px 0px 20px rgba(0, 0, 0, 0.1)",
+            cursor: "pointer",
+          }}>
           <div className='col-3'>
             <img
               alt={object.code}

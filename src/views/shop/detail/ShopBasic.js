@@ -11,7 +11,7 @@ import {
   // deleteObject,
   putObject,
 } from "../../../features/objectsSlice";
-
+import { ReactComponent as Delete } from "../../../components/icon/delete.svg";
 import shopDefaul from "../../../components/icon/Shop.jpg";
 import { getRolePath } from "../../../js/conf/confUser";
 
@@ -20,7 +20,6 @@ const useStyle = makeStyles({
   mainImg: {
     height: "300px",
     width: "300px",
-    cursor: "pointer",
     background: "transparent",
   },
   formItem: { width: "50%", marginTop: "10px" },
@@ -30,13 +29,21 @@ const useStyle = makeStyles({
     justifyContent: "space-between",
   },
   btnStyle: { width: "80px" },
+  deleteStyle: {
+    "& rect": {
+      fill: "#D83535",
+    },
+    position: "absolute",
+    top: "3px",
+    right: "3px",
+  },
 });
 
 export default function ShopBasic(props) {
   const { Shop, flagSlice, api } = props;
   const classes = useStyle();
   const rolePath = getRolePath();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch(); 
   const ref = useRef();
   const status = useSelector((state) => state.objects.status);
   const [justSubmitted, setJustSubmitted] = useState(null);
@@ -108,7 +115,13 @@ export default function ShopBasic(props) {
     <Container className={classes.root}>
       <div className={clsx(classes.formItem, classes.flexStyle)}>
         {/* img component */}
-        <div onClick={() => modifying === true && ref.current.click()}>
+        <div
+          onClick={() => modifying === true && ref.current.click()}
+          style={{
+            padding: "5px",
+            position: "relative",
+            border: modifying === true ? "2px solid #1d1d384d" : "none",
+          }}>
           <img
             alt={infoUpdate.code}
             src={
@@ -119,8 +132,12 @@ export default function ShopBasic(props) {
                 : shopDefaul
             }
             className={classes.mainImg}
+            style={{
+              cursor: modifying === true ? "pointer" : "default",
+            }}
             title='更换图片'
           />
+          {modifying === true && <Delete className={classes.deleteStyle} />}
           <input
             ref={ref}
             type='file'

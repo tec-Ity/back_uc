@@ -108,7 +108,7 @@ const ListItemButtonComp = (props) => {
       <ListItemIcon>
         <ListItemText>
           {name}
-          <span style={{ color: "red" }}>{count && " (" + count + ")"}</span>
+          <span style={{ color: "red" }}>{count>0 && " (" + count + ")"}</span>
         </ListItemText>
       </ListItemIcon>
       <ListItemIcon>

@@ -73,6 +73,18 @@ const useStyle = makeStyles({
     fontWeight: "700",
     borderRadius: "10px",
   },
+  categChildAdd: {
+    position: "absolute",
+    bottom: "10px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "column",
+    color:'#000000',
+    "& > :nth-child(1)": {
+      transform: "rotate(90deg)",
+    },
+  },
   inputBox: {
     position: "relative",
     // border: "1px solid",
@@ -119,12 +131,15 @@ const useStyle = makeStyles({
   addNewChildImgBox: {
     height: "37px",
     width: "74px",
-    backgroundColor: "#0000004d",
+    backgroundColor: "#000000",
     color: "#fff",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     cursor: "pointer",
+    "&:hover": {
+      backgroundColor: "#000000cc",
+    },
   },
 });
 
@@ -155,7 +170,7 @@ export default function Categs() {
         showAddNew={() => setAddNew(true)}
         api={api}
         links={links}
-        addLabel="添加分类"
+        addLabel='添加分类'
         flagSlice={flagSlice}
       />
       <CategList addNew={addNew} closeAddNew={() => setAddNew(false)} />
@@ -172,7 +187,7 @@ function CategList(props) {
     <Grid container className={classes.listGridContainer}>
       {addNew === true && (
         <CategListItem
-          key="new"
+          key='new'
           addNew={addNew}
           closeAddNew={closeAddNew}
           categ={{}}
@@ -202,7 +217,7 @@ function CategListItem({
   const [initCategInfo] = useState({
     sort: categ?.sort || 0,
     name: categ?.code || "",
-    isUsable: categ?.is_usable || true,
+    isUsable: categ?.is_usable,
     imgs: [],
   });
   const [categUpdateData, setCategUpdateData] = useState(initCategInfo);
@@ -259,6 +274,7 @@ function CategListItem({
       closeAddNew();
     }
   };
+
   const handleDelete = (e) => {
     e.stopPropagation();
     if (addNew === false) {
@@ -274,6 +290,7 @@ function CategListItem({
       closeAddNew();
     }
   };
+
   const handleEdit = (e) => {
     setModifying(true);
     setShowChild(false);
@@ -296,16 +313,15 @@ function CategListItem({
         xs={12}
         className={classes.listGridItem}
         style={{ marginBottom: "20px" }}
-        justifyContent="center"
-        alignItems="center"
+        justifyContent='center'
+        alignItems='center'
         onClick={() => {
           modifying === true
             ? ref.current.click()
             : showChild === true
             ? setShowChild(false)
             : setShowChild(true);
-        }}
-      >
+        }}>
         {modifying === false ? (
           <>
             {/* bg img */}
@@ -313,10 +329,17 @@ function CategListItem({
               src={api_DNS + categ.img_url}
               alt={categUpdateData.name}
               className={classes.categBg}
+              style={{
+                filter: categ?.is_usable === false && "grayscale(100%)",
+              }}
             />
             {/* gateg code */}
             <div className={classes.categCode}>
               {(index + 1).toFixed(1) + " " + categUpdateData.name}
+            </div>
+            <div className={classes.categChildAdd}>
+              <div>&gt;</div>
+              <div>展开子分类</div>
             </div>
           </>
         ) : (
@@ -324,7 +347,7 @@ function CategListItem({
           <>
             {imgLocal.length > 0 ? (
               // show selected img
-              <img src={imgLocal[0]} alt="logo" className={classes.categBg} />
+              <img src={imgLocal[0]} alt='logo' className={classes.categBg} />
             ) : (
               // when no selected img
               <div>Upload image{" (16:9)"}</div>
@@ -333,7 +356,7 @@ function CategListItem({
             <input
               ref={ref}
               style={{ display: "none" }}
-              type="file"
+              type='file'
               onChange={(e) => {
                 // console.log(e.target.files);
                 setCategUpdateData((prev) => ({
@@ -410,14 +433,13 @@ function CategListItem({
             container
             item
             xs={2}
-            alignItems="center"
-            justifyContent="flex-end"
-          >
+            alignItems='center'
+            justifyContent='flex-end'>
             usable
             <Switch
               checked={categUpdateData.isUsable}
-              size="small"
-              color="default"
+              size='small'
+              color='default'
               style={{ color: "#000" }}
               onChange={(e) =>
                 setCategUpdateData((prev) => ({
@@ -442,7 +464,7 @@ function CategListItemChild({
 }) {
   const classes = useStyle();
   const dispatch = useDispatch();
-  const ref = React.useRef();
+  //   const ref = React.useRef();
   const status = useSelector((state) => state.objects.status);
   const [modifying, setModifying] = useState(addNewChild);
   const [justSubmitted, setJustSubmitted] = useState(false);
@@ -450,7 +472,7 @@ function CategListItemChild({
     sort: categ?.sort || 0,
     name: categ?.code || "",
     isUsable: categ?.is_usable || true,
-    imgs: [],
+    // imgs: [],
   });
   const [categUpdateData, setCategUpdateData] = useState(initCategInfo);
 
@@ -476,9 +498,9 @@ function CategListItemChild({
         Categ_far: farId,
       })
     );
-    for (let i = 0; i < categUpdateData.imgs.length; i++) {
-      formData.append("image" + i, categUpdateData.imgs[i]);
-    }
+    // for (let i = 0; i < categUpdateData.imgs.length; i++) {
+    //   formData.append("image" + i, categUpdateData.imgs[i]);
+    // }
     if (addNewChild === false) {
       dispatch(
         putObject({
@@ -547,22 +569,20 @@ function CategListItemChild({
         item
         xs={12}
         style={{ marginBottom: "10px" }}
-        justifyContent="space-between"
-      >
-        <Grid container item xs={1}>
+        justifyContent='space-between'>
+        {/* <Grid container item xs={1}>
           <div
             className={clsx(
               classes.childImgBox,
               modifying === true ? classes.hoverPointer : ""
-            )}
-          >
+            )}>
             Up
           </div>
           <input
             disabled={modifying === false}
             ref={ref}
             style={{ display: "none" }}
-            type="file"
+            type='file'
             onChange={(e) => {
               // console.log(e.target.files);
               setCategUpdateData((prev) => ({
@@ -578,7 +598,7 @@ function CategListItemChild({
               setImgLocal(imgLocalPath);
             }}
           />
-        </Grid>
+        </Grid> */}
         <Grid item xs={1}>
           <div className={classes.inputBox}>
             <input
@@ -611,13 +631,13 @@ function CategListItemChild({
             <label className={classes.inputlabel}>Name</label>
           </div>
         </Grid>
-        <Grid container item xs={2} alignItems="center" justifyContent="center">
+        <Grid container item xs={2} alignItems='center' justifyContent='center'>
           usable
           <Switch
             disabled={modifying === false}
             checked={categUpdateData.isUsable}
-            size="small"
-            color="default"
+            size='small'
+            color='default'
             style={{ color: "#000" }}
             onChange={(e) =>
               setCategUpdateData((prev) => ({
@@ -631,11 +651,10 @@ function CategListItemChild({
           container
           item
           xs={2}
-          alignItems="center"
-          justifyContent="center"
+          alignItems='center'
+          justifyContent='center'
           style={{ position: "static" }}
-          className={classes.btnGroup}
-        >
+          className={classes.btnGroup}>
           <CusBtnGroup
             secondary
             modifying={modifying}
@@ -671,17 +690,15 @@ function AddNewChildRow({ farId }) {
       item
       xs={12}
       style={{ marginBottom: "10px" }}
-      justifyContent="space-between"
-    >
+      justifyContent='space-between'>
       <Grid container item xs={1}>
         <div
           className={classes.addNewChildImgBox}
-          onClick={() => setAddNewChild(true)}
-        >
+          onClick={() => setAddNewChild(true)}>
           +
         </div>
       </Grid>
-      <Grid item xs={2} container alignItems="center">
+      <Grid item xs={2} container alignItems='center'>
         添加子分类
       </Grid>
       {/* offsets */}

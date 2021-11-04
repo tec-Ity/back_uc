@@ -59,7 +59,7 @@ export default function SearchInput(props) {
   } = props;
   const dispatch = useDispatch();
   const search = useSelector(selectQuery(flagSlice))?.search || "";
-console.log(flagSlice,api)
+  // console.log(flagSlice,api)
   const onChangeSearch = (e) => {
     const val = e.target.value;
     dispatch(
@@ -77,6 +77,7 @@ console.log(flagSlice,api)
   }, [search]);
   // 根据父组件 farSearch 的变化 及时更新 recucer 中的 filter, (比如点击卡片 search input 会变为 obj.code)
   useEffect(() => {
+    console.log(farSearch);
     if (farSearch && typeof farSearch === "string") {
       dispatch(
         setQuery({
