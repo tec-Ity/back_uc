@@ -10,16 +10,31 @@ import UserPutModal from "../modal/UserPutModal";
 import UserPwdModal from "../modal/UserPwdModal";
 import NavBread from "../../../components/universal/navBread/NavBread";
 
-// import { selectUser } from "../../../features/authSlice";
-import { getObject, deleteObject, selectObject, cleanField } from "../../../features/objectsSlice";
+import { selectUser } from "../../../features/authSlice";
+import {
+  getObject,
+  deleteObject,
+  selectObject,
+  cleanField,
+} from "../../../features/objectsSlice";
 
-import { Box, Grid, Typography, Button, IconButton } from "@mui/material";
+import {
+  Box,
+  Grid,
+  Typography,
+  Button,
+  IconButton,
+  SvgIcon,
+} from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { ReactComponent as EditIcon } from "../../../components/icon/editBlack.svg";
 import { ReactComponent as CancelIcon } from "../../../components/icon/cancelBlack.svg";
 import { ReactComponent as DoneIcon } from "../../../components/icon/doneBlack.svg";
+import { ReactComponent as UserProfileLightGrey } from "../../../components/icon/userProfileLightGrey.svg";
 import ListPageHeader from "../../../components/basic/ListPageHeader.js";
 import InfoBox from "./InfoBox";
+import ToggleBox from "./ToggleBox";
+import { putObject, selectObjects } from "../../../features/objectsSlice";
 
 const useStyle = makeStyles({
   infobox: {
@@ -41,7 +56,7 @@ export default function User() {
   const api = `/user/${id}`;
   const api_delete = "/User/" + id;
 
-  // const curUser = useSelector(selectUser);
+  const curUser = useSelector(selectUser);
   const curRole = parseInt(localStorage.getItem("role"));
   const object = useSelector(selectObject(flagSlice));
 
@@ -66,13 +81,6 @@ export default function User() {
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState({});
 
-  useEffect(() => {
-    if (!editing) return;
-    const { code, nome, phonePre, phone, role } = object;
-    const Shop = object.Shop ? object.Shop._id : null;
-    setForm({ code, nome, phonePre, phone, role });
-  }, [object]);
-
   function handleSave() {
     console.log(form);
     setEditing(!editing);
@@ -82,10 +90,16 @@ export default function User() {
     return (
       <>
         <Grid item xs={12} sm={3}>
-          <Typography sx={{ fontSize: "16px", color: "#0000004D", fontWeight: "700" }}>{label}</Typography>
+          <Typography
+            sx={{ fontSize: "16px", color: "#0000004D", fontWeight: "700" }}
+          >
+            {label}
+          </Typography>
         </Grid>
-        <Grid item xs='auto' sm='auto'>
-          <Typography sx={{ fontSize: "16px", fontWeight: "700" }}>{content}</Typography>
+        <Grid item xs="auto" sm="auto">
+          <Typography sx={{ fontSize: "16px", fontWeight: "700" }}>
+            {content}
+          </Typography>
         </Grid>
       </>
     );
@@ -110,6 +124,19 @@ export default function User() {
       label: "登录账号",
       type: "code",
     },
+
+    {
+      label: "用户姓名",
+      type: "nome",
+    },
+    {
+      variant: {
+        name: "phone",
+        variantObj: {
+          fields: [{ label: "电话", type: "phonePre" }, { type: "phone" }],
+        },
+      },
+    },
     {
       label: "用户角色",
       type: "role",
@@ -121,14 +148,10 @@ export default function User() {
             { label: "管理者", id: 3 },
             { label: "超级员工", id: 5 },
             { label: "店铺老板", id: 101 },
-            { label: "店铺员工", id: 103 },
+            { label: "店铺员工", id: 105 },
           ],
         },
       },
-    },
-    {
-      label: "用户姓名",
-      type: "nome",
     },
     {
       label: "Shop",
@@ -136,29 +159,9 @@ export default function User() {
       variant: {
         name: "shop",
         variantObj: {
-          testlist: [
-            { label: "The Shawshank Redemption", year: 1994 },
-            { label: "The Godfather", year: 1972 },
-            { label: "The Godfather: Part II", year: 1974 },
-            { label: "The Dark Knight", year: 2008 },
-            { label: "12 Angry Men", year: 1957 },
-            { label: "Schindler's List", year: 1993 },
-          ],
+          testlist: [{ label: "milano", city: "1" }],
         },
       },
-    },
-    {
-      variant: {
-        name: "phone",
-        variantObj: {
-          fields: [{ label: "电话", type: "phonePre" }, { type: "phone" }],
-        },
-      },
-    },
-    {
-      label: "是否可用",
-      type: "is_usable",
-      noBox: true,
     },
   ];
 
@@ -168,114 +171,152 @@ export default function User() {
       {
         // 数据正确
         object._id && String(object._id) === String(id) && (
-          <div className='text-right'>
-            {/* {
+          <Box
+            height="180px"
+            width="100%"
+            sx={{ display: "flex", justifyContent: "space-between" }}
+          >
+            <UserProfileLightGrey />
+            <Box>
+              <div className="text-right">
+                {/* {
               // 如果比自己等级低 可删除
             } */}
-            <button className='btn btn-info' onClick={() => setModalPut(true)}>
-              {" "}
-              <i className='bx bx-edit-alt'></i>{" "}
-            </button>
-            <UserPutModal show={modalPut} onHide={() => setModalPut(false)} object={object} flagSlice={flagSlice} />
+                <button
+                  className="btn btn-info"
+                  onClick={() => setModalPut(true)}
+                >
+                  {" "}
+                  <i className="bx bx-edit-alt"></i>{" "}
+                </button>
+                <UserPutModal
+                  show={modalPut}
+                  onHide={() => setModalPut(false)}
+                  object={object}
+                  flagSlice={flagSlice}
+                />
 
-            {editing && curRole < object.role && (
-              <Button variant='contained' color='error' onClick={deleteDB}>
-                删除此用户
-              </Button>
-            )}
-            {editing && (
-              <Button variant='contained' color='secondary' onClick={() => setModalPwd(true)}>
-                修改密码
-              </Button>
-            )}
-            <UserPwdModal show={modalPwd} onHide={() => setModalPwd(false)} object={object} flagSlice={flagSlice} />
-            {editing && (
-              <IconButton onClick={handleSave}>
-                <DoneIcon />
-              </IconButton>
-            )}
-            {!editing ? (
-              <Button
-                variant='contained'
-                color='primary'
-                startIcon={!editing ? <EditIcon /> : <CancelIcon />}
-                onClick={() => {
-                  //load object to form
-                  const { code, nome, phonePre, phone, role } = object;
-                  const Shop = object.Shop ? object.Shop._id : null;
-                  setForm({ code, nome, phonePre, phone, role });
+                {editing && curRole < object.role && (
+                  <Button variant="contained" color="error" onClick={deleteDB}>
+                    删除此用户
+                  </Button>
+                )}
+                {editing && (
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => setModalPwd(true)}
+                  >
+                    修改密码
+                  </Button>
+                )}
+                <UserPwdModal
+                  show={modalPwd}
+                  onHide={() => setModalPwd(false)}
+                  object={object}
+                  flagSlice={flagSlice}
+                />
+                {editing && (
+                  <IconButton onClick={handleSave}>
+                    <DoneIcon />
+                  </IconButton>
+                )}
+                {!editing ? (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    startIcon={!editing ? <EditIcon /> : <CancelIcon />}
+                    onClick={() => {
+                      //load object to form
+                      const { code, nome, phonePre, phone, role } = object;
+                      const Shop = object.Shop ? object.Shop._id : null;
+                      setForm({ code, nome, phonePre, phone, role });
 
-                  setEditing(!editing);
-                }}
-              >
-                编辑
-              </Button>
-            ) : (
-              <IconButton
-                onClick={() => {
-                  setEditing(!editing);
-                }}
-              >
-                <CancelIcon />
-              </IconButton>
-            )}
-          </div>
+                      setEditing(!editing);
+                    }}
+                  >
+                    编辑
+                  </Button>
+                ) : (
+                  <IconButton
+                    onClick={() => {
+                      setEditing(!editing);
+                    }}
+                  >
+                    <CancelIcon />
+                  </IconButton>
+                )}
+              </div>
+            </Box>
+          </Box>
         )
       }
 
-      <Box sx={{ maxWidth: "70%" }}>
+      <Box sx={{ maxWidth: "100%" }}>
         {/* main details */}
-        <Grid
-          container
-          columns={{ xs: 1, sm: 2 }}
-          spacing='17px'
-          direction='row'
-          justifyContent='flex-start'
-          alignItems='center'
-        >
+        <ToggleBox status={object.is_usable} />
+        <Grid container columns={{ xs: 1, sm: 4 }} spacing="0">
           {fields.map((field) => {
             if (field.variant?.name === "phone") {
               return (
-                <Grid container columns={{ xs: 2, sm: 2 }} spacing={1} item xs={1} sm={1}>
+                <Grid
+                  container
+                  columns={{ xs: 3, sm: 3 }}
+                  spacing={0}
+                  item
+                  borderTop={1}
+                  xs={1}
+                  sm={1}
+                >
                   {field.variant.variantObj.fields.map((variantField) => {
                     return (
-                      <InfoBox
-                        label={variantField.label}
-                        type={variantField.type}
-                        object={object}
-                        editing={editing}
-                        form={form}
-                        setForm={setForm}
-                        noBox={variantField.noBox}
-                        variant={field.variant}
-                        curRole={curRole}
-                        permMap={permMap}
-                      />
+                      <Grid item xs={1} sm={2}>
+                        <InfoBox
+                          label={variantField.label}
+                          type={variantField.type}
+                          object={object}
+                          editing={editing}
+                          form={form}
+                          setForm={setForm}
+                          noBox={variantField.noBox}
+                          variant={field.variant}
+                          curUser={curUser}
+                          curRole={curRole}
+                          permMap={permMap}
+                        />
+                      </Grid>
                     );
                   })}
                 </Grid>
               );
             }
             return (
-              <InfoBox
-                label={field.label}
-                type={field.type}
-                object={object}
-                editing={editing}
-                form={form}
-                setForm={setForm}
-                noBox={field.noBox}
-                variant={field.variant}
-                curRole={curRole}
-                permMap={permMap}
-              />
+              <Grid item xs={1} sm={1} width="100%" borderTop={1}>
+                <InfoBox
+                  label={field.label}
+                  type={field.type}
+                  object={object}
+                  editing={editing}
+                  form={form}
+                  setForm={setForm}
+                  noBox={field.noBox}
+                  variant={field.variant}
+                  curUser={curUser}
+                  curRole={curRole}
+                  permMap={permMap}
+                />
+              </Grid>
             );
           })}
+          <Grid item xs sm width="100%" borderTop={1}></Grid>
+          <Grid item xs sm width="100%" borderTop={1}>
+            <Box width="1000px"></Box>
+          </Grid>
         </Grid>
 
         {/* footer details */}
-        <Grid container mt='44px'>
-          <FooterBox label='最近登录' content={object.at_last_login} />
+        <Grid container mt="44px">
+          <FooterBox label="最近登录" content={object.at_last_login} />
         </Grid>
       </Box>
       {/* <div className="row mt-3">
