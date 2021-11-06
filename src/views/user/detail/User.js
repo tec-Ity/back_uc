@@ -24,7 +24,7 @@ import {
   Typography,
   Button,
   IconButton,
-  SvgIcon,
+  FormControlLabel,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { ReactComponent as EditIcon } from "../../../components/icon/editBlack.svg";
@@ -32,9 +32,9 @@ import { ReactComponent as CancelIcon } from "../../../components/icon/cancelBla
 import { ReactComponent as DoneIcon } from "../../../components/icon/doneBlack.svg";
 import { ReactComponent as UserProfileLightGrey } from "../../../components/icon/userProfileLightGrey.svg";
 import ListPageHeader from "../../../components/basic/ListPageHeader.js";
+import FormBox from "./FormBox";
 import InfoBox from "./InfoBox";
 import ToggleBox from "./ToggleBox";
-import { putObject, selectObjects } from "../../../features/objectsSlice";
 
 const useStyle = makeStyles({
   infobox: {
@@ -43,6 +43,35 @@ const useStyle = makeStyles({
   },
   label: {
     marginRight: "10px",
+  },
+  switch: {
+    width: 42,
+    height: 26,
+    padding: 0,
+    "& .MuiSwitch-switchBase": {
+      padding: 0,
+      margin: 2,
+      transitionDuration: "300ms",
+      "&.Mui-checked": {
+        transform: "translateX(16px)",
+        color: "#fff",
+        "& + .MuiSwitch-track": {
+          backgroundColor: "#65C466",
+          opacity: 1,
+          border: 0,
+        },
+        "&.Mui-disabled + .MuiSwitch-track": {
+          opacity: 0.5,
+        },
+      },
+      "&.Mui-focusVisible .MuiSwitch-thumb": {
+        color: "#33cf4d",
+        border: "6px solid #fff",
+      },
+      "&.Mui-disabled .MuiSwitch-thumb": {
+        color: "#ffffff",
+      },
+    },
   },
 });
 
@@ -79,7 +108,11 @@ export default function User() {
 
   const classes = useStyle();
   const [editing, setEditing] = useState(false);
+
   const [form, setForm] = useState({});
+  useEffect(() => {
+    setForm(object);
+  }, [object]);
 
   function handleSave() {
     console.log(form);
@@ -121,14 +154,15 @@ export default function User() {
 
   const fields = [
     {
+      label: "用户姓名",
+      type: "nome",
+      permissions: ["hierachy", "self"],
+    },
+    {
       label: "登录账号",
       type: "code",
     },
 
-    {
-      label: "用户姓名",
-      type: "nome",
-    },
     {
       variant: {
         name: "phone",
@@ -143,7 +177,7 @@ export default function User() {
       variant: {
         name: "role",
         variantObj: {
-          testlist: [
+          options: [
             { label: "拥有者", id: 1 },
             { label: "管理者", id: 3 },
             { label: "超级员工", id: 5 },
@@ -155,11 +189,11 @@ export default function User() {
     },
     {
       label: "Shop",
-      type: "shop",
+      type: "Shop",
       variant: {
         name: "shop",
         variantObj: {
-          testlist: [{ label: "milano", city: "1" }],
+          options: [{ label: "milano", id: "1" }],
         },
       },
     },
@@ -252,10 +286,16 @@ export default function User() {
         )
       }
 
-      <Box sx={{ maxWidth: "100%" }}>
+      <Box mt="46px" sx={{ maxWidth: "100%" }}>
         {/* main details */}
-        <ToggleBox status={object.is_usable} />
-        <Grid container columns={{ xs: 1, sm: 4 }} spacing="0">
+        <FormBox
+          data={{ fields: fields, object: object }}
+          agent={curUser}
+          stateHandler={[form, setForm]}
+          editing={editing}
+          permMap={permMap}
+        />
+        {/* <Grid container columns={{ xs: 1, sm: 4 }} spacing="0">
           {fields.map((field) => {
             if (field.variant?.name === "phone") {
               return (
@@ -312,10 +352,13 @@ export default function User() {
           <Grid item xs sm width="100%" borderTop={1}>
             <Box width="1000px"></Box>
           </Grid>
-        </Grid>
+        </Grid> */}
 
         {/* footer details */}
-        <Grid container mt="44px">
+        <Box mt="25px" ml="25px">
+          <ToggleBox checked={object.is_usable} label="Usable" />
+        </Box>
+        <Grid container mt="25px">
           <FooterBox label="最近登录" content={object.at_last_login} />
         </Grid>
       </Box>
