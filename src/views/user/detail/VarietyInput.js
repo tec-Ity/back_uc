@@ -1,4 +1,12 @@
 import { TextField, Autocomplete } from "@mui/material";
+import { styled } from "@mui/system";
+
+const CustTextField = styled(TextField)(() => ({
+  marginRight: 8,
+  "& .MuiInputBase-root.Mui-disabled": {
+    color: "rgba(0, 0, 0, 1)", // (default alpha is 0.38)
+  },
+}));
 
 export default function VarietyInput({
   object,
@@ -15,7 +23,7 @@ export default function VarietyInput({
   function handleListShop(event, newValue) {
     console.log(newValue);
   }
-  function handleListRole(event, newValue) {
+  function handleList(event, newValue) {
     setForm({ ...form, [type]: newValue?.id });
   }
 
@@ -31,14 +39,19 @@ export default function VarietyInput({
     return roleMap[roleId];
   }
 
+  let custOut = null;
+  if (type == "role") {
+    custOut = roleName(form[type]);
+  }
+
   switch (variant?.name) {
     case "shop":
       return (
         <Autocomplete
           disablePortal
           id={type}
-          options={variant.variantObj.testlist}
-          onChange={handleListShop}
+          options={variant.variantObj.options}
+          onChange={handleList}
           fullWidth
           value={form[type]}
           renderInput={(params) => {
@@ -57,10 +70,10 @@ export default function VarietyInput({
         <Autocomplete
           disablePortal
           id={type}
-          options={variant.variantObj.testlist}
-          onChange={handleListRole}
+          options={variant.variantObj.options}
+          onChange={handleList}
           fullWidth
-          value={roleName(form[type])}
+          value={custOut || form[type]}
           renderInput={(params) => {
             return (
               <TextField
@@ -75,7 +88,7 @@ export default function VarietyInput({
       );
     default:
       return (
-        <TextField
+        <CustTextField
           id={type}
           variant="standard"
           value={form[type]}
