@@ -148,9 +148,9 @@ export const deleteObject = createAsyncThunk(
     { flagSlice, api, id, isList = false },
     { getState, rejectWithValue }
   ) => {
-    console.log(api)
+    // console.log(api)
     const res = await fetch_Prom(api, "DELETE");
-    console.log(res);
+    // console.log(res);
     if (res.status === 200) {
       alert("deleted successfully");
       return { flagSlice, id, isList };

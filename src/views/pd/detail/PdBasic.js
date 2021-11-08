@@ -72,6 +72,21 @@ export default function PdBasic({ Pd, flagSlice, api }) {
     dispatch(getObjects({ flagSlice: brandSlice, api: brandApi }));
   }, [dispatch]);
 
+  const handleCancel = () => {
+    setPdInfo({
+      code: Pd.code || "",
+      name: Pd.nome || "",
+      brand: Pd.Brand || { code: "", _id: "" }, //code id
+      nation: Pd.Nation || { code: "", _id: "" }, //code nome
+      categ2: Pd.Categ || { code: "", _id: "" }, //code nome
+      categ1: Pd.Categ?.Categ_far || { code: "", _id: "" }, //code nome
+      sort: Pd.sort || 0,
+      price_regular: Pd.price_regular || 0,
+      unit: Pd.unit || "",
+      desp: Pd.desp || "",
+    });
+  };
+
   useEffect(() => {
     if (justSubmitted === "DELETE" && status === "succeed") {
       hist.goBack();
@@ -276,10 +291,10 @@ export default function PdBasic({ Pd, flagSlice, api }) {
           modifying={modifying}
           handleEdit={() => setModifying(true)}
           handleCancel={() => {
+            handleCancel();
             setModifying(false);
           }}
           handleDelete={() => {
-            console.log(api);
             dispatch(deleteObject({ flagSlice, api }));
             setJustSubmitted("DELETE");
           }}
