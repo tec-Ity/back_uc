@@ -276,7 +276,7 @@ export default function PdBasic({ Pd, flagSlice, api }) {
           modifying={modifying}
           handleEdit={() => setModifying(true)}
           handleCancel={() => {
-            setModifying(true);
+            setModifying(false);
           }}
           handleDelete={() => {
             console.log(api);
