@@ -2,18 +2,30 @@ import React, { useState, useEffect, useRef } from "react";
 import { Grid } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
 import CusInput from "../../../components/basic/CusInput";
+import CusBtnGroup from "../../../components/basic/CusBtnGroup";
 import CusSelectSearch from "../../../components/basic/CusSelectSearch";
 import {
   // useSelector,
   useDispatch,
+  useSelector,
 } from "react-redux";
-import { getObjects, putObject } from "../../../features/objectsSlice";
+import {
+  getObjects,
+  putObject,
+  deleteObject,
+} from "../../../features/objectsSlice";
 import api_DNS from "../../../js/_dns";
+import { useHistory } from "react-router";
 // import CusTextArea from "../../../components/basic/CusTextArea";
 
 const useStyle = makeStyles({
   root: {
     "& > div": { padding: "10px 5px" },
+  },
+  hrStyle: {
+    borderTop: "2px solid #1d1d384d",
+    display: "flex",
+    justifyContent: "flex-end",
   },
 });
 
@@ -26,6 +38,10 @@ const categApi = "/Categs";
 export default function PdBasic({ Pd, flagSlice, api }) {
   const classes = useStyle();
   const dispatch = useDispatch();
+  const hist = useHistory();
+  const status = useSelector((state) => state.objects.status);
+  const [modifying, setModifying] = useState(false);
+  const [justSubmitted, setJustSubmitted] = useState(false);
   const [pdInfo, setPdInfo] = useState({
     code: Pd.code || "",
     name: Pd.nome || "",
@@ -56,6 +72,14 @@ export default function PdBasic({ Pd, flagSlice, api }) {
     dispatch(getObjects({ flagSlice: brandSlice, api: brandApi }));
   }, [dispatch]);
 
+  useEffect(() => {
+    if (justSubmitted === "DELETE" && status === "succeed") {
+      hist.goBack();
+      setJustSubmitted(false);
+    }
+    // if(justSubmitted === "UPDATE")
+  }, [hist, justSubmitted, status]);
+
   const handleSubmit = () => {
     const general = {
       nome: pdInfo.name,
@@ -69,6 +93,7 @@ export default function PdBasic({ Pd, flagSlice, api }) {
     };
     console.log(general);
     dispatch(putObject({ flagSlice, api, data: { general } }));
+    setJustSubmitted("UPDATE");
   };
   const handleSubmitImg = () => {
     const formData = new FormData();
@@ -84,21 +109,30 @@ export default function PdBasic({ Pd, flagSlice, api }) {
   const [imgsUpdate, setImgsUpdate] = useState();
   const [imgLocal, setImgLocal] = useState([]);
   const [showImgDeleteBtn, setShowImgDeleteBtn] = useState(false);
-  const [modifying, setModifying] = useState(false);
+  const [modifyingImg, setModifyingImg] = useState(false);
   //   console.log(imgsUpdate);
   return (
     <Grid container className={classes.root}>
-      {modifying === false && (
+      {modifyingImg === false && (
         <button
           className='btn btn-success mx-3'
-          onClick={() => setModifying(true)}>
-          修改
+          onClick={() => setModifyingImg(true)}>
+          修改图片
         </button>
       )}
-      {modifying === true && (
+      {modifyingImg === true && (
         <>
-          <button className='btn btn-success mx-3' onClick={handleSubmit}>
+          {/* <button className='btn btn-success mx-3' onClick={handleSubmit}>
             提交修改信息
+          </button> */}
+          <button
+            className='btn btn-warning mx-3'
+            onClick={() => {
+              setModifyingImg(false);
+              setImgLocal([]);
+              setImgsUpdate(null);
+            }}>
+            取消修改
           </button>
           <button
             className='btn btn-success mx-3'
@@ -137,8 +171,8 @@ export default function PdBasic({ Pd, flagSlice, api }) {
         item
         container
         xs={12}
-        onClick={() => ref.current.click()}
-        style={{ cursor: "pointer" }}>
+        onClick={() => modifyingImg === true && ref.current.click()}
+        style={{ cursor: modifyingImg === true ? "pointer" : "default" }}>
         {Pd.img_urls?.map((img) => (
           <div
             key={img}
@@ -235,6 +269,21 @@ export default function PdBasic({ Pd, flagSlice, api }) {
             setImgLocal(imgLocalPath);
             setImgsUpdate(imgs);
           }}
+        />
+      </Grid>
+      <Grid item xs={12} className={classes.hrStyle}>
+        <CusBtnGroup
+          modifying={modifying}
+          handleEdit={() => setModifying(true)}
+          handleCancel={() => {
+            setModifying(true);
+          }}
+          handleDelete={() => {
+            console.log(api);
+            dispatch(deleteObject({ flagSlice, api }));
+            setJustSubmitted("DELETE");
+          }}
+          handleSubmit={handleSubmit}
         />
       </Grid>
       {/* code */}

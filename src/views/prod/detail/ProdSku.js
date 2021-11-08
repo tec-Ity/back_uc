@@ -148,7 +148,7 @@ const SkuRow = ({
     setJustSubmitted(true);
   };
   const handleEdit = (e) => {
-    e.stopPropagation();
+    // e.stopPropagation();
     setModifying(true);
   };
   const handleCancel = (e) => {
