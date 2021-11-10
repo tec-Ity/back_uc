@@ -4,7 +4,7 @@ import { useParams, useHistory } from "react-router";
 import { FormattedMessage } from "react-intl";
 import { useSelector, useDispatch } from "react-redux";
 
-import { getRolePath } from "../../../js/conf/confUser";
+import confUser, { getRolePath } from "../../../js/conf/confUser";
 
 import UserPutModal from "../modal/UserPutModal";
 import UserPwdModal from "../modal/UserPwdModal";
@@ -13,19 +13,14 @@ import NavBread from "../../../components/universal/navBread/NavBread";
 import { selectUser } from "../../../features/authSlice";
 import {
   getObject,
+  getObjects,
   deleteObject,
   selectObject,
+  selectObjects,
   cleanField,
 } from "../../../features/objectsSlice";
 
-import {
-  Box,
-  Grid,
-  Typography,
-  Button,
-  IconButton,
-  FormControlLabel,
-} from "@mui/material";
+import { Box, Grid, Typography, Button, IconButton } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { ReactComponent as EditIcon } from "../../../components/icon/editBlack.svg";
 import { ReactComponent as CancelIcon } from "../../../components/icon/cancelBlack.svg";
@@ -33,7 +28,6 @@ import { ReactComponent as DoneIcon } from "../../../components/icon/doneBlack.s
 import { ReactComponent as UserProfileLightGrey } from "../../../components/icon/userProfileLightGrey.svg";
 import ListPageHeader from "../../../components/basic/ListPageHeader.js";
 import FormBox from "./FormBox";
-import InfoBox from "./InfoBox";
 import ToggleBox from "./ToggleBox";
 
 const useStyle = makeStyles({
@@ -75,6 +69,8 @@ const useStyle = makeStyles({
   },
 });
 
+const populateObjs = [{ path: "Shop", select: "code nome" }];
+
 export default function User() {
   const hist = useHistory();
   const dispatch = useDispatch();
@@ -100,23 +96,47 @@ export default function User() {
   };
 
   useEffect(() => {
-    dispatch(getObject({ flagSlice, api }));
+    dispatch(
+      getObject({
+        flagSlice,
+        api: api + "?populateObjs=" + JSON.stringify(populateObjs),
+      })
+    );
     return () => {
       dispatch(cleanField({ flagSlice, flagField }));
     };
   }, [api, dispatch]);
 
-  const classes = useStyle();
   const [editing, setEditing] = useState(false);
+  const flagSlice_Shops = "user_Shops";
+  const api_Shops = "/Shops";
+  const classes = useStyle();
+  const objShops = useSelector(selectObjects(flagSlice_Shops));
+
+  useEffect(() => {
+    dispatch(getObjects({ flagSlice: flagSlice_Shops, api: api_Shops }));
+  }, [editing]);
 
   const [form, setForm] = useState({});
   useEffect(() => {
-    setForm(object);
+    const { nome, code, phonePre, phone, role } = object;
+    setForm({ nome, code, phonePre, phone, role });
   }, [object]);
 
   function handleSave() {
-    console.log(form);
+    console.log("[SAVE]", form);
     setEditing(!editing);
+  }
+
+  function handleLog() {
+    console.log("[LOG]", object);
+  }
+
+  function populateShops(Shops) {
+    let arr = Shops.map((shop) => {
+      return { label: shop.nome, id: shop.code };
+    });
+    return arr;
   }
 
   function FooterBox({ label, content }) {
@@ -162,7 +182,6 @@ export default function User() {
       label: "登录账号",
       type: "code",
     },
-
     {
       variant: {
         name: "phone",
@@ -193,7 +212,7 @@ export default function User() {
       variant: {
         name: "shop",
         variantObj: {
-          options: [{ label: "milano", id: "1" }],
+          options: populateShops(objShops),
         },
       },
     },
@@ -229,6 +248,10 @@ export default function User() {
                   object={object}
                   flagSlice={flagSlice}
                 />
+
+                <IconButton onClick={handleLog}>
+                  <DoneIcon />
+                </IconButton>
 
                 {editing && curRole < object.role && (
                   <Button variant="contained" color="error" onClick={deleteDB}>

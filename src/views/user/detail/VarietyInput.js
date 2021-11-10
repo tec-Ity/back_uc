@@ -3,12 +3,14 @@ import { styled } from "@mui/system";
 
 const CustTextField = styled(TextField)(() => ({
   marginRight: 8,
-  "& .MuiInputBase-root.Mui-disabled": {
+  "& .Mui-disabled": {
+    fontWeight: 700,
     color: "rgba(0, 0, 0, 1)", // (default alpha is 0.38)
   },
 }));
 
 export default function VarietyInput({
+  editable,
   object,
   variant,
   setForm,
@@ -20,9 +22,6 @@ export default function VarietyInput({
     setForm({ ...form, [type]: event.target.value });
   }
 
-  function handleListShop(event, newValue) {
-    console.log(newValue);
-  }
   function handleList(event, newValue) {
     setForm({ ...form, [type]: newValue?.id });
   }
@@ -40,7 +39,7 @@ export default function VarietyInput({
   }
 
   let custOut = null;
-  if (type == "role") {
+  if (type === "role") {
     custOut = roleName(form[type]);
   }
 
@@ -49,7 +48,7 @@ export default function VarietyInput({
       return (
         <Autocomplete
           disablePortal
-          id={type}
+          id={variant.name}
           options={variant.variantObj.options}
           onChange={handleList}
           fullWidth
@@ -69,7 +68,7 @@ export default function VarietyInput({
       return (
         <Autocomplete
           disablePortal
-          id={type}
+          id={variant.name}
           options={variant.variantObj.options}
           onChange={handleList}
           fullWidth

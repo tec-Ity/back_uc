@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography, Grid, Box } from "@mui/material";
+import { Typography, Box } from "@mui/material";
 import VarietyInput from "./VarietyInput";
 
 function roleName(roleId) {
@@ -18,6 +18,8 @@ export default function InfoBox({
   label,
   type,
   object,
+  altObject = null,
+  altType = null,
   variant,
   noBox,
   editing,
@@ -28,18 +30,17 @@ export default function InfoBox({
   permMap,
 }) {
   //calculate if editable
-  const { [curRole]: userPerms } = permMap;
   let editable = editing && curRole < object.role;
   if (type === "nome") {
     editable =
-      editing && (curRole < object.role || curUser.code == object.code);
-  }
-  if (type === "shop") {
-    editable = editing && curRole < object.role && curRole < 100;
+      editing && (curRole < object.role || curUser.code === object.code);
   }
   let custOut = null;
   if (type === "role") {
-    custOut = roleName(object[type]);
+    custOut = roleName(object?.[type]);
+  }
+  if (type === "Shop") {
+    custOut = altObject?.[altType];
   }
 
   return (
@@ -69,6 +70,7 @@ export default function InfoBox({
       </Typography>
       {editable ? (
         <VarietyInput
+          editable={editable}
           object={object}
           type={type}
           variant={variant}
