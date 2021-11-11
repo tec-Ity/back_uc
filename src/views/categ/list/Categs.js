@@ -12,6 +12,7 @@ import {
   getObjects,
   postObject,
   putObject,
+  setQueryFixed,
 } from "../../../features/objectsSlice";
 import api_DNS from "../../../js/_dns";
 import CusBtnGroup from "../../../components/basic/CusBtnGroup";
@@ -73,7 +74,7 @@ const useStyle = makeStyles({
     height: "fit-content",
     // backgroundColor: "#fff",
     color: "#fff",
-    textShadow: '2px 2px 5px black',
+    textShadow: "2px 2px 5px black",
     fontSize: "30px",
     fontWeight: "700",
     borderRadius: "10px",
@@ -150,25 +151,31 @@ const useStyle = makeStyles({
 
 const links = [{ label: "主页", to: "/home" }, { label: "分类列表" }];
 const flagSlice = "categs";
-const api = "/Categs";
 const populateObjs = [
   {
     path: "Categ_sons",
     select: "code",
   },
 ];
+
+const api = "/Categs";
 export default function Categs() {
   const dispatch = useDispatch();
   const [addNew, setAddNew] = useState(false);
+  const queryFixed = "&populateObjs=" + JSON.stringify(populateObjs);
+  // 先把queryFixed设置好
+  useEffect(() => {
+    dispatch(setQueryFixed({ flagSlice, queryFixed }));
+  }, [dispatch, queryFixed]);
+
   useEffect(() => {
     dispatch(
       getObjects({
         flagSlice,
-        api: api + "?populateObjs=" + JSON.stringify(populateObjs),
+        api,
       })
     );
   }, [dispatch]);
-
   return (
     <Container>
       <ListPageHeader
@@ -179,7 +186,7 @@ export default function Categs() {
         flagSlice={flagSlice}
       />
       <CategList addNew={addNew} closeAddNew={() => setAddNew(false)} />
-      
+
       <PageNav flagSlice={flagSlice} api={api} />
     </Container>
   );
@@ -189,7 +196,7 @@ function CategList(props) {
   const { addNew, closeAddNew } = props;
   const classes = useStyle();
   const categs = useSelector((state) => state.objects[flagSlice]?.objects);
-
+  console.log(categs);
   return (
     <Grid container className={classes.listGridContainer}>
       {addNew === true && (
@@ -229,7 +236,6 @@ function CategListItem({
   });
   const [categUpdateData, setCategUpdateData] = useState(initCategInfo);
   const [imgLocal, setImgLocal] = useState([]);
-
   const handleSubmit = (e) => {
     e.stopPropagation();
     const formData = new FormData();
@@ -714,6 +720,7 @@ function AddNewChildRow({ farId }) {
     </Grid>
   ) : (
     <CategListItemChild
+      key='addNew'
       farId={farId}
       addNewChild={addNewChild}
       closeAddNewChild={() => setAddNewChild(false)}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container, Grid } from "@mui/material";
 // import NavBread from "../../../components/universal/navBread/NavBread";
-import { getRolePath } from "../../../js/conf/confUser";
+// import { getRolePath } from "../../../js/conf/confUser";
 import { 
   // Link,
   useParams
@@ -136,7 +136,7 @@ const useStyle = makeStyles({
   //orderProds
 });
 
-const rolePath = getRolePath();
+// const rolePath = getRolePath();
 const flagSlice = "order";
 const flagField = "object";
 //populate objs
@@ -163,7 +163,7 @@ const populateObjs = [
 ];
 const links = [
   { label: "主页", to: "/home" },
-  { label: "订单列表", to: `/${rolePath}/orders` },
+  { label: "订单列表", to: `/orders` },
   { label: "订单详情" },
 ];
 ////////////////////////////////////////////////////////////////

@@ -10,7 +10,7 @@ import {
 import ProdAttr from "./ProdAttr";
 import ProdBasic from "./ProdBasic";
 import ProdSku from "./ProdSku";
-import { getRolePath } from "../../../js/conf/confUser";
+// import { getRolePath } from "../../../js/conf/confUser";
 import ListPageHeader from "../../../components/basic/ListPageHeader";
 
 const populateObjs = [
@@ -30,7 +30,7 @@ const populateObjs = [
 export default function Prod(props) {
   const { id } = useParams();
   const hist = useHistory();
-  const rolePath = getRolePath();
+//   const rolePath = getRolePath();
   const dispatch = useDispatch();
   const flagSlice = "prod";
   const flagField = "object";
@@ -83,7 +83,7 @@ export default function Prod(props) {
         api={api}
         links={[
           { label: "主页", to: "/home" },
-          { label: "商品列表", to: `/${rolePath}/prods` },
+          { label: "商品列表", to: `/prods` },
           { label: "商品详情" },
         ]}
         showAddIcon={false}

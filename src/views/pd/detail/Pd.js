@@ -9,7 +9,7 @@ import {
 import ListPageHeader from "../../../components/basic/ListPageHeader";
 import PdBasic from "./PdBasic";
 import PdProds from "./PdProds";
-import { getRolePath } from "../../../js/conf/confUser";
+// import { getRolePath } from "../../../js/conf/confUser";
 import CusSwitchTabs from "../../../components/basic/CusSwitchTabs";
 
 const flagSlice = "pd";
@@ -41,7 +41,7 @@ const switchList = [
 export default function Pd(props) {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const rolePath = getRolePath();
+//   const rolePath = getRolePath();
   const api = `/pd/${id}`;
   const param = new URLSearchParams(useLocation().search);
   const section = param.get("section");
@@ -89,7 +89,7 @@ export default function Pd(props) {
         api={api}
         links={[
           { label: "主页", to: "/home" },
-          { label: "产品列表", to: `/${rolePath}/pds` },
+          { label: "产品列表", to: `/pds` },
           { label: "产品详情" },
         ]}
         showAddIcon={false}

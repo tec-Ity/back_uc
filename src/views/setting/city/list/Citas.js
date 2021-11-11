@@ -20,7 +20,7 @@ import {
 import CusInput from "../../../../components/basic/CusInput";
 import api_DNS from "../../../../js/_dns";
 import CusBtnGroup from "../../../../components/basic/CusBtnGroup";
-import { getRolePath } from "../../../../js/conf/confUser";
+// import { getRolePath } from "../../../../js/conf/confUser";
 import ListPageHeader from "../../../../components/basic/ListPageHeader";
 import PageNav from "../../../../components/universal/query/PageNav";
 
@@ -123,10 +123,10 @@ const useStyle = makeStyles({
     cursor: "pointer",
   },
 });
-const rolePath = getRolePath();
+// const rolePath = getRolePath();
 const links = [
   { label: "主页", to: "/home" },
-  { label: "设置", to: `/${rolePath}/setting` },
+  { label: "设置", to: `/setting` },
   { label: "城市列表" },
 ];
 const flagSlice = "citys";

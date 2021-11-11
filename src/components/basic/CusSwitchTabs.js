@@ -10,7 +10,7 @@ const useStyle = makeStyles({
     width: "100%",
     height: "30px",
     borderBottom: "2px solid",
-    marginBottom:'30px'
+    marginBottom: "30px",
   },
   tabStyle: {
     margin: "0",
@@ -42,6 +42,7 @@ export default function CusSwitchTabs({ switchList, setSel, selected }) {
     <div className={classes.tabBox}>
       {switchList?.map((switchTab) => (
         <div
+          key={switchTab.label}
           className={clsx(
             classes.tabStyle,
             switchTab.selKey === selected

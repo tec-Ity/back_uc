@@ -104,8 +104,8 @@ export default function User() {
   }
 
   const links = [
-    { label: "主页", to: `/${rolePath}/home` },
-    { label: "用户列表", to: `/${rolePath}/users` },
+    { label: "主页", to: `/home` },
+    { label: "用户列表", to: `/users` },
     { label: "详情" },
   ];
 

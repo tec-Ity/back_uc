@@ -70,6 +70,7 @@ export default function SearchInput(props) {
   };
   // 根据本身 filter 的变化, 更新 reducer 中对应查找的数据 (如果加载此组件， 则不用在父组件中加载)
   useEffect(() => {
+    console.log("search");
     flagSlice &&
       api &&
       dispatch(getObjects({ flagSlice, api, isReload: true }));

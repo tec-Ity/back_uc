@@ -5,7 +5,7 @@ import {
   // Breadcrumbs,
   Grid,
   // Link, Typography,
-  Switch
+  Switch,
 } from "@mui/material";
 // import { OutlinedInput, FormControl, InputLabel } from "@material-ui/core";
 // import Modal from "@mui/material/Modal";
@@ -20,7 +20,7 @@ import {
 // import CusInput from "../../../../components/basic/CusInput";
 import api_DNS from "../../../../js/_dns";
 import CusBtnGroup from "../../../../components/basic/CusBtnGroup";
-import { getRolePath } from "../../../../js/conf/confUser";
+// import { getRolePath } from "../../../../js/conf/confUser";
 import ListPageHeader from "../../../../components/basic/ListPageHeader";
 import PageNav from "../../../../components/universal/query/PageNav";
 const useStyle = makeStyles({
@@ -122,10 +122,10 @@ const useStyle = makeStyles({
     cursor: "pointer",
   },
 });
-const rolePath = getRolePath();
+// const rolePath = getRolePath();
 const links = [
   { label: "主页", to: "/home" },
-  { label: "设置", to: `/${rolePath}/setting` },
+  { label: "设置", to: `/setting` },
   { label: "国家列表" },
 ];
 const flagSlice = "nations";

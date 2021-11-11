@@ -80,8 +80,8 @@ export default function Orders() {
     { path: "Client", select: "code nome phone" },
     { path: "Shop", select: "code nome" },
   ];
-  const queryFixed = "&populateObjs=" + JSON.stringify(populateObjs);
   const queryObj = useSelector(selectQuery(flagSlice));
+  const queryFixed = "&populateObjs=" + JSON.stringify(populateObjs);
   // 先把queryFixed设置好
   useEffect(() => {
     dispatch(setQueryFixed({ flagSlice, queryFixed }));

@@ -1,4 +1,4 @@
-import { useState, useEffect,  } from "react";
+import { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import { selectObjects, getObjects } from "../../../features/objectsSlice";
@@ -16,11 +16,14 @@ import PageNav from "../../../components/universal/query/PageNav";
 
 const flagSlice = "shops";
 const api = "/Shops";
-const links = [{ label: "主页", to: "/home" }, { label: "店铺列表" }];
 export default function Shops(props) {
   const rolePath = getRolePath();
   const dispatch = useDispatch();
   const hist = useHistory();
+  const links = [
+    { label: "主页", to: `/home` },
+    { label: "店铺列表" },
+  ];
 
   const [modalShow, setModalShow] = useState(false);
 

@@ -1,13 +1,14 @@
 import React from "react";
-import { 
+import {
   Breadcrumbs,
   // Link as MuiLink,
-  Typography
+  Typography,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import makeStyles from "@mui/styles/makeStyles";
 import SearchInput from "../universal/query/SearchInput";
 import { ReactComponent as AddIcon } from "../icon/addIconWhite.svg";
+import { getRolePath } from "../../js/conf/confUser";
 
 const useStyle = makeStyles({
   headerContainer: {
@@ -66,6 +67,7 @@ export default function ListPageHeader({
   links,
   api,
 }) {
+  const rolePath = getRolePath();
   const classes = useStyle();
   return (
     <div className={classes.headerContainer}>
@@ -76,7 +78,10 @@ export default function ListPageHeader({
               {link.label}
             </Typography>
           ) : (
-            <Link key={index} to={link.to} className={classes.linkStyle}>
+            <Link
+              key={index}
+              to={"/" + rolePath + link.to}
+              className={classes.linkStyle}>
               {link.label}
             </Link>
           )
