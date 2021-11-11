@@ -16,7 +16,7 @@ export const getObjects = createAsyncThunk(
     { getState, rejectWithValue }
   ) => {
     const queryStr = genQueryStr(flagSlice, getState());
-    console.log(1, flagSlice, api);
+    // console.log(1, flagSlice, api);
     // if(!flagSlice || !api) return rejectWithValue("getObjects error info");
     const res = await fetch_Prom(api + queryStr);
     // console.log(2, flagSlice, api, res);
@@ -273,7 +273,7 @@ export const objectsSlice = createSlice({
         if (i < state[flagSlice].objects.length)
           state[flagSlice].objects[i] = object;
       } else {
-        console.log(object);
+        // console.log(object);
         state[flagSlice].object = object;
       }
     },

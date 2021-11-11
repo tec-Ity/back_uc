@@ -9,7 +9,8 @@ import {
 import { getObjects } from "../../../features/objectsSlice";
 import FilterGeneral from "../../../components/universal/query/filter/FilterGeneral";
 import moment from "moment";
-import PageComp from "../../../components/universal/query/page/PageComp";
+// import PageComp from "../../../components/universal/query/page/PageComp";
+import PageNav from "../../../components/universal/query/PageNav";
 import { statusName, statusCode } from "../../../js/conf/confOrder";
 import { useHistory } from "react-router";
 import { getRolePath } from "../../../js/conf/confUser";
@@ -98,7 +99,7 @@ export default function Orders() {
   ]);
 
   const objects = useSelector(selectObjects(flagSlice));
-  const pageSize = 50;
+  // const pageSize = 50;
   let imp_Orders = 0;
   return (
     <>
@@ -187,7 +188,8 @@ export default function Orders() {
       </Grid>
       <h3>{imp_Orders.toFixed(2)}</h3>
       {/* page control */}
-      <PageComp flagSlice={flagSlice} count={objects?.length / pageSize} />
+      {/* <PageComp flagSlice={flagSlice} count={objects?.length / pageSize} /> */}
+      <PageNav flagSlice={flagSlice} api={api} />
     </>
   );
 }

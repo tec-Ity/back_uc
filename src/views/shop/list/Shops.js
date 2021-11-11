@@ -12,6 +12,7 @@ import ShopCard from "../ui/ShopCard";
 import ShopRow from "../ui/ShopRow";
 import ListPageHeader from "../../../components/basic/ListPageHeader";
 // const ShopPostModal = lazy(() => import("../modal/ShopPostModal"));
+import PageNav from "../../../components/universal/query/PageNav";
 
 const flagSlice = "shops";
 const api = "/Shops";
@@ -56,6 +57,8 @@ export default function Shops(props) {
           clickEvent={clickEvent}
         />
       </div>
+
+      <PageNav flagSlice={flagSlice} api={api} />
     </>
   );
 }

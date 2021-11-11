@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { useParams, useHistory } from "react-router";
-import { FormattedMessage } from "react-intl";
+// import { FormattedMessage } from "react-intl";
 import { useSelector, useDispatch } from "react-redux";
 
 import { getRolePath } from "../../../js/conf/confUser";
 
 import UserPutModal from "../modal/UserPutModal";
 import UserPwdModal from "../modal/UserPwdModal";
-import NavBread from "../../../components/universal/navBread/NavBread";
+// import NavBread from "../../../components/universal/navBread/NavBread";
 
 // import { selectUser } from "../../../features/authSlice";
 import {
@@ -19,22 +19,22 @@ import {
 } from "../../../features/objectsSlice";
 
 import { Box, Grid, Typography, Button, IconButton } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+// import { makeStyles } from "@mui/styles";
 import { ReactComponent as EditIcon } from "../../../components/icon/editBlack.svg";
 import { ReactComponent as CancelIcon } from "../../../components/icon/cancelBlack.svg";
 import { ReactComponent as DoneIcon } from "../../../components/icon/doneBlack.svg";
 import ListPageHeader from "../../../components/basic/ListPageHeader.js";
 import InfoBox from "./InfoBox";
 
-const useStyle = makeStyles({
-  infobox: {
-    height: "50px",
-    width: "286px",
-  },
-  label: {
-    marginRight: "10px",
-  },
-});
+// const useStyle = makeStyles({
+//   infobox: {
+//     height: "50px",
+//     width: "286px",
+//   },
+//   label: {
+//     marginRight: "10px",
+//   },
+// });
 
 export default function User() {
   const hist = useHistory();
@@ -67,15 +67,16 @@ export default function User() {
     };
   }, [api, dispatch]);
 
-  const classes = useStyle();
+  // const classes = useStyle();
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState({});
 
   useEffect(() => {
     if (!editing) return;
     const { code, nome, phonePre, phone, role } = object;
-    const Shop = object.Shop ? object.Shop._id : null;
+    // const Shop = object.Shop ? object.Shop._id : null;
     setForm({ code, nome, phonePre, phone, role });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [object]);
 
   function handleSave() {
@@ -222,7 +223,7 @@ export default function User() {
                 onClick={() => {
                   //load object to form
                   const { code, nome, phonePre, phone, role } = object;
-                  const Shop = object.Shop ? object.Shop._id : null;
+                  // const Shop = object.Shop ? object.Shop._id : null;
                   setForm({ code, nome, phonePre, phone, role });
 
                   setEditing(!editing);

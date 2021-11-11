@@ -73,7 +73,7 @@ export default function UserCard(props) {
   } else if (object?.img_urls?.length > 0) {
     img_url = get_DNS() + object.img_urls[0];
   }
-  console.log(object);
+  // console.log(object);
   return (
     <>
       {object ? (

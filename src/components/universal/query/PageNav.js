@@ -8,8 +8,8 @@ import {
   selectPageNum,
 } from "../../../features/objectsSlice";
 
-export default function PageName(props) {
-  const { flagSlice, api, } = props;
+export default function PageNav(props) {
+  const { flagSlice, api, pagesize} = props;
   const dispatch = useDispatch();
   const page = useSelector(selectQuery(flagSlice))?.page || 1;
   const pageNum = useSelector(selectPageNum(flagSlice));
@@ -17,9 +17,17 @@ export default function PageName(props) {
   const pageClick = (val) =>(event) => { dispatch( setQuery({ flagSlice, query: { key: "page", val }, isReload: false }) ); }
   // 根据本身 filter 的变化, 更新 reducer 中对应查找的数据 (如果加载此组件， 则不用在父组件中加载)
   useEffect(() => {
-        dispatch(getObjects({ flagSlice, api, isReload: true }));
+          dispatch(getObjects({ flagSlice, api, isReload: true }));
+          // eslint-disable-next-line react-hooks/exhaustive-deps
+        }, [page]);
+
+        useEffect(() => {
+                if(pagesize !== 50) {
+                        dispatch( setQuery({ flagSlice, query: { key: "pagesize", val: pagesize } }) ); 
+                }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-      }, [page]);
+      }, [pagesize]);
+        
 
   // 卸载
   useEffect(() => {

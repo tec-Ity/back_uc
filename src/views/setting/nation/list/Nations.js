@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
 import makeStyles from "@mui/styles/makeStyles";
 import Container from "@mui/material/Container";
-import { Breadcrumbs, Grid, Link, Typography, Switch } from "@mui/material";
+import {
+  // Breadcrumbs,
+  Grid,
+  // Link, Typography,
+  Switch
+} from "@mui/material";
 // import { OutlinedInput, FormControl, InputLabel } from "@material-ui/core";
 // import Modal from "@mui/material/Modal";
-import SearchInput from "../../../../components/universal/query/SearchInput";
+// import SearchInput from "../../../../components/universal/query/SearchInput";
 import { useDispatch, useSelector } from "react-redux";
 import {
   deleteObject,
@@ -17,6 +22,7 @@ import api_DNS from "../../../../js/_dns";
 import CusBtnGroup from "../../../../components/basic/CusBtnGroup";
 import { getRolePath } from "../../../../js/conf/confUser";
 import ListPageHeader from "../../../../components/basic/ListPageHeader";
+import PageNav from "../../../../components/universal/query/PageNav";
 const useStyle = makeStyles({
   root: {},
   //header
@@ -136,6 +142,7 @@ export default function Nations() {
     <Container>
       <ListPageHeader links={links} />
       <CityList addNew={addNew} closeAddNew={() => setAddNew(false)} />
+      <PageNav flagSlice={flagSlice} api={api} />
     </Container>
   );
 }

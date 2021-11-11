@@ -10,7 +10,7 @@ import ListPageHeader from "../../../components/basic/ListPageHeader";
 import UiVariety from "../../../components/ui/UiVariety";
 import PdCard from "../ui/PdCard";
 import PdRow from "../ui/PdRow";
-import PageNave from "../../../components/universal/query/PageNav";
+import PageNav from "../../../components/universal/query/PageNav";
 import PdPostModal from "../modal/PdPostModal";
 
 const links = [{ label: "主页", to: "/home" }, { label: "产品列表" }];
@@ -57,7 +57,8 @@ export default function Pds(props) {
           clickEvent={clickEvent}
         />
       </div>
-      <PageNave flagSlice={flagSlice} api={api} />
+
+      <PageNav flagSlice={flagSlice} api={api} />
 
       <PdPostModal show={addNew} handleClose={() => setAddNew(false)} />
     </>

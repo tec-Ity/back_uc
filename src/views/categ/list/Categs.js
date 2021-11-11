@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import makeStyles from "@mui/styles/makeStyles";
 import Container from "@mui/material/Container";
-import clsx from "clsx";
+// import clsx from "clsx";
 import { Grid, Switch } from "@mui/material";
 // import { OutlinedInput, FormControl, InputLabel } from "@material-ui/core";
 // import Modal from "@mui/material/Modal";
@@ -16,6 +16,8 @@ import {
 import api_DNS from "../../../js/_dns";
 import CusBtnGroup from "../../../components/basic/CusBtnGroup";
 import CusBtnGroupSecondary from "../../../components/basic/CusBtnGroupSecondary";
+import PageNav from "../../../components/universal/query/PageNav";
+
 const useStyle = makeStyles({
   root: {},
   //header
@@ -177,6 +179,8 @@ export default function Categs() {
         flagSlice={flagSlice}
       />
       <CategList addNew={addNew} closeAddNew={() => setAddNew(false)} />
+      
+      <PageNav flagSlice={flagSlice} api={api} />
     </Container>
   );
 }

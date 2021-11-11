@@ -111,7 +111,7 @@ export default function PdCard(props) {
               <div>{object.nome}</div>
               <div>{object.desp || " "}</div>
             </div>
-            {console.log(object)}
+
             {curRole > 100 &&
               (object?.Prods &&
               object.Prods.length > 0 &&

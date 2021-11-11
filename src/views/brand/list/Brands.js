@@ -7,6 +7,7 @@ import { Grid, Switch } from "@mui/material";
 // import Modal from "@mui/material/Modal";
 // import SearchInput from "../../../components/universal/query/SearchInput";
 import { useDispatch, useSelector } from "react-redux";
+import PageNav from "../../../components/universal/query/PageNav";
 import {
   deleteObject,
   getObjects,
@@ -137,6 +138,7 @@ export default function Brands() {
         addLabel='添加品牌'
       />
       <BrandList addNew={addNew} closeAddNew={() => setAddNew(false)} />
+      <PageNav flagSlice={flagSlice} api={api} />
     </Container>
   );
 }
