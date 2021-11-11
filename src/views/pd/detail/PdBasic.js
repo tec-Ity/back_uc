@@ -97,9 +97,9 @@ export default function PdBasic({ Pd, flagSlice, api }) {
 
   const handleSubmit = () => {
     const general = {
+      code: pdInfo.code,
       nome: pdInfo.name,
       Nation: pdInfo.nation._id,
-      code: pdInfo.code,
       Brand: pdInfo.brand._id,
       Categ: pdInfo.categ2._id,
       sort: pdInfo.sort,
@@ -303,7 +303,14 @@ export default function PdBasic({ Pd, flagSlice, api }) {
       </Grid>
       {/* code */}
       <Grid item xs={6}>
-        <CusInput label='Code' disabled value={pdInfo.code} />
+        <CusInput
+          disabled={!modifying}
+          label='Code'
+          value={pdInfo.code}
+          handleChange={(e) =>
+            setPdInfo((prev) => ({ ...prev, code: e.target.value }))
+          }
+        />
       </Grid>
       {/* name */}
       <Grid item xs={6}>
