@@ -31,11 +31,9 @@ export default function UiVariety(props) {
     init: "card",
     arr: ["card", "row"],
   };
+
   const [keyUi, setKeyUi] = useState(styleUi.init);
-  //   const [activeBtns, setActiveBtns] = useState([
-  //     "btn-success",
-  //     "btn-outline-success",
-  //   ]);
+
   const [activeBtn, setActiveBtn] = useState(0);
   const changeUi = (iBtn) => {
     // 变化样式组件
