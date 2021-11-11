@@ -196,7 +196,7 @@ function CategList(props) {
   const { addNew, closeAddNew } = props;
   const classes = useStyle();
   const categs = useSelector((state) => state.objects[flagSlice]?.objects);
-  console.log(categs);
+//   console.log(categs);
   return (
     <Grid container className={classes.listGridContainer}>
       {addNew === true && (

@@ -16,8 +16,8 @@ export const getObjects = createAsyncThunk(
     { getState, rejectWithValue }
   ) => {
     const queryStr = genQueryStr(flagSlice, getState());
-    console.log(1, flagSlice, api);
-    console.log(2, queryStr);
+    // console.log(1, flagSlice, api);
+    // console.log(2, queryStr);
     // if(!flagSlice || !api) return rejectWithValue("getObjects error info");
     const res = await fetch_Prom(api + queryStr);
     // console.log(2, flagSlice, api, res);
