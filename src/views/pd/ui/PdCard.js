@@ -35,17 +35,18 @@ const useStyle = makeStyles({
 
     overflowWrap: "break-word",
     "& > :nth-child(1)": {
-      height: "107px",
+      height: "140px",
       fontSize: "14px",
       fontWeight: "600",
     },
-    "& > :nth-child(2)": {
-      fontSize: "12px",
-      color: "#00000080",
-      height: "3em",
-      overflow: "hidden",
-    },
+    // "& > :nth-child(2)": {
+    //   fontSize: "12px",
+    //   color: "#00000080",
+    //   height: "3em",
+    //   overflow: "hidden",
+    // },
   },
+  
   bottomBtn: {
     position: "absolute",
     height: "30px",
@@ -115,7 +116,7 @@ export default function PdCard(props) {
             <img src={img_url} className={classes.imgStyle} alt={object.code} />
             <div className={classes.infoStyle}>
               <div>{object.nome}</div>
-              <div>{object.desp || " "}</div>
+              {/* <div>{object.desp || " "}</div> */}
             </div>
 
             {curRole > 100 &&

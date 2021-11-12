@@ -27,13 +27,16 @@ const useStyle = makeStyles({
   },
   listGridContainer: {
     // border: "1px solid",
+    display: "flex",
+    justifyContent: "space-between",
   },
   listGridItem: {
     position: "relative",
-    "&:hover": { cursor: "pointer" },
+    cursor: "pointer",
     // border: "1px solid",
     boxSizing: "border-box",
-    height: "160px",
+    height: "350px",
+    width: "255px",
     // marginBottom: "20px",
     padding: "2px",
     boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.1)",
@@ -263,7 +266,7 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
   }, [justSubmitted, status]);
 
   return (
-    <>
+    <div>
       <Grid
         container
         item
@@ -359,7 +362,7 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
       {/* ---modify form--- */}
       {modifying === true && (
         <Grid container item xs={12} style={{ marginBottom: "10px" }}>
-          <Grid item xs={1}>
+          <Grid item xs={2}>
             <div className={classes.inputBox}>
               <input
                 value={brandUpdateData.sort}
@@ -375,7 +378,7 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
             </div>
           </Grid>
           <Grid item xs={1} />
-          <Grid item xs={8}>
+          <Grid item xs={5}>
             <div className={classes.inputBox}>
               <input
                 value={brandUpdateData.name}
@@ -390,7 +393,7 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
               <label className={classes.inputlabel}>Name</label>
             </div>
           </Grid>
-          {/* <Grid item xs={1} /> */}
+          <Grid item xs={1} />
           <Grid
             container
             item
@@ -413,6 +416,6 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
           </Grid>
         </Grid>
       )}
-    </>
+    </div>
   );
 }
