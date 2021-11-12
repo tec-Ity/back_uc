@@ -1,4 +1,4 @@
-import { useState, useEffect,  } from "react";
+import { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import { selectObjects, getObjects } from "../../../features/objectsSlice";
@@ -12,14 +12,18 @@ import ShopCard from "../ui/ShopCard";
 import ShopRow from "../ui/ShopRow";
 import ListPageHeader from "../../../components/basic/ListPageHeader";
 // const ShopPostModal = lazy(() => import("../modal/ShopPostModal"));
+import PageNav from "../../../components/universal/query/PageNav";
 
 const flagSlice = "shops";
 const api = "/Shops";
-const links = [{ label: "主页", to: "/home" }, { label: "店铺列表" }];
 export default function Shops(props) {
   const rolePath = getRolePath();
   const dispatch = useDispatch();
   const hist = useHistory();
+  const links = [
+    { label: "主页", to: `/home` },
+    { label: "店铺列表" },
+  ];
 
   const [modalShow, setModalShow] = useState(false);
 
@@ -56,6 +60,8 @@ export default function Shops(props) {
           clickEvent={clickEvent}
         />
       </div>
+
+      <PageNav flagSlice={flagSlice} api={api} />
     </>
   );
 }

@@ -12,6 +12,10 @@ import UiVariety from "../../../components/ui/UiVariety";
 import ClientCard from "../ui/ClientCard";
 import ClientRow from "../ui/ClientRow";
 import ListPageHeader from "../../../components/basic/ListPageHeader";
+
+import PageNav from "../../../components/universal/query/PageNav";
+
+
 const links = [{ label: "主页", to: "/home" }, { label: "客户列表" }];
 
 export default function Clients(props) {
@@ -47,6 +51,8 @@ export default function Clients(props) {
           clickEvent={clickEvent}
         />
       </div>
+
+      <PageNav flagSlice={flagSlice} api={api} />
     </>
   );
 }

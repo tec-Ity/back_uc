@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useLocation, } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
-import { getRolePath } from "../../../js/conf/confUser";
+// import { getRolePath } from "../../../js/conf/confUser";
 import {
   getObject,
   selectObject,
@@ -19,7 +19,7 @@ const populateObjs = [
 ];
 
 export default function Shop() {
-  const rolePath = getRolePath();
+//   const rolePath = getRolePath();
   const dispatch = useDispatch();
   const { id } = useParams();
   const flagSlice = "shop";
@@ -86,7 +86,7 @@ export default function Shop() {
         api={api}
         links={[
           { label: "主页", to: "/home" },
-          { label: "店铺列表", to: `/${rolePath}/shops` },
+          { label: "店铺列表", to: `/shops` },
           { label: "店铺详情" },
         ]}
         showAddIcon={false}

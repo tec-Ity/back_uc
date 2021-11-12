@@ -1,9 +1,16 @@
 import React from "react";
-import { Breadcrumbs, Link as MuiLink, Typography } from "@mui/material";
+import {
+  Breadcrumbs,
+  // Link as MuiLink,
+  Typography,
+} from "@mui/material";
 import { Link } from "react-router-dom";
 import makeStyles from "@mui/styles/makeStyles";
 import SearchInput from "../universal/query/SearchInput";
 import { ReactComponent as AddIcon } from "../icon/addIconWhite.svg";
+import { getRolePath } from "../../js/conf/confUser";
+import { useSelector } from "react-redux";
+// import { setPrevView } from "../../features/objectsSlice";
 
 const useStyle = makeStyles({
   headerContainer: {
@@ -13,9 +20,6 @@ const useStyle = makeStyles({
     marginBottom: "20px",
     height: "100px",
   },
-  //   bread: {
-  //     fontSize: "20px",
-  //   },
   searchSection: {
     display: "flex",
   },
@@ -62,7 +66,11 @@ export default function ListPageHeader({
   links,
   api,
 }) {
+  const rolePath = getRolePath();
   const classes = useStyle();
+  const prevView = useSelector((state) => state.objects.prevView);
+  //   const dispatch = useDispatch();
+  //   console.log(prevView);
   return (
     <div className={classes.headerContainer}>
       <Breadcrumbs className={classes.bread}>
@@ -72,7 +80,16 @@ export default function ListPageHeader({
               {link.label}
             </Typography>
           ) : (
-            <Link key={index} to={link.to} className={classes.linkStyle}>
+            <Link
+              key={index}
+              to={
+                "/" +
+                rolePath +
+                (link.prevView === true
+                  ? link.to + `?view=${prevView}`
+                  : link.to)
+              }
+              className={classes.linkStyle}>
               {link.label}
             </Link>
           )

@@ -14,6 +14,7 @@ import {
 import { ReactComponent as Delete } from "../../../components/icon/delete.svg";
 import shopDefaul from "../../../components/icon/Shop.jpg";
 import { getRolePath } from "../../../js/conf/confUser";
+import CusBtnGroup from "../../../components/basic/CusBtnGroup";
 
 const useStyle = makeStyles({
   root: {},
@@ -43,7 +44,7 @@ export default function ShopBasic(props) {
   const { Shop, flagSlice, api } = props;
   const classes = useStyle();
   const rolePath = getRolePath();
-  const dispatch = useDispatch(); 
+  const dispatch = useDispatch();
   const ref = useRef();
   const status = useSelector((state) => state.objects.status);
   const [justSubmitted, setJustSubmitted] = useState(null);
@@ -59,6 +60,7 @@ export default function ShopBasic(props) {
     img: "",
   });
   const [modifying, setModifying] = useState(false);
+  const [modifyingImg, setModifyingImg] = useState(false);
   React.useEffect(() => {
     setInfoUpdate({
       code: Shop?.code || "",
@@ -116,11 +118,11 @@ export default function ShopBasic(props) {
       <div className={clsx(classes.formItem, classes.flexStyle)}>
         {/* img component */}
         <div
-          onClick={() => modifying === true && ref.current.click()}
+          onClick={() => modifyingImg === true && ref.current.click()}
           style={{
             padding: "5px",
             position: "relative",
-            border: modifying === true ? "2px solid #1d1d384d" : "none",
+            border: modifyingImg === true ? "2px solid #1d1d384d" : "none",
           }}>
           <img
             alt={infoUpdate.code}
@@ -133,11 +135,11 @@ export default function ShopBasic(props) {
             }
             className={classes.mainImg}
             style={{
-              cursor: modifying === true ? "pointer" : "default",
+              cursor: modifyingImg === true ? "pointer" : "default",
             }}
             title='更换图片'
           />
-          {modifying === true && <Delete className={classes.deleteStyle} />}
+          {/* {modifyingImg === true && <Delete className={classes.deleteStyle} />} */}
           <input
             ref={ref}
             type='file'
@@ -150,7 +152,7 @@ export default function ShopBasic(props) {
           />
         </div>
         <div>
-          {modifying === false ? (
+          {/* {modifying === false ? (
             <>
               <button
                 className={clsx("btn mx-3 btn-warning", classes.btnStyle)}
@@ -179,8 +181,23 @@ export default function ShopBasic(props) {
                 Delete
               </button>
             </>
-          )}
+          )} */}
+          <CusBtnGroup
+            handleEdit={() => setModifyingImg(true)}
+            modifying={modifyingImg}
+            disableDelete
+          />
         </div>
+      </div>
+      <div
+        style={{
+          width: "100%",
+          borderTop: "2px solid #0000004d",
+          marginTop: "10px",
+          display: "flex",
+          justifyContent: "flex-end",
+        }}>
+        <CusBtnGroup handleEdit={() => setModifying(true)} />
       </div>
       <div className={classes.formItem}>
         <CusInput

@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
 import makeStyles from "@mui/styles/makeStyles";
 import Container from "@mui/material/Container";
-import { Breadcrumbs, Grid, Link, Typography, Switch } from "@mui/material";
+import {
+  // Breadcrumbs,
+  Grid,
+  // Link, Typography,
+  Switch,
+} from "@mui/material";
 // import { OutlinedInput, FormControl, InputLabel } from "@material-ui/core";
 // import Modal from "@mui/material/Modal";
-import SearchInput from "../../../../components/universal/query/SearchInput";
+// import SearchInput from "../../../../components/universal/query/SearchInput";
 import { useDispatch, useSelector } from "react-redux";
 import {
   deleteObject,
@@ -15,8 +20,10 @@ import {
 import CusInput from "../../../../components/basic/CusInput";
 import api_DNS from "../../../../js/_dns";
 import CusBtnGroup from "../../../../components/basic/CusBtnGroup";
-import { getRolePath } from "../../../../js/conf/confUser";
+// import { getRolePath } from "../../../../js/conf/confUser";
 import ListPageHeader from "../../../../components/basic/ListPageHeader";
+import PageNav from "../../../../components/universal/query/PageNav";
+
 const useStyle = makeStyles({
   root: {},
   //header
@@ -116,10 +123,10 @@ const useStyle = makeStyles({
     cursor: "pointer",
   },
 });
-const rolePath = getRolePath();
+// const rolePath = getRolePath();
 const links = [
   { label: "主页", to: "/home" },
-  { label: "设置", to: `/${rolePath}/setting` },
+  { label: "设置", to: `/setting` },
   { label: "城市列表" },
 ];
 const flagSlice = "citys";
@@ -135,8 +142,10 @@ export default function Citas() {
 
   return (
     <Container>
-      <ListPageHeader  links={links} />
+      <ListPageHeader links={links} flagSlice={flagSlice} api={api} />
       <CityList addNew={addNew} closeAddNew={() => setAddNew(false)} />
+
+      <PageNav flagSlice={flagSlice} api={api} />
     </Container>
   );
 }

@@ -7,7 +7,7 @@ import CusInput from "../../../components/basic/CusInput";
 import CusSelectSearch from "../../../components/basic/CusSelectSearch";
 import { useSelector, useDispatch } from "react-redux";
 import { postObject } from "../../../features/objectsSlice";
-import api_DNS from "../../../js/_dns";
+// import api_DNS from "../../../js/_dns";
 // import CusTextArea from "../../../components/basic/CusTextArea";
 
 const useStyle = makeStyles({
@@ -42,7 +42,10 @@ export default function PdPostModal({ show, handleClose, timeout = 500 }) {
     desp: "",
   });
   const [imgLocal, setImgLocal] = useState([]);
-  const [showImgDeleteBtn, setShowImgDeleteBtn] = useState(false);
+  const [
+    showImgDeleteBtn,
+    // setShowImgDeleteBtn
+  ] = useState(false);
   const [imgsUpdate, setImgsUpdate] = useState();
   const [justSubmitted, setJustSubmitted] = useState(false);
 

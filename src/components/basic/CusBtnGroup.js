@@ -43,17 +43,19 @@ export default function CusBtnGroup(props) {
     handleDelete,
     handleCancel,
     handleEdit,
+    disableDelete = false,
   } = props;
   const classes = useStyle();
   return (
     <div className={classes.btnGroup}>
       {modifying === true ? (
         <>
-          <div onClick={handleDelete} className={classes.redMain}>
-            <Delete className={classes.deleteRed} />
-
-            <div>删除</div>
-          </div>
+          {!disableDelete && (
+            <div onClick={handleDelete} className={classes.redMain}>
+              <Delete className={classes.deleteRed} />
+              <div>删除</div>
+            </div>
+          )}
           <div onClick={handleSubmit} className={classes.blackMain}>
             <Confirm />
             <div>确认</div>
