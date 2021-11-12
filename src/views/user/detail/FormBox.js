@@ -1,21 +1,19 @@
-import React, { useState } from "react";
+import React from "react";
 import { Grid, Box } from "@mui/material";
 import InfoBox from "./InfoBox";
-import VarietyInput from "./VarietyInput";
 
 export default function FormBox({
   data: { fields, object },
   agent: curUser,
   stateHandler: [form, setForm],
   editing,
-  permMap,
 }) {
   const curRole = curUser.role;
 
   return (
     <div>
       {object?._id && (
-        <Grid container columns={{ xs: 1, sm: 4 }} spacing="0">
+        <Grid container columns={{ xs: 1, sm: 3 }} spacing="0">
           {fields.map((field) => {
             if (field.variant?.name === "phone") {
               return (
@@ -30,7 +28,11 @@ export default function FormBox({
                 >
                   {field.variant.variantObj.fields.map((variantField) => {
                     return (
-                      <Grid item xs={1} sm={2}>
+                      <Grid
+                        item
+                        xs={1}
+                        sm={variantField.type === "phonePre" ? 1 : 2}
+                      >
                         <InfoBox
                           label={variantField.label}
                           type={variantField.type}
@@ -42,7 +44,6 @@ export default function FormBox({
                           variant={field.variant}
                           curUser={curUser}
                           curRole={curRole}
-                          permMap={permMap}
                         />
                       </Grid>
                     );
@@ -50,31 +51,12 @@ export default function FormBox({
                 </Grid>
               );
             }
-            if (object.Shop && field.variant?.name === "shop") {
-              return (
-                <Grid item xs={1} sm={1} width="100%" borderTop={1}>
-                  <InfoBox
-                    label={field.label}
-                    type={field.type}
-                    object={object}
-                    altObject={object.Shop}
-                    altType="nome"
-                    editing={editing}
-                    form={form}
-                    setForm={setForm}
-                    noBox={field.noBox}
-                    variant={field.variant}
-                    curUser={curUser}
-                    curRole={curRole}
-                    permMap={permMap}
-                  />
-                </Grid>
-              );
-            }
+
             return (
               <Grid item xs={1} sm={1} width="100%" borderTop={1}>
                 <InfoBox
                   label={field.label}
+                  content={field.content}
                   type={field.type}
                   object={object}
                   editing={editing}
@@ -84,11 +66,12 @@ export default function FormBox({
                   variant={field.variant}
                   curUser={curUser}
                   curRole={curRole}
-                  permMap={permMap}
                 />
               </Grid>
             );
           })}
+
+          {/* fill rows */}
           <Grid item xs sm width="100%" borderTop={1}></Grid>
           <Grid item xs sm width="100%" borderTop={1}>
             <Box width="1000px"></Box>

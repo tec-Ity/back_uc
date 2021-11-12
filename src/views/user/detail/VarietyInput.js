@@ -10,13 +10,11 @@ const CustTextField = styled(TextField)(() => ({
 }));
 
 export default function VarietyInput({
-  editable,
-  object,
+  content,
   variant,
   setForm,
   form,
   type,
-  curRole,
 }) {
   function handleChange(event) {
     setForm({ ...form, [type]: event.target.value });
@@ -26,33 +24,16 @@ export default function VarietyInput({
     setForm({ ...form, [type]: newValue?.id });
   }
 
-  function roleName(roleId) {
-    const roleMap = {
-      1: "拥有者",
-      3: "管理者",
-      5: "超级员工",
-      101: "店铺老板",
-      103: "店铺员工",
-    };
-
-    return roleMap[roleId];
-  }
-
-  let custOut = null;
-  if (type === "role") {
-    custOut = roleName(form[type]);
-  }
-
   switch (variant?.name) {
-    case "shop":
+    case "select":
       return (
         <Autocomplete
           disablePortal
-          id={variant.name}
+          id={type}
           options={variant.variantObj.options}
           onChange={handleList}
           fullWidth
-          value={form[type]}
+          value={content}
           renderInput={(params) => {
             return (
               <TextField
@@ -62,27 +43,6 @@ export default function VarietyInput({
               />
             );
           }}
-        />
-      );
-    case "role":
-      return (
-        <Autocomplete
-          disablePortal
-          id={variant.name}
-          options={variant.variantObj.options}
-          onChange={handleList}
-          fullWidth
-          value={custOut || form[type]}
-          renderInput={(params) => {
-            return (
-              <TextField
-                variant="standard"
-                {...params}
-                InputProps={{ ...params.InputProps, disableUnderline: true }}
-              />
-            );
-          }}
-          getOptionDisabled={(option) => curRole >= option.id}
         />
       );
     default:
