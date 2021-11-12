@@ -9,8 +9,8 @@ import makeStyles from "@mui/styles/makeStyles";
 import SearchInput from "../universal/query/SearchInput";
 import { ReactComponent as AddIcon } from "../icon/addIconWhite.svg";
 import { getRolePath } from "../../js/conf/confUser";
-import { useSelector, useDispatch } from "react-redux";
-import { setPrevView } from "../../features/objectsSlice";
+import { useSelector } from "react-redux";
+// import { setPrevView } from "../../features/objectsSlice";
 
 const useStyle = makeStyles({
   headerContainer: {
@@ -69,8 +69,8 @@ export default function ListPageHeader({
   const rolePath = getRolePath();
   const classes = useStyle();
   const prevView = useSelector((state) => state.objects.prevView);
-  const dispatch = useDispatch();
-//   console.log(prevView);
+  //   const dispatch = useDispatch();
+  //   console.log(prevView);
   return (
     <div className={classes.headerContainer}>
       <Breadcrumbs className={classes.bread}>
@@ -89,9 +89,6 @@ export default function ListPageHeader({
                   ? link.to + `?view=${prevView}`
                   : link.to)
               }
-              //   onClick={() =>
-              //     link.prevView === true && dispatch(setPrevView(""))
-              //   }
               className={classes.linkStyle}>
               {link.label}
             </Link>
