@@ -173,13 +173,37 @@ export default function User() {
       content: object.code,
       type: "code",
       permissions: ["hierachy"],
+      check: {
+        regexp: "^[a-zA-Z0-9]*$",
+        min: 4,
+        max: 20,
+        errMsg: {
+          nullMsg: "成员账号不能为空",
+          regexpMsg: "成员账号只能由数字和字母组成",
+          minMsg: "成员账号的位数不能小于: ",
+          maxMsg: "成员账号的位数不能大于: ",
+        },
+      },
     },
     {
       variant: {
         name: "phone",
         variantObj: {
           fields: [
-            { label: "电话", content: object.phonePre, type: "phonePre" },
+            {
+              label: "电话",
+              content: object.phonePre,
+              type: "phonePre",
+              check: {
+                regexp: "^[0-9]*$",
+                trim: 4,
+                errMsg: {
+                  nullMsg: "电话号码前缀不能为空",
+                  regexpMsg: "电话号码前缀只能由数字组成",
+                  trimMsg: "电话号码前缀长度只能为: ",
+                },
+              },
+            },
             { type: "phone", content: object.phone },
           ],
         },
@@ -189,6 +213,7 @@ export default function User() {
       label: "用户角色",
       content: roleName(object.role),
       type: "role",
+      permissions: ["hierachy"],
       variant: {
         name: "select",
         variantObj: {
@@ -198,21 +223,18 @@ export default function User() {
     },
   ];
 
-  if (curRole > 100) {
-    fields = [
-      ...fields,
-      {
-        label: "Shop",
-        content: object.Shop?.nome,
-        type: "Shop",
-        variant: {
-          name: "select",
-          variantObj: {
-            options: populateShops(objShops),
-          },
+  if (object.role > 100) {
+    fields.push({
+      label: "Shop",
+      content: object.Shop?.nome,
+      type: "Shop",
+      variant: {
+        name: "select",
+        variantObj: {
+          options: populateShops(objShops),
         },
       },
-    ];
+    });
   }
 
   return (

@@ -6,6 +6,8 @@ export default function InfoBox({
   label,
   content,
   type,
+  permissions,
+  check,
   object,
   variant,
   noBox,
@@ -16,10 +18,23 @@ export default function InfoBox({
   curRole,
 }) {
   //calculate if editable
-  let editable = editing && curRole < object.role;
-  if (type === "nome") {
-    editable =
-      editing && (curRole < object.role || curUser.code === object.code);
+  let editable;
+  if (false) {
+    let arr = permissions.map((permission) => {
+      switch (permission) {
+        case "hierachy":
+          return object.role > curRole;
+        case "self":
+          return object.code === curUser.code;
+        default:
+          console.log("not a permission");
+          return false;
+      }
+    });
+    console.log("[PERM]", arr);
+    editable = editing && arr.every((perm) => perm === true);
+  } else {
+    editable = editing;
   }
 
   return (
@@ -49,11 +64,11 @@ export default function InfoBox({
       </Typography>
       {editable ? (
         <VarietyInput
-          editable={editable}
           content={content}
+          variant={variant}
+          check={check}
           object={object}
           type={type}
-          variant={variant}
           form={form}
           setForm={setForm}
           curUser={curUser}
