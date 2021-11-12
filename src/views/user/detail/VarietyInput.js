@@ -1,9 +1,17 @@
 import { TextField, Autocomplete } from "@mui/material";
+import { styled } from "@mui/system";
+
+const CustTextField = styled(TextField)(() => ({
+  marginRight: 8,
+  "& .Mui-disabled": {
+    fontWeight: 700,
+    color: "rgba(0, 0, 0, 1)", // (default alpha is 0.38)
+  },
+}));
 
 export default function VarietyInput({
   content,
   variant,
-  variantObj,
   setForm,
   form,
   type,
@@ -11,30 +19,38 @@ export default function VarietyInput({
   function handleChange(event) {
     setForm({ ...form, [type]: event.target.value });
   }
-  switch (variant) {
-    case "shop":
+
+  function handleList(event, newValue) {
+    setForm({ ...form, [type]: newValue?.id });
+  }
+
+  switch (variant?.name) {
+    case "select":
       return (
         <Autocomplete
           disablePortal
           id={type}
-          options={variantObj.testlist}
+          options={variant.variantObj.options}
+          onChange={handleList}
           fullWidth
-          renderInput={(params) => (
-            <TextField
-              variant="standard"
-              InputProps={{ disableUnderline: true }}
-              {...params}
-              label="Shop"
-            />
-          )}
+          value={content}
+          renderInput={(params) => {
+            return (
+              <TextField
+                variant="standard"
+                {...params}
+                InputProps={{ ...params.InputProps, disableUnderline: true }}
+              />
+            );
+          }}
         />
       );
     default:
       return (
-        <TextField
+        <CustTextField
           id={type}
           variant="standard"
-          value={form[type] ? form[type] : content}
+          value={form[type]}
           onChange={handleChange}
           InputProps={{ disableUnderline: true }}
           fullWidth

@@ -1,40 +1,43 @@
 import React, { useEffect, useState } from "react";
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useParams, useHistory } from "react-router";
-// import { FormattedMessage } from "react-intl";
+import { FormattedMessage } from "react-intl";
 import { useSelector, useDispatch } from "react-redux";
 
 import { getRolePath } from "../../../js/conf/confUser";
 
 import UserPutModal from "../modal/UserPutModal";
 import UserPwdModal from "../modal/UserPwdModal";
-// import NavBread from "../../../components/universal/navBread/NavBread";
 
-// import { selectUser } from "../../../features/authSlice";
+import { selectUser } from "../../../features/authSlice";
 import {
   getObject,
+  getObjects,
   deleteObject,
   selectObject,
+  selectObjects,
+  putObject,
   cleanField,
 } from "../../../features/objectsSlice";
 
 import { Box, Grid, Typography, Button, IconButton } from "@mui/material";
-// import { makeStyles } from "@mui/styles";
 import { ReactComponent as EditIcon } from "../../../components/icon/editBlack.svg";
 import { ReactComponent as CancelIcon } from "../../../components/icon/cancelBlack.svg";
 import { ReactComponent as DoneIcon } from "../../../components/icon/doneBlack.svg";
+import { ReactComponent as UserProfileLightGrey } from "../../../components/icon/userProfileLightGrey.svg";
 import ListPageHeader from "../../../components/basic/ListPageHeader.js";
-import InfoBox from "./InfoBox";
+import FormBox from "./FormBox";
+import ToggleBox from "./ToggleBox";
 
-// const useStyle = makeStyles({
-//   infobox: {
-//     height: "50px",
-//     width: "286px",
-//   },
-//   label: {
-//     marginRight: "10px",
-//   },
-// });
+const populateObjs = [{ path: "Shop", select: "code nome" }];
+
+const roleList = [
+  { nome: "拥有者", code: 1 },
+  { nome: "管理者", code: 3 },
+  { nome: "超级员工", code: 5 },
+  { nome: "店铺老板", code: 101 },
+  { nome: "店铺员工", code: 105 },
+];
 
 export default function User() {
   const hist = useHistory();
@@ -46,7 +49,7 @@ export default function User() {
   const api = `/user/${id}`;
   const api_delete = "/User/" + id;
 
-  // const curUser = useSelector(selectUser);
+  const curUser = useSelector(selectUser);
   const curRole = parseInt(localStorage.getItem("role"));
   const object = useSelector(selectObject(flagSlice));
 
@@ -61,30 +64,79 @@ export default function User() {
   };
 
   useEffect(() => {
-    dispatch(getObject({ flagSlice, api }));
+    dispatch(
+      getObject({
+        flagSlice,
+        api: api + "?populateObjs=" + JSON.stringify(populateObjs),
+      })
+    );
     return () => {
       dispatch(cleanField({ flagSlice, flagField }));
     };
   }, [api, dispatch]);
 
-  // const classes = useStyle();
   const [editing, setEditing] = useState(false);
-  const [form, setForm] = useState({});
+  const flagSlice_Shops = "user_Shops";
+  const api_Shops = "/Shops";
+  const objShops = useSelector(selectObjects(flagSlice_Shops));
 
   useEffect(() => {
-    if (!editing) return;
-    const { code, nome, phonePre, phone, role } = object;
-    // const Shop = object.Shop ? object.Shop._id : null;
-    setForm({ code, nome, phonePre, phone, role });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    dispatch(getObjects({ flagSlice: flagSlice_Shops, api: api_Shops }));
+  }, []);
+
+  const [form, setForm] = useState({});
+  useEffect(() => {
+    const { nome, code, phonePre, phone, role } = object;
+    setForm({ nome, code, phonePre, phone, role, Shop: object.Shop?.code });
   }, [object]);
 
-  function handleSave() {
-    console.log(form);
-    // setEditing(!editing);
+  function handleEdit() {
+    //load object to form
+    const { nome, code, phonePre, phone, role } = object;
+    setForm({ nome, code, phonePre, phone, role, Shop: object.Shop?.code });
+
+    setEditing(!editing);
   }
 
-  function FooterBox({ label = "label", content = "content", variant, noBox }) {
+  function handleSave() {
+    console.log("[SAVE]", form);
+    dispatch(putObject({ flagSlice, api, data: { general: form } }));
+    setEditing(!editing);
+  }
+
+  function handleLog() {
+    console.log("[LOG]", form, object);
+  }
+
+  function populateShops(Shops) {
+    let arr = Shops.map((shop) => {
+      return { label: shop.nome, id: shop._id };
+    });
+    return arr;
+  }
+
+  function populateRoles(roles) {
+    let arr = roles
+      .filter((role) => curRole < role.code)
+      .map((role) => {
+        return { label: role.nome, id: role.code };
+      });
+    return arr;
+  }
+
+  function roleName(roleId) {
+    const roleMap = {
+      1: "拥有者",
+      3: "管理者",
+      5: "超级员工",
+      101: "店铺老板",
+      105: "店铺员工",
+    };
+
+    return roleMap[roleId];
+  }
+
+  function FooterBox({ label, content }) {
     return (
       <>
         <Grid item xs={12} sm={3}>
@@ -104,68 +156,56 @@ export default function User() {
   }
 
   const links = [
-    { label: "主页", to: `/home` },
-    { label: "用户列表", to: `/users`, prevView: true  },
+    { label: "主页", to: `/${rolePath}/home` },
+    { label: "用户列表", to: `/${rolePath}/users` },
     { label: "详情" },
   ];
 
-  const permMap = {
-    1: ["code", "name", "shop", "phone", "usable", "phonePre"],
-    3: ["name", "role"],
-    5: ["name"],
-    101: ["name"],
-    105: ["name"],
-  };
-
   const fields = [
     {
+      label: "用户姓名",
+      content: object.nome,
+      type: "nome",
+      permissions: ["hierachy", "self"],
+    },
+    {
       label: "登录账号",
-      type: "code",
       content: object.code,
+      type: "code",
+      permissions: ["hierachy"],
+    },
+    {
+      variant: {
+        name: "phone",
+        variantObj: {
+          fields: [
+            { label: "电话", content: object.phonePre, type: "phonePre" },
+            { type: "phone", content: object.phone },
+          ],
+        },
+      },
     },
     {
       label: "用户角色",
+      content: roleName(object.role),
       type: "role",
-      content: object.role,
-    },
-    {
-      label: "用户姓名",
-      type: "name",
-      content: object.nome,
+      variant: {
+        name: "select",
+        variantObj: {
+          options: populateRoles(roleList),
+        },
+      },
     },
     {
       label: "Shop",
-      type: "shop",
-      content: object.shop?.code,
-      variant: "shop",
-      variantObj: {
-        testlist: [
-          { label: "The Shawshank Redemption", year: 1994 },
-          { label: "The Godfather", year: 1972 },
-          { label: "The Godfather: Part II", year: 1974 },
-          { label: "The Dark Knight", year: 2008 },
-          { label: "12 Angry Men", year: 1957 },
-          { label: "Schindler's List", year: 1993 },
-        ],
+      content: object.Shop?.nome,
+      type: "Shop",
+      variant: {
+        name: "select",
+        variantObj: {
+          options: populateShops(objShops),
+        },
       },
-    },
-    {
-      variant: "phone",
-      variantObj: {
-        fields: [
-          { label: "电话", type: "phonePre", content: object.phonePre },
-          {
-            type: "phone",
-            content: object.phone,
-          },
-        ],
-      },
-    },
-    {
-      label: "是否可用",
-      type: "usable",
-      content: object.is_usable,
-      noBox: true,
     },
   ];
 
@@ -175,142 +215,99 @@ export default function User() {
       {
         // 数据正确
         object._id && String(object._id) === String(id) && (
-          <div className="text-right">
-            {/* {
+          <Box
+            height="180px"
+            width="100%"
+            sx={{ display: "flex", justifyContent: "space-between" }}
+          >
+            <UserProfileLightGrey />
+            <Box>
+              <div className="text-right">
+                {/* {
               // 如果比自己等级低 可删除
             } */}
-            <button className="btn btn-info" onClick={() => setModalPut(true)}>
-              {" "}
-              <i className="bx bx-edit-alt"></i>{" "}
-            </button>
-            <UserPutModal
-              show={modalPut}
-              onHide={() => setModalPut(false)}
-              object={object}
-              flagSlice={flagSlice}
-            />
+                <button
+                  className="btn btn-info"
+                  onClick={() => setModalPut(true)}
+                >
+                  {" "}
+                  <i className="bx bx-edit-alt"></i>{" "}
+                </button>
+                <UserPutModal
+                  show={modalPut}
+                  onHide={() => setModalPut(false)}
+                  object={object}
+                  flagSlice={flagSlice}
+                />
 
-            {editing && curRole < object.role && (
-              <Button variant="contained" color="error" onClick={deleteDB}>
-                删除此用户
-              </Button>
-            )}
-            {editing && (
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={() => setModalPwd(true)}
-              >
-                修改密码
-              </Button>
-            )}
-            <UserPwdModal
-              show={modalPwd}
-              onHide={() => setModalPwd(false)}
-              object={object}
-              flagSlice={flagSlice}
-            />
-            {editing && (
-              <IconButton onClick={handleSave}>
-                <DoneIcon />
-              </IconButton>
-            )}
-            {!editing ? (
-              <Button
-                variant="contained"
-                color="primary"
-                startIcon={!editing ? <EditIcon /> : <CancelIcon />}
-                onClick={() => {
-                  //load object to form
-                  const { code, nome, phonePre, phone, role } = object;
-                  // const Shop = object.Shop ? object.Shop._id : null;
-                  setForm({ code, nome, phonePre, phone, role });
+                <IconButton onClick={handleLog}>
+                  <DoneIcon />
+                </IconButton>
 
-                  setEditing(!editing);
-                }}
-              >
-                编辑
-              </Button>
-            ) : (
-              <IconButton
-                onClick={() => {
-                  setEditing(!editing);
-                  // setForm({});
-                }}
-              >
-                <CancelIcon />
-              </IconButton>
-            )}
-          </div>
+                {editing && curRole < object.role && (
+                  <Button variant="contained" color="error" onClick={deleteDB}>
+                    删除此用户
+                  </Button>
+                )}
+                {editing && (
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => setModalPwd(true)}
+                  >
+                    修改密码
+                  </Button>
+                )}
+                <UserPwdModal
+                  show={modalPwd}
+                  onHide={() => setModalPwd(false)}
+                  object={object}
+                  flagSlice={flagSlice}
+                />
+                {editing && (
+                  <IconButton onClick={handleSave}>
+                    <DoneIcon />
+                  </IconButton>
+                )}
+                {!editing ? (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    startIcon={!editing ? <EditIcon /> : <CancelIcon />}
+                    onClick={handleEdit}
+                  >
+                    编辑
+                  </Button>
+                ) : (
+                  <IconButton
+                    onClick={() => {
+                      setEditing(!editing);
+                    }}
+                  >
+                    <CancelIcon />
+                  </IconButton>
+                )}
+              </div>
+            </Box>
+          </Box>
         )
       }
 
-      <Box sx={{ maxWidth: "70%" }}>
+      <Box mt="46px" sx={{ maxWidth: "100%" }}>
         {/* main details */}
-        <Grid
-          container
-          columns={{ xs: 1, sm: 2 }}
-          spacing="17px"
-          direction="row"
-          justifyContent="flex-start"
-          alignItems="center"
-        >
-          {fields.map((field) => {
-            if (field.variant === "phone") {
-              return (
-                <Grid
-                  container
-                  columns={{ xs: 2, sm: 2 }}
-                  spacing={1}
-                  item
-                  xs={1}
-                  sm={1}
-                >
-                  {field.variantObj.fields.map((variantField) => {
-                    return (
-                      <InfoBox
-                        label={variantField.label}
-                        type={variantField.type}
-                        content={variantField.content}
-                        editing={editing}
-                        form={form}
-                        setForm={setForm}
-                        noBox={variantField.noBox}
-                        variant={field.variant}
-                        variantObj={field.variantObj}
-                        curRole={curRole}
-                        permMap={permMap}
-                      />
-                    );
-                  })}
-                </Grid>
-              );
-            }
-            return (
-              <InfoBox
-                label={field.label}
-                type={field.type}
-                content={field.content}
-                editing={editing}
-                form={form}
-                setForm={setForm}
-                noBox={field.noBox}
-                variant={field.variant}
-                variantObj={field.variantObj}
-                curRole={curRole}
-                permMap={permMap}
-              />
-            );
-          })}
-        </Grid>
+        <FormBox
+          data={{ fields: fields, object: object }}
+          agent={curUser}
+          stateHandler={[form, setForm]}
+          editing={editing}
+        />
 
         {/* footer details */}
-        <Grid container mt="44px">
-          <FooterBox
-            label="最近登录"
-            content={object.at_last_login}
-            variant="footer"
-          />
+        <Box mt="25px" ml="25px">
+          <ToggleBox checked={object.is_usable} label="Usable" />
+        </Box>
+        <Grid container mt="25px">
+          <FooterBox label="最近登录" content={object.at_last_login} />
         </Grid>
       </Box>
       {/* <div className="row mt-3">
