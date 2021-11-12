@@ -36,6 +36,7 @@ export default function FormBox({
                         <InfoBox
                           label={variantField.label}
                           type={variantField.type}
+                          check={field.check}
                           object={object}
                           editing={editing}
                           form={form}
@@ -58,6 +59,8 @@ export default function FormBox({
                   label={field.label}
                   content={field.content}
                   type={field.type}
+                  permissions={field.permissions}
+                  check={field.check}
                   object={object}
                   editing={editing}
                   form={form}
