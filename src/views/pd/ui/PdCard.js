@@ -14,7 +14,8 @@ const useStyle = makeStyles({
   innerBox: {
     position: "relative",
     boxSizing: "border-box",
-    height: "250px",
+    cursor: "pointer",
+    height: "340px",
     width: "200px",
     backgroundColor: "#fff",
     boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.1)",
@@ -26,18 +27,23 @@ const useStyle = makeStyles({
     width: "160px",
     display: "block",
     objectFit: "scale-down",
+    borderBottom: "1px solid",
+    paddingBottom: "10px",
   },
   infoStyle: {
     marginTop: "5px",
+
+    overflowWrap: "break-word",
     "& > :nth-child(1)": {
+      height: "107px",
       fontSize: "14px",
       fontWeight: "600",
-      overflowWrap: "break-word",
     },
     "& > :nth-child(2)": {
       fontSize: "12px",
       color: "#00000080",
-      height: "1.5em",
+      height: "3em",
+      overflow: "hidden",
     },
   },
   bottomBtn: {
@@ -111,7 +117,7 @@ export default function PdCard(props) {
               <div>{object.nome}</div>
               <div>{object.desp || " "}</div>
             </div>
-            {console.log(object)}
+
             {curRole > 100 &&
               (object?.Prods &&
               object.Prods.length > 0 &&

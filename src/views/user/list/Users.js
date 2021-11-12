@@ -13,8 +13,8 @@ import UserCard from "../ui/UserCard";
 // import { makeStyles } from "@mui/styles";
 import { selectObjects, getObjects } from "../../../features/objectsSlice";
 import ListPageHeader from "../../../components/basic/ListPageHeader";
+import PageNav from "../../../components/universal/query/PageNav";
 
-const links = [{ label: "主页", to: "/home" }, { label: "用户列表" }];
 // const UserPostModal = lazy(() => import("../modal/UserPostModal"));
 const populateObjs = [{ path: "Shop", select: "code" }];
 export default function Users(props) {
@@ -23,6 +23,7 @@ export default function Users(props) {
   const api = "/Users";
   const hist = useHistory();
   const rolePath = getRolePath();
+  const links = [{ label: "主页", to: `/home` }, { label: "用户列表" }];
 
   const selectAs = [
     { select: "code", as: "title" },
@@ -68,6 +69,8 @@ export default function Users(props) {
         objects={objects}
         clickEvent={clickCardEvent}
       />
+
+      <PageNav flagSlice={flagSlice} api={api} />
     </>
   );
 }

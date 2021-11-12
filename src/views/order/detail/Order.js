@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Container, Grid } from "@mui/material";
-import NavBread from "../../../components/universal/navBread/NavBread";
-import { getRolePath } from "../../../js/conf/confUser";
-import { Link, useParams } from "react-router-dom";
+// import NavBread from "../../../components/universal/navBread/NavBread";
+// import { getRolePath } from "../../../js/conf/confUser";
+import {
+  // Link,
+  useParams,
+} from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import makeStyles from "@mui/styles/makeStyles";
 import api_DNS from "../../../js/_dns";
@@ -133,7 +136,7 @@ const useStyle = makeStyles({
   //orderProds
 });
 
-const rolePath = getRolePath();
+// const rolePath = getRolePath();
 const flagSlice = "order";
 const flagField = "object";
 //populate objs
@@ -160,7 +163,7 @@ const populateObjs = [
 ];
 const links = [
   { label: "主页", to: "/home" },
-  { label: "订单列表", to: `/${rolePath}/orders` },
+  { label: "订单列表", to: `/orders`, prevView: true },
   { label: "订单详情" },
 ];
 ////////////////////////////////////////////////////////////////

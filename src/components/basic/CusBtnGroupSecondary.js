@@ -1,14 +1,14 @@
 import React from "react";
 import { makeStyles } from "@mui/styles";
-import { ReactComponent as Confirm } from "../icon/confirm.svg";
-import { ReactComponent as Cancel } from "../icon/cancel.svg";
-import { ReactComponent as Delete } from "../icon/delete.svg";
-import { ReactComponent as Edit } from "../icon/edit.svg";
+// import { ReactComponent as Confirm } from "../icon/confirm.svg";
+// import { ReactComponent as Cancel } from "../icon/cancel.svg";
+// import { ReactComponent as Delete } from "../icon/delete.svg";
+// import { ReactComponent as Edit } from "../icon/edit.svg";
 import { ReactComponent as ConfirmSec } from "../icon/doneBlack.svg";
 import { ReactComponent as CancelSec } from "../icon/cancelBlack.svg";
 import { ReactComponent as DeleteSec } from "../icon/deleteBlack.svg";
 import { ReactComponent as EditSec } from "../icon/editBlack.svg";
-import clsx from "clsx";
+// import clsx from "clsx";
 
 const useStyle = makeStyles({
   btnGroup: {

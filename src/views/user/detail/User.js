@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { useParams, useHistory } from "react-router";
-import { FormattedMessage } from "react-intl";
+// import { FormattedMessage } from "react-intl";
 import { useSelector, useDispatch } from "react-redux";
 
 import confUser, { getRolePath } from "../../../js/conf/confUser";
 
 import UserPutModal from "../modal/UserPutModal";
 import UserPwdModal from "../modal/UserPwdModal";
-import NavBread from "../../../components/universal/navBread/NavBread";
+// import NavBread from "../../../components/universal/navBread/NavBread";
 
 import { selectUser } from "../../../features/authSlice";
 import {
@@ -21,7 +21,7 @@ import {
 } from "../../../features/objectsSlice";
 
 import { Box, Grid, Typography, Button, IconButton } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+// import { makeStyles } from "@mui/styles";
 import { ReactComponent as EditIcon } from "../../../components/icon/editBlack.svg";
 import { ReactComponent as CancelIcon } from "../../../components/icon/cancelBlack.svg";
 import { ReactComponent as DoneIcon } from "../../../components/icon/doneBlack.svg";
@@ -38,36 +38,8 @@ const useStyle = makeStyles({
   label: {
     marginRight: "10px",
   },
-  switch: {
-    width: 42,
-    height: 26,
-    padding: 0,
-    "& .MuiSwitch-switchBase": {
-      padding: 0,
-      margin: 2,
-      transitionDuration: "300ms",
-      "&.Mui-checked": {
-        transform: "translateX(16px)",
-        color: "#fff",
-        "& + .MuiSwitch-track": {
-          backgroundColor: "#65C466",
-          opacity: 1,
-          border: 0,
-        },
-        "&.Mui-disabled + .MuiSwitch-track": {
-          opacity: 0.5,
-        },
-      },
-      "&.Mui-focusVisible .MuiSwitch-thumb": {
-        color: "#33cf4d",
-        border: "6px solid #fff",
-      },
-      "&.Mui-disabled .MuiSwitch-thumb": {
-        color: "#ffffff",
-      },
-    },
-  },
 });
+
 
 const populateObjs = [{ path: "Shop", select: "code nome" }];
 
@@ -106,6 +78,9 @@ export default function User() {
       dispatch(cleanField({ flagSlice, flagField }));
     };
   }, [api, dispatch]);
+
+
+  const classes = useStyle();
 
   const [editing, setEditing] = useState(false);
   const flagSlice_Shops = "user_Shops";
@@ -159,8 +134,8 @@ export default function User() {
   }
 
   const links = [
-    { label: "主页", to: `/${rolePath}/home` },
-    { label: "用户列表", to: `/${rolePath}/users` },
+    { label: "主页", to: `/home` },
+    { label: "用户列表", to: `/users`, prevView: true  },
     { label: "详情" },
   ];
 

@@ -70,6 +70,7 @@ export default function SearchInput(props) {
   };
   // 根据本身 filter 的变化, 更新 reducer 中对应查找的数据 (如果加载此组件， 则不用在父组件中加载)
   useEffect(() => {
+    // console.log("search");
     flagSlice &&
       api &&
       dispatch(getObjects({ flagSlice, api, isReload: true }));
@@ -77,7 +78,7 @@ export default function SearchInput(props) {
   }, [search]);
   // 根据父组件 farSearch 的变化 及时更新 recucer 中的 filter, (比如点击卡片 search input 会变为 obj.code)
   useEffect(() => {
-    console.log(farSearch);
+    // console.log(farSearch);
     if (farSearch && typeof farSearch === "string") {
       dispatch(
         setQuery({

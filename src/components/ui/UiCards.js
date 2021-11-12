@@ -3,7 +3,7 @@ import UiCard from "./UiCard";
 
 export default function UiCards(props) {
   const {
-    cols = "col-6 col-md-4 col-lg-3 mt-3",
+    cols = "col-6 col-md-4 col-lg-3 col-xl-2 mt-3",
     propsCard,
     objects,
     matchId,

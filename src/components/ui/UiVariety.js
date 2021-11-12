@@ -4,7 +4,12 @@ import UiRows from "./UiRows";
 import makeStyles from "@mui/styles/makeStyles";
 import { ReactComponent as ListView } from "../icon/listView.svg";
 import { ReactComponent as GridView } from "../icon/gridView.svg";
+import { useLocation } from "react-router-dom";
 import clsx from "clsx";
+import { useHistory } from "react-router";
+import { useDispatch } from "react-redux";
+import { setPrevView } from "../../features/objectsSlice";
+
 const useStyle = makeStyles({
   root: {
     display: "flex",
@@ -24,33 +29,52 @@ const useStyle = makeStyles({
   },
 });
 
+const styleUi = ["card", "list"];
+const initUi = "card";
 export default function UiVariety(props) {
   const { propsCard, UiRow, objects, clickEvent, cols } = props;
   const classes = useStyle();
-  const styleUi = {
-    init: "card",
-    arr: ["card", "row"],
-  };
-  const [keyUi, setKeyUi] = useState(styleUi.init);
-  //   const [activeBtns, setActiveBtns] = useState([
-  //     "btn-success",
-  //     "btn-outline-success",
-  //   ]);
+  const hist = useHistory();
+  const [keyUi, setKeyUi] = useState(styleUi[0]);
   const [activeBtn, setActiveBtn] = useState(0);
+  const param = new URLSearchParams(useLocation().search);
+  const view = param.get("view");
+  const section = param.get("section");
+  const dispatch = useDispatch();
+  //on click
   const changeUi = (iBtn) => {
+    const view = styleUi[iBtn];
     // 变化样式组件
-    setKeyUi(styleUi.arr[iBtn]);
+    setKeyUi(view);
     // 改变按钮样式
-    // const btns = [];
     setActiveBtn(iBtn);
-    // activeBtns.forEach((item, i) =>
-    //   btns.push(i === iBtn ? "btn-success" : "btn-outline-success")
-    // );
-    // setActiveBtns(btns);
+    if (section) {
+      hist.push(`?=${section}&view=${view}`);
+    } else {
+      hist.push(`?view=${view}`);
+      dispatch(setPrevView(view));
+    }
   };
+
+  //init
+  React.useEffect(() => {
+    if (section) {
+      hist.push(`?section=${section}&view=${initUi}`);
+    } else if (!view) {
+      hist.push(`?view=${initUi}`);
+    //   dispatch(setPrevView(view));
+    }
+  }, [section]);
+
+  //view change trigger
+  React.useEffect(() => {
+    setKeyUi(view);
+    setActiveBtn(styleUi.indexOf(view));
+  }, [view]);
+
   const componentUI = () => {
     switch (keyUi) {
-      case styleUi.arr[0]:
+      case styleUi[0]:
         return (
           <UiCards
             cols={cols}
@@ -59,7 +83,7 @@ export default function UiVariety(props) {
             clickEvent={clickEvent}
           />
         );
-      case styleUi.arr[1]:
+      case styleUi[1]:
         return (
           <UiRows UiRow={UiRow} objects={objects} clickEvent={clickEvent} />
         );
@@ -67,8 +91,7 @@ export default function UiVariety(props) {
         return <div> Not exist this UI </div>;
     }
   };
-  //   let icon = `${process.env.PUBLIC_URL}/img/icon/`;
-  // gridView.svg`;
+
   return (
     <>
       <div className={classes.root}>

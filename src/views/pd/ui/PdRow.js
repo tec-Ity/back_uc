@@ -15,6 +15,7 @@ export default function PdRow(props) {
         <div
           className='row mt-3 align-middle'
           key={object._id}
+          onClick={clickEvent && clickEvent(object)}
           style={{
             boxShadow: " 0px 0px 20px rgba(0, 0, 0, 0.1)",
             cursor: "pointer",
@@ -27,11 +28,7 @@ export default function PdRow(props) {
               style={{ width: "70px", height: "70px" }}
             />
           </div>
-          <div
-            className='col-3 text-primary'
-            onClick={clickEvent && clickEvent(object)}>
-            {object.code}
-          </div>
+          <div className='col-3 text-primary'>{object.code}</div>
           <div className='col-3'>{object.nome}</div>
           <div className='col-3'>{object.addr}</div>
         </div>
