@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { makeStyles } from "@mui/styles";
 import { useHistory } from "react-router";
 import clsx from "clsx";
@@ -38,6 +38,11 @@ const useStyle = makeStyles({
 export default function CusSwitchTabs({ switchList, setSel, selected }) {
   const classes = useStyle();
   const hist = useHistory();
+
+//   useEffect(() => {
+//     hist.push(`?section=${switchList[0]?.url}`);
+//   }, [hist, switchList]);
+
   return (
     <div className={classes.tabBox}>
       {switchList?.map((switchTab) => (

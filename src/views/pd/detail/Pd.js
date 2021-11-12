@@ -9,7 +9,6 @@ import {
 import ListPageHeader from "../../../components/basic/ListPageHeader";
 import PdBasic from "./PdBasic";
 import PdProds from "./PdProds";
-// import { getRolePath } from "../../../js/conf/confUser";
 import CusSwitchTabs from "../../../components/basic/CusSwitchTabs";
 
 const flagSlice = "pd";
