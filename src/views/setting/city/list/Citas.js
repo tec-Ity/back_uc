@@ -5,7 +5,7 @@ import {
   // Breadcrumbs,
   Grid,
   // Link, Typography,
-  Switch
+  Switch,
 } from "@mui/material";
 // import { OutlinedInput, FormControl, InputLabel } from "@material-ui/core";
 // import Modal from "@mui/material/Modal";
@@ -142,7 +142,7 @@ export default function Citas() {
 
   return (
     <Container>
-      <ListPageHeader  links={links} />
+      <ListPageHeader links={links} flagSlice={flagSlice} api={api} />
       <CityList addNew={addNew} closeAddNew={() => setAddNew(false)} />
 
       <PageNav flagSlice={flagSlice} api={api} />

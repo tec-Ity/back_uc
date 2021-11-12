@@ -132,7 +132,7 @@ export default function Brands() {
     <Container>
       <ListPageHeader
         links={links}
-        flgs={flagSlice}
+        flagSlice={flagSlice}
         api={api}
         showAddNew={() => setAddNew(true)}
         addLabel='添加品牌'

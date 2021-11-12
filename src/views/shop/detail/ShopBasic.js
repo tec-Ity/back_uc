@@ -139,7 +139,7 @@ export default function ShopBasic(props) {
             }}
             title='更换图片'
           />
-          {modifyingImg === true && <Delete className={classes.deleteStyle} />}
+          {/* {modifyingImg === true && <Delete className={classes.deleteStyle} />} */}
           <input
             ref={ref}
             type='file'
@@ -185,6 +185,7 @@ export default function ShopBasic(props) {
           <CusBtnGroup
             handleEdit={() => setModifyingImg(true)}
             modifying={modifyingImg}
+            disableDelete
           />
         </div>
       </div>

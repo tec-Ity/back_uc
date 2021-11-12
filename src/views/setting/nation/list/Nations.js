@@ -140,7 +140,7 @@ export default function Nations() {
 
   return (
     <Container>
-      <ListPageHeader links={links} />
+      <ListPageHeader links={links} flagSlice={flagSlice} api={api} />
       <CityList addNew={addNew} closeAddNew={() => setAddNew(false)} />
       <PageNav flagSlice={flagSlice} api={api} />
     </Container>
