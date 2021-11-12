@@ -7,6 +7,7 @@ const initialState = {
   status: "idle",
   ongoingOrderCount: 0,
   orderCountStatus: "idle",
+  prevView: "",
 };
 
 export const getObjects = createAsyncThunk(
@@ -196,6 +197,9 @@ export const objectsSlice = createSlice({
     unObjectsSlice: (state, action) => {
       const { flagSlice } = action.payload;
       delete state[flagSlice];
+    },
+    setPrevView: (state, action) => {
+      state.prevView = action.payload;
     },
   },
 
