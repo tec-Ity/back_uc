@@ -105,7 +105,7 @@ export default function User() {
 
   const links = [
     { label: "主页", to: `/home` },
-    { label: "用户列表", to: `/users` },
+    { label: "用户列表", to: `/users`, prevView: true  },
     { label: "详情" },
   ];
 

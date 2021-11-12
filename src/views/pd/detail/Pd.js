@@ -40,7 +40,7 @@ const switchList = [
 export default function Pd(props) {
   const { id } = useParams();
   const dispatch = useDispatch();
-//   const rolePath = getRolePath();
+  //   const rolePath = getRolePath();
   const api = `/pd/${id}`;
   const param = new URLSearchParams(useLocation().search);
   const section = param.get("section");
@@ -88,7 +88,7 @@ export default function Pd(props) {
         api={api}
         links={[
           { label: "主页", to: "/home" },
-          { label: "产品列表", to: `/pds` },
+          { label: "产品列表", to: `/pds`, prevView: true },
           { label: "产品详情" },
         ]}
         showAddIcon={false}

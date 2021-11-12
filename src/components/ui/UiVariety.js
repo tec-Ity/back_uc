@@ -7,6 +7,9 @@ import { ReactComponent as GridView } from "../icon/gridView.svg";
 import { useLocation } from "react-router-dom";
 import clsx from "clsx";
 import { useHistory } from "react-router";
+import { useDispatch } from "react-redux";
+import { setPrevView } from "../../features/objectsSlice";
+
 const useStyle = makeStyles({
   root: {
     display: "flex",
@@ -37,10 +40,7 @@ export default function UiVariety(props) {
   const param = new URLSearchParams(useLocation().search);
   const view = param.get("view");
   const section = param.get("section");
-
-
-    console.log(hist)
-
+  const dispatch = useDispatch();
   //on click
   const changeUi = (iBtn) => {
     const view = styleUi[iBtn];
@@ -48,15 +48,22 @@ export default function UiVariety(props) {
     setKeyUi(view);
     // 改变按钮样式
     setActiveBtn(iBtn);
-    section
-      ? hist.push(`?section=${section}&view=${view}`)
-      : hist.push(`?view=${view}`);
+    if (section) {
+      hist.push(`?=${section}&view=${view}`);
+    } else {
+      hist.push(`?view=${view}`);
+      dispatch(setPrevView(view));
+    }
   };
+
   //init
   React.useEffect(() => {
-    section
-      ? hist.push(`?section=${section}&view=${initUi}`)
-      : hist.push(`?view=${initUi}`);
+    if (section) {
+      hist.push(`?section=${section}&view=${initUi}`);
+    } else if (!view) {
+      hist.push(`?view=${initUi}`);
+    //   dispatch(setPrevView(view));
+    }
   }, [section]);
 
   //view change trigger

@@ -314,8 +314,13 @@ export const objectsSlice = createSlice({
   },
 });
 
-export const { setQueryFixed, setQuery, cleanField, unObjectsSlice } =
-  objectsSlice.actions;
+export const {
+  setQueryFixed,
+  setQuery,
+  cleanField,
+  unObjectsSlice,
+  setPrevView,
+} = objectsSlice.actions;
 
 export const selectQuery = (flagSlice) => (state) => {
   if (state.objects[flagSlice] && state.objects[flagSlice].query)

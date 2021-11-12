@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Container, Grid } from "@mui/material";
 // import NavBread from "../../../components/universal/navBread/NavBread";
 // import { getRolePath } from "../../../js/conf/confUser";
-import { 
+import {
   // Link,
-  useParams
+  useParams,
 } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import makeStyles from "@mui/styles/makeStyles";
@@ -163,7 +163,7 @@ const populateObjs = [
 ];
 const links = [
   { label: "主页", to: "/home" },
-  { label: "订单列表", to: `/orders` },
+  { label: "订单列表", to: `/orders`, prevView: true },
   { label: "订单详情" },
 ];
 ////////////////////////////////////////////////////////////////

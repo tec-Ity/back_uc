@@ -39,13 +39,13 @@ export default function CusSwitchTabs({ switchList, setSel, selected }) {
   const classes = useStyle();
   const hist = useHistory();
 
-//   useEffect(() => {
-//     hist.push(`?section=${switchList[0]?.url}`);
-//   }, [hist, switchList]);
+  //   useEffect(() => {
+  //     hist.push(`?section=${switchList[0]?.url}`);
+  //   }, [hist, switchList]);
 
   return (
     <div className={classes.tabBox}>
-      {switchList?.map((switchTab) => (
+      {switchList?.map((switchTab,index) => (
         <div
           key={switchTab.label}
           className={clsx(
