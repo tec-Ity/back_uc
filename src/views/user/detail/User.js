@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useParams, useHistory } from "react-router";
-// import { FormattedMessage } from "react-intl";
+import { FormattedMessage } from "react-intl";
 import { useSelector, useDispatch } from "react-redux";
 
-import confUser, { getRolePath } from "../../../js/conf/confUser";
+import { getRolePath } from "../../../js/conf/confUser";
 
 import UserPutModal from "../modal/UserPutModal";
 import UserPwdModal from "../modal/UserPwdModal";
-// import NavBread from "../../../components/universal/navBread/NavBread";
 
 import { selectUser } from "../../../features/authSlice";
 import {
@@ -17,11 +16,11 @@ import {
   deleteObject,
   selectObject,
   selectObjects,
+  putObject,
   cleanField,
 } from "../../../features/objectsSlice";
 
 import { Box, Grid, Typography, Button, IconButton } from "@mui/material";
-// import { makeStyles } from "@mui/styles";
 import { ReactComponent as EditIcon } from "../../../components/icon/editBlack.svg";
 import { ReactComponent as CancelIcon } from "../../../components/icon/cancelBlack.svg";
 import { ReactComponent as DoneIcon } from "../../../components/icon/doneBlack.svg";
@@ -30,18 +29,15 @@ import ListPageHeader from "../../../components/basic/ListPageHeader.js";
 import FormBox from "./FormBox";
 import ToggleBox from "./ToggleBox";
 
-const useStyle = makeStyles({
-  infobox: {
-    height: "50px",
-    width: "286px",
-  },
-  label: {
-    marginRight: "10px",
-  },
-});
-
-
 const populateObjs = [{ path: "Shop", select: "code nome" }];
+
+const roleList = [
+  { nome: "拥有者", code: 1 },
+  { nome: "管理者", code: 3 },
+  { nome: "超级员工", code: 5 },
+  { nome: "店铺老板", code: 101 },
+  { nome: "店铺员工", code: 105 },
+];
 
 export default function User() {
   const hist = useHistory();
@@ -79,39 +75,65 @@ export default function User() {
     };
   }, [api, dispatch]);
 
-
-  const classes = useStyle();
-
   const [editing, setEditing] = useState(false);
   const flagSlice_Shops = "user_Shops";
   const api_Shops = "/Shops";
-  const classes = useStyle();
   const objShops = useSelector(selectObjects(flagSlice_Shops));
 
   useEffect(() => {
     dispatch(getObjects({ flagSlice: flagSlice_Shops, api: api_Shops }));
-  }, [editing]);
+  }, []);
 
   const [form, setForm] = useState({});
   useEffect(() => {
     const { nome, code, phonePre, phone, role } = object;
-    setForm({ nome, code, phonePre, phone, role });
+    setForm({ nome, code, phonePre, phone, role, Shop: object.Shop?.code });
   }, [object]);
+
+  function handleEdit() {
+    //load object to form
+    const { nome, code, phonePre, phone, role } = object;
+    setForm({ nome, code, phonePre, phone, role, Shop: object.Shop?.code });
+
+    setEditing(!editing);
+  }
 
   function handleSave() {
     console.log("[SAVE]", form);
+    dispatch(putObject({ flagSlice, api, data: { general: form } }));
     setEditing(!editing);
   }
 
   function handleLog() {
-    console.log("[LOG]", object);
+    console.log("[LOG]", form, object);
   }
 
   function populateShops(Shops) {
     let arr = Shops.map((shop) => {
-      return { label: shop.nome, id: shop.code };
+      return { label: shop.nome, id: shop._id };
     });
     return arr;
+  }
+
+  function populateRoles(roles) {
+    let arr = roles
+      .filter((role) => curRole < role.code)
+      .map((role) => {
+        return { label: role.nome, id: role.code };
+      });
+    return arr;
+  }
+
+  function roleName(roleId) {
+    const roleMap = {
+      1: "拥有者",
+      3: "管理者",
+      5: "超级员工",
+      101: "店铺老板",
+      105: "店铺员工",
+    };
+
+    return roleMap[roleId];
   }
 
   function FooterBox({ label, content }) {
@@ -134,58 +156,52 @@ export default function User() {
   }
 
   const links = [
-    { label: "主页", to: `/home` },
-    { label: "用户列表", to: `/users`, prevView: true  },
+    { label: "主页", to: `/${rolePath}/home` },
+    { label: "用户列表", to: `/${rolePath}/users` },
     { label: "详情" },
   ];
-
-  const permMap = {
-    1: ["code", "name", "shop", "phone", "usable", "phonePre"],
-    3: ["name", "role"],
-    5: ["name"],
-    101: ["name"],
-    105: ["name"],
-  };
 
   const fields = [
     {
       label: "用户姓名",
+      content: object.nome,
       type: "nome",
       permissions: ["hierachy", "self"],
     },
     {
       label: "登录账号",
+      content: object.code,
       type: "code",
+      permissions: ["hierachy"],
     },
     {
       variant: {
         name: "phone",
         variantObj: {
-          fields: [{ label: "电话", type: "phonePre" }, { type: "phone" }],
-        },
-      },
-    },
-    {
-      label: "用户角色",
-      type: "role",
-      variant: {
-        name: "role",
-        variantObj: {
-          options: [
-            { label: "拥有者", id: 1 },
-            { label: "管理者", id: 3 },
-            { label: "超级员工", id: 5 },
-            { label: "店铺老板", id: 101 },
-            { label: "店铺员工", id: 105 },
+          fields: [
+            { label: "电话", content: object.phonePre, type: "phonePre" },
+            { type: "phone", content: object.phone },
           ],
         },
       },
     },
     {
+      label: "用户角色",
+      content: roleName(object.role),
+      type: "role",
+      variant: {
+        name: "select",
+        variantObj: {
+          options: populateRoles(roleList),
+        },
+      },
+    },
+    {
       label: "Shop",
+      content: object.Shop?.nome,
       type: "Shop",
       variant: {
-        name: "shop",
+        name: "select",
         variantObj: {
           options: populateShops(objShops),
         },
@@ -258,14 +274,7 @@ export default function User() {
                     variant="contained"
                     color="primary"
                     startIcon={!editing ? <EditIcon /> : <CancelIcon />}
-                    onClick={() => {
-                      //load object to form
-                      const { code, nome, phonePre, phone, role } = object;
-                      const Shop = object.Shop ? object.Shop._id : null;
-                      setForm({ code, nome, phonePre, phone, role });
-
-                      setEditing(!editing);
-                    }}
+                    onClick={handleEdit}
                   >
                     编辑
                   </Button>
@@ -291,66 +300,7 @@ export default function User() {
           agent={curUser}
           stateHandler={[form, setForm]}
           editing={editing}
-          permMap={permMap}
         />
-        {/* <Grid container columns={{ xs: 1, sm: 4 }} spacing="0">
-          {fields.map((field) => {
-            if (field.variant?.name === "phone") {
-              return (
-                <Grid
-                  container
-                  columns={{ xs: 3, sm: 3 }}
-                  spacing={0}
-                  item
-                  borderTop={1}
-                  xs={1}
-                  sm={1}
-                >
-                  {field.variant.variantObj.fields.map((variantField) => {
-                    return (
-                      <Grid item xs={1} sm={2}>
-                        <InfoBox
-                          label={variantField.label}
-                          type={variantField.type}
-                          object={object}
-                          editing={editing}
-                          form={form}
-                          setForm={setForm}
-                          noBox={variantField.noBox}
-                          variant={field.variant}
-                          curUser={curUser}
-                          curRole={curRole}
-                          permMap={permMap}
-                        />
-                      </Grid>
-                    );
-                  })}
-                </Grid>
-              );
-            }
-            return (
-              <Grid item xs={1} sm={1} width="100%" borderTop={1}>
-                <InfoBox
-                  label={field.label}
-                  type={field.type}
-                  object={object}
-                  editing={editing}
-                  form={form}
-                  setForm={setForm}
-                  noBox={field.noBox}
-                  variant={field.variant}
-                  curUser={curUser}
-                  curRole={curRole}
-                  permMap={permMap}
-                />
-              </Grid>
-            );
-          })}
-          <Grid item xs sm width="100%" borderTop={1}></Grid>
-          <Grid item xs sm width="100%" borderTop={1}>
-            <Box width="1000px"></Box>
-          </Grid>
-        </Grid> */}
 
         {/* footer details */}
         <Box mt="25px" ml="25px">
