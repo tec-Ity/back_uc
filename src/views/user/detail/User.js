@@ -156,12 +156,12 @@ export default function User() {
   }
 
   const links = [
-    { label: "主页", to: `/${rolePath}/home` },
-    { label: "用户列表", to: `/${rolePath}/users` },
+    { label: "主页", to: `/home` },
+    { label: "用户列表", to: `/users` },
     { label: "详情" },
   ];
 
-  const fields = [
+  let fields = [
     {
       label: "用户姓名",
       content: object.nome,
@@ -196,18 +196,24 @@ export default function User() {
         },
       },
     },
-    {
-      label: "Shop",
-      content: object.Shop?.nome,
-      type: "Shop",
-      variant: {
-        name: "select",
-        variantObj: {
-          options: populateShops(objShops),
+  ];
+
+  if (curRole > 100) {
+    fields = [
+      ...fields,
+      {
+        label: "Shop",
+        content: object.Shop?.nome,
+        type: "Shop",
+        variant: {
+          name: "select",
+          variantObj: {
+            options: populateShops(objShops),
+          },
         },
       },
-    },
-  ];
+    ];
+  }
 
   return (
     <>
