@@ -51,6 +51,7 @@ export default function CusSelectSearch({
   disabled,
   handleSelect,
   queryUrl = "",
+  useDefault = false,
 }) {
   const classes = useStyle();
   const dispatch = useDispatch();
@@ -61,14 +62,10 @@ export default function CusSelectSearch({
   const handleSelectOption = (e, val) => {
     handleSelect(val);
   };
-  //   console.log(queryUrl);
-  //on inputvalue change
-  //   console.log(queryUrl);
-  //   console.log("flag", flagSlice);
-  //   console.log(objects);
+
   const handleChangeInputValue = useCallback(
     (e, val) => {
-      //e passed null at first time with no reason
+      //'e' is passed null at first time with no reason
       if (e) {
         setInputValue(val);
         flagSlice &&
@@ -104,6 +101,7 @@ export default function CusSelectSearch({
       flagSlice && dispatch(unObjectsSlice(flagSlice));
     };
   }, [dispatch, flagSlice]);
+
   return (
     <Autocomplete
       isOptionEqualToValue={(option, value) => option.id === value?.id}
@@ -127,14 +125,22 @@ export default function CusSelectSearch({
           : []
       }
       renderInput={(params) => (
-        <div ref={params.InputProps.ref} className={classes.inputBox}>
+        <div
+          ref={params.InputProps.ref}
+          className={useDefault === false ? classes.inputBox : ""}>
           <input
             type='text'
             placeholder={placeholder}
             {...params.inputProps}
-            className={classes.inputStyle}
+            className={useDefault === false ? classes.inputStyle : ""}
+            style={{
+              width: useDefault === true && "100%",
+              fontWeight: useDefault && 700,
+            }}
           />
-          <label className={classes.inputLabel}>{label}</label>
+          {useDefault === false && (
+            <label className={classes.inputLabel}>{label}</label>
+          )}
         </div>
       )}
     />

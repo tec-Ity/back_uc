@@ -62,8 +62,9 @@ export default function UiVariety(props) {
       hist.push(`?section=${section}&view=${initUi}`);
     } else if (!view) {
       hist.push(`?view=${initUi}`);
-    //   dispatch(setPrevView(view));
+      //   dispatch(setPrevView(view));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [section]);
 
   //view change trigger

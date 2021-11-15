@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { makeStyles } from "@mui/styles";
 import { useHistory } from "react-router";
 import clsx from "clsx";
@@ -45,7 +45,7 @@ export default function CusSwitchTabs({ switchList, setSel, selected }) {
 
   return (
     <div className={classes.tabBox}>
-      {switchList?.map((switchTab,index) => (
+      {switchList?.map((switchTab, index) => (
         <div
           key={switchTab.label}
           className={clsx(

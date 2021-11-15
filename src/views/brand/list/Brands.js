@@ -2,10 +2,8 @@ import React, { useEffect, useState } from "react";
 import makeStyles from "@mui/styles/makeStyles";
 import Container from "@mui/material/Container";
 // import clsx from "clsx";
-import { Grid, Switch } from "@mui/material";
-// import { OutlinedInput, FormControl, InputLabel } from "@material-ui/core";
-// import Modal from "@mui/material/Modal";
-// import SearchInput from "../../../components/universal/query/SearchInput";
+import { getRolePath } from "../../../js/conf/confUser";
+import { Grid } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import PageNav from "../../../components/universal/query/PageNav";
 import {
@@ -13,18 +11,18 @@ import {
   getObjects,
   postObject,
   putObject,
+  selectQueryFixed,
+  setQueryFixed,
 } from "../../../features/objectsSlice";
 import api_DNS from "../../../js/_dns";
 import CusBtnGroup from "../../../components/basic/CusBtnGroup";
 import ListPageHeader from "../../../components/basic/ListPageHeader";
+import CusSelectSearch from "../../../components/basic/CusSelectSearch";
+import CusSwitch from "../../../components/basic/CusSwitch";
+import { useHistory } from "react-router";
+
 const useStyle = makeStyles({
   root: {},
-  //header
-  headerContainer: {
-    display: "flex",
-    justifyContent: "space-between",
-    marginBottom: "20px",
-  },
   listGridContainer: {
     // border: "1px solid",
     display: "flex",
@@ -32,15 +30,14 @@ const useStyle = makeStyles({
   },
   listGridItem: {
     position: "relative",
-    cursor: "pointer",
     // border: "1px solid",
     boxSizing: "border-box",
     height: "350px",
     width: "255px",
     // marginBottom: "20px",
-    padding: "2px",
     boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.1)",
     borderRadius: "5px",
+    padding: "10px",
   },
   btnGroup: {
     position: "absolute",
@@ -50,48 +47,39 @@ const useStyle = makeStyles({
   childGroup: {
     padding: "0 5%",
   },
+
   brandBg: {
-    height: "100%",
+    height: "184px",
     width: "100%",
     objectFit: "cover",
-    position: "absolute",
+    paddingBottom: "",
+    // borderBottom: "2px solid #000",
+    // position: "absolute",
     zIndex: "-1",
+    cursor: "pointer",
   },
-  brandCode: {
-    width: "fit-content",
-    height: "fit-content",
-    backgroundColor: "#fff",
-    fontSize: "30px",
-    fontWeight: "700",
-    borderRadius: "10px",
-  },
-  inputBox: {
-    position: "relative",
-    // border: "1px solid",
-    height: "50px",
-  },
-  inputlabel: {
-    // border:'1px solid',
-    fontFamily: "Montserrat",
-    padding: "0 2px",
-    lineHeight: "1em",
-    backgroundColor: "#fff",
-    position: "absolute",
-    top: 0,
-    left: "10px",
-    fontWeight: "700",
-    color: "#1d1d384d",
+  infoContainer: {
+    borderTop: "2px solid",
+    width: "100%",
+    marginTop: "10px",
+    "& > div": {
+      marginTop: "5px",
+      height: "28px",
+      display: "flex",
+      justifyContent: "space-between",
+      width: "100%",
+      "& > :first-child": {
+        color: "#00000080",
+      },
+      "& > :nth-child(2)": {
+        fontWeight: 700,
+        //   fontSize:'14px'
+      },
+    },
   },
   inputStyle: {
-    width: "100%",
-    height: "80%",
-    position: "absolute",
-    bottom: 0,
-    paddingLeft: "20px",
-    paddingTop: "0",
-    fontWeight: "700",
-    fontSize: "20px",
-    border: "2px solid #1d1d384d",
+    // height: "100%",
+    width: "50%",
   },
   //children:
   children: {},
@@ -123,13 +111,29 @@ const useStyle = makeStyles({
 const links = [{ label: "主页", to: "/home" }, { label: "品牌列表" }];
 const flagSlice = "brands";
 const api = "/Brands";
-
+const populateObjs = [
+  {
+    path: "Nation",
+    select: "code nome",
+  },
+];
 export default function Brands() {
   const dispatch = useDispatch();
   const [addNew, setAddNew] = useState(false);
+  const queryFixed = useSelector(selectQueryFixed(flagSlice));
   useEffect(() => {
-    dispatch(getObjects({ flagSlice, api }));
+    dispatch(
+      setQueryFixed({
+        flagSlice,
+        queryFixed: "&populateObjs=" + JSON.stringify(populateObjs),
+      })
+    );
   }, [dispatch]);
+
+  //   console.log(queryFixed);
+  useEffect(() => {
+    queryFixed && dispatch(getObjects({ flagSlice, api }));
+  }, [dispatch, queryFixed]);
 
   return (
     <Container>
@@ -139,6 +143,7 @@ export default function Brands() {
         api={api}
         showAddNew={() => setAddNew(true)}
         addLabel='添加品牌'
+        showSearch={Boolean(queryFixed)}
       />
       <BrandList addNew={addNew} closeAddNew={() => setAddNew(false)} />
       <PageNav flagSlice={flagSlice} api={api} />
@@ -171,18 +176,31 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
   const classes = useStyle();
   const dispatch = useDispatch();
   const ref = React.useRef();
+  const rolePath = getRolePath();
+  const hist = useHistory();
   const status = useSelector((state) => state.objects.status);
   const [modifying, setModifying] = useState(addNew);
-  const [showChild, setShowChild] = useState(false);
   const [justSubmitted, setJustSubmitted] = useState(false);
-  const [initBrandInfo] = useState({
+  //   console.log("init", initBrandInfo);
+  const [brandUpdateData, setBrandUpdateData] = useState({
     sort: brand?.sort || 0,
     name: brand?.code || "",
-    isUsable: brand?.is_usable || true,
+    isUsable: brand?.is_usable,
+    nation: { id: brand?.Nation?._id || "", code: brand?.Nation?.code || "" },
     imgs: [],
   });
-  const [brandUpdateData, setBrandUpdateData] = useState(initBrandInfo);
+
   const [imgLocal, setImgLocal] = useState([]);
+  //   console.log(brandUpdateData);
+  useEffect(() => {
+    setBrandUpdateData({
+      sort: brand?.sort || 0,
+      name: brand?.code || "",
+      isUsable: brand?.is_usable,
+      nation: { id: brand?.Nation?._id || "", code: brand?.Nation?.code || "" },
+      imgs: [],
+    });
+  }, [brand]);
 
   const handleSubmit = (e) => {
     e.stopPropagation();
@@ -194,11 +212,13 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
         nome: brandUpdateData.name,
         sort: brandUpdateData.sort,
         is_usable: brandUpdateData.isUsable,
+        Nation: brandUpdateData?.nation?.id,
       })
     );
     for (let i = 0; i < brandUpdateData.imgs.length; i++) {
       formData.append("image" + i, brandUpdateData.imgs[i]);
     }
+
     if (addNew === false) {
       dispatch(
         putObject({
@@ -230,7 +250,16 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
     e.stopPropagation();
     if (addNew === false) {
       setModifying(false);
-      setBrandUpdateData(initBrandInfo);
+      setBrandUpdateData({
+        sort: brand?.sort || 0,
+        name: brand?.code || "",
+        isUsable: brand?.is_usable,
+        nation: {
+          id: brand?.Nation?._id || "",
+          code: brand?.Nation?.code || "",
+        },
+        imgs: [],
+      });
     } else if (addNew === true) {
       closeAddNew();
     }
@@ -253,17 +282,17 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
 
   const handleEdit = (e) => {
     setModifying(true);
-    setShowChild(false);
     setImgLocal([]);
     e.stopPropagation();
   };
-
+  console.log(brandUpdateData);
   useEffect(() => {
     if (justSubmitted === true && status === "succeed") {
       setModifying(false);
       setJustSubmitted(false);
+      hist.push(`/${rolePath}/reload`);
     }
-  }, [justSubmitted, status]);
+  }, [hist, justSubmitted, rolePath, status]);
 
   return (
     <div>
@@ -273,15 +302,7 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
         xs={12}
         className={classes.listGridItem}
         style={{ marginBottom: "20px" }}
-        justifyContent='center'
-        alignItems='center'
-        onClick={() => {
-          modifying === true
-            ? ref.current.click()
-            : showChild === true
-            ? setShowChild(false)
-            : setShowChild(true);
-        }}>
+        alignContent='flex-start'>
         {modifying === false ? (
           <>
             {/* bg img */}
@@ -290,21 +311,50 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
               alt={brandUpdateData.name}
               className={classes.brandBg}
             />
-            {/* gateg code */}
-            <div className={classes.brandCode}>
-              {(index + 1).toFixed(1) + " " + brandUpdateData.name}
+            <div className={classes.infoContainer}>
+              <div>
+                <div>品牌名称</div>
+                <div>{brandUpdateData.name}</div>
+              </div>
+              <div>
+                <div>排序</div>
+                <div>{brandUpdateData.sort}</div>
+              </div>
+              <div>
+                <div>国家</div>
+                <div>{brandUpdateData.nation?.code}</div>
+              </div>
+              <div>
+                <div>可用</div>
+                <div>{brandUpdateData.isUsable === true ? "YES" : "NO"}</div>
+              </div>
             </div>
           </>
         ) : (
           // img upload  section
           <>
-            {imgLocal.length > 0 ? (
-              // show selected img
-              <img src={imgLocal[0]} alt='logo' className={classes.brandBg} />
-            ) : (
-              // when no selected img
-              <div>Upload image{" (16:9)"}</div>
-            )}
+            <div
+              style={{ width: "100%" }}
+              onClick={() => {
+                modifying === true && ref.current.click();
+              }}>
+              {imgLocal.length > 0 ? (
+                // show selected img
+                <img src={imgLocal[0]} alt='logo' className={classes.brandBg} />
+              ) : (
+                // when no selected img
+                <div
+                  className={classes.brandBg}
+                  style={{
+                    border: "1px solid",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}>
+                  Upload image{" (16:9)"}
+                </div>
+              )}
+            </div>
             {/* hidden input file */}
             <input
               ref={ref}
@@ -325,6 +375,66 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
                 setImgLocal(imgLocalPath);
               }}
             />
+            {/* ---modify form--- */}
+            <div className={classes.infoContainer}>
+              <div>
+                <div>品牌名称</div>
+                <input
+                  value={brandUpdateData.name}
+                  className={classes.inputStyle}
+                  onChange={(e) =>
+                    setBrandUpdateData((prev) => ({
+                      ...prev,
+                      name: e.target.value,
+                    }))
+                  }
+                />
+              </div>
+              <div>
+                <div>排序</div>
+                <input
+                  value={brandUpdateData.sort}
+                  className={classes.inputStyle}
+                  onChange={(e) =>
+                    setBrandUpdateData((prev) => ({
+                      ...prev,
+                      sort: e.target.value,
+                    }))
+                  }
+                />
+              </div>
+              <div>
+                <div>国家</div>
+                <div style={{ width: "50%" }}>
+                  <CusSelectSearch
+                    useDefault
+                    flagSlice='Nations'
+                    api='/Nations'
+                    defaultSel={brandUpdateData.nation?.code}
+                    handleSelect={(val) =>
+                      setBrandUpdateData((prev) => ({
+                        ...prev,
+                        nation: { ...prev.nation, id: val.id, code: val.label },
+                      }))
+                    }
+                  />
+                </div>
+              </div>
+              <div>
+                <div>可用</div>
+                <div>
+                  <CusSwitch
+                    checked={brandUpdateData.isUsable}
+                    handleSwitch={(checked) =>
+                      setBrandUpdateData((prev) => ({
+                        ...prev,
+                        isUsable: checked,
+                      }))
+                    }
+                  />
+                </div>
+              </div>
+            </div>
           </>
         )}
         {/* icon groups */}
@@ -336,86 +446,8 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
             handleDelete={handleDelete}
             handleEdit={handleEdit}
           />
-          {/* {modifying === true ? (
-            <>
-              <div onClick={handleSubmit}>Done</div>
-              <div onClick={handleCancel}>Cancle</div>
-              <div onClick={handleDelete}>Del</div>
-            </>
-          ) : (
-            <>
-              <div
-                onClick={(e) => {
-                  setModifying(true);
-                  setShowChild(false);
-                  setImgLocal([]);
-                  e.stopPropagation();
-                }}>
-                edit
-              </div>
-              <div onClick={handleDelete}>del</div>
-            </>
-          )} */}
         </div>
       </Grid>
-
-      {/* ---modify form--- */}
-      {modifying === true && (
-        <Grid container item xs={12} style={{ marginBottom: "10px" }}>
-          <Grid item xs={2}>
-            <div className={classes.inputBox}>
-              <input
-                value={brandUpdateData.sort}
-                className={classes.inputStyle}
-                onChange={(e) =>
-                  setBrandUpdateData((prev) => ({
-                    ...prev,
-                    sort: e.target.value,
-                  }))
-                }
-              />
-              <label className={classes.inputlabel}>Sort</label>
-            </div>
-          </Grid>
-          <Grid item xs={1} />
-          <Grid item xs={5}>
-            <div className={classes.inputBox}>
-              <input
-                value={brandUpdateData.name}
-                className={classes.inputStyle}
-                onChange={(e) =>
-                  setBrandUpdateData((prev) => ({
-                    ...prev,
-                    name: e.target.value,
-                  }))
-                }
-              />
-              <label className={classes.inputlabel}>Name</label>
-            </div>
-          </Grid>
-          <Grid item xs={1} />
-          <Grid
-            container
-            item
-            xs={2}
-            alignItems='center'
-            justifyContent='flex-end'>
-            usable
-            <Switch
-              checked={brandUpdateData.isUsable}
-              size='small'
-              color='default'
-              style={{ color: "#000" }}
-              onChange={(e) =>
-                setBrandUpdateData((prev) => ({
-                  ...prev,
-                  isUsable: e.target.checked,
-                }))
-              }
-            />
-          </Grid>
-        </Grid>
-      )}
     </div>
   );
 }
