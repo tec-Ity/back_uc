@@ -26,8 +26,9 @@ import { ReactComponent as CancelIcon } from "../../../components/icon/cancelBla
 import { ReactComponent as DoneIcon } from "../../../components/icon/doneBlack.svg";
 import { ReactComponent as UserProfileLightGrey } from "../../../components/icon/userProfileLightGrey.svg";
 import ListPageHeader from "../../../components/basic/ListPageHeader.js";
+import CusSwitch from "../../../components/basic/CusSwitch";
+import CusBtnGroup from "../../../components/basic/CusBtnGroup";
 import FormBox from "./FormBox";
-import ToggleBox from "./ToggleBox";
 
 const populateObjs = [{ path: "Shop", select: "code nome" }];
 
@@ -76,6 +77,7 @@ export default function User() {
   }, [api, dispatch]);
 
   const [editing, setEditing] = useState(false);
+  const [justSubmitted, setJustSubmitted] = useState(false);
   const flagSlice_Shops = "user_Shops";
   const api_Shops = "/Shops";
   const objShops = useSelector(selectObjects(flagSlice_Shops));
@@ -85,9 +87,13 @@ export default function User() {
   }, [dispatch]);
 
   const [form, setForm] = useState({});
+
+  function initObj(obj, setter) {
+    const { nome, code, phonePre, phone, role } = obj;
+    setter({ nome, code, phonePre, phone, role, Shop: object.Shop?.code });
+  }
   useEffect(() => {
-    const { nome, code, phonePre, phone, role } = object;
-    setForm({ nome, code, phonePre, phone, role, Shop: object.Shop?.code });
+    initObj(object, setForm);
   }, [object]);
 
   function handleEdit() {
@@ -102,10 +108,11 @@ export default function User() {
     console.log("[SAVE]", form);
     dispatch(putObject({ flagSlice, api, data: { general: form } }));
     setEditing(!editing);
+    setJustSubmitted("UPDATE");
   }
 
   function handleLog() {
-    console.log("[LOG]", form, object);
+    console.log("[LOG]", form, fields);
   }
 
   function populateShops(Shops) {
@@ -173,14 +180,43 @@ export default function User() {
       content: object.code,
       type: "code",
       permissions: ["hierachy"],
+      check: {
+        regexp: "^[a-zA-Z0-9]*$",
+        min: 4,
+        max: 20,
+        errMsg: {
+          nullMsg: "成员账号不能为空",
+          regexpMsg: "成员账号只能由数字和字母组成",
+          minMsg: "成员账号的位数不能小于: ",
+          maxMsg: "成员账号的位数不能大于: ",
+        },
+      },
     },
     {
       variant: {
         name: "phone",
         variantObj: {
           fields: [
-            { label: "电话", content: object.phonePre, type: "phonePre" },
-            { type: "phone", content: object.phone },
+            {
+              label: "电话",
+              content: object.phonePre,
+              type: "phonePre",
+              permissions: ["hierachy"],
+              check: {
+                regexp: "^[0-9]*$",
+                trim: 4,
+                errMsg: {
+                  nullMsg: "电话号码前缀不能为空",
+                  regexpMsg: "电话号码前缀只能由数字组成",
+                  trimMsg: "电话号码前缀长度只能为: ",
+                },
+              },
+            },
+            {
+              content: object.phone,
+              type: "phone",
+              permissions: ["hierachy", "self"],
+            },
           ],
         },
       },
@@ -189,6 +225,7 @@ export default function User() {
       label: "用户角色",
       content: roleName(object.role),
       type: "role",
+      permissions: ["hierachy"],
       variant: {
         name: "select",
         variantObj: {
@@ -198,22 +235,55 @@ export default function User() {
     },
   ];
 
-  if (curRole > 100) {
-    fields = [
-      ...fields,
-      {
-        label: "Shop",
-        content: object.Shop?.nome,
-        type: "Shop",
-        variant: {
-          name: "select",
-          variantObj: {
-            options: populateShops(objShops),
-          },
+  if (object.role > 100) {
+    fields.push({
+      label: "Shop",
+      content: object.Shop?.nome,
+      type: "Shop",
+      permissions: ["hierachy", "shop"],
+      variant: {
+        name: "select",
+        variantObj: {
+          options: populateShops(objShops),
         },
       },
-    ];
+    });
   }
+
+  function setEditable(field) {
+    let flag = null;
+    field.permissions?.map((permission) => {
+      let tmp_flag = null;
+      switch (permission) {
+        case "hierachy":
+          tmp_flag = curRole < object.role;
+          break;
+        case "self":
+          tmp_flag = curUser.code === object.code;
+          break;
+        case "shop":
+          tmp_flag = curRole < object.role;
+          if (curRole > 100) tmp_flag = false;
+          break;
+        default:
+          console.log("[PERMISSION]default");
+          break;
+      }
+      flag = flag || tmp_flag;
+    });
+    if (flag == null) return;
+    field.editable = flag;
+  }
+
+  fields.map((field) => {
+    if (field.variant?.variantObj.fields != null) {
+      field.variant?.variantObj.fields.map((v_field) => {
+        setEditable(v_field);
+      });
+    } else {
+      setEditable(field);
+    }
+  });
 
   return (
     <>
@@ -227,6 +297,19 @@ export default function User() {
             sx={{ display: "flex", justifyContent: "space-between" }}
           >
             <UserProfileLightGrey />
+            <CusBtnGroup
+              modifying={editing}
+              handleEdit={() => setEditing(true)}
+              handleCancel={() => {
+                initObj(object, setForm);
+                setEditing(false);
+              }}
+              handleDelete={() => {
+                deleteDB();
+                setJustSubmitted("DELETE");
+              }}
+              handleSubmit={handleSave}
+            />
             <Box>
               <div className="text-right">
                 {/* {
@@ -309,10 +392,37 @@ export default function User() {
         />
 
         {/* footer details */}
-        <Box mt="25px" ml="25px">
+        {/* <Box mt="25px" ml="25px">
           <ToggleBox checked={object.is_usable} label="Usable" />
+        </Box> */}
+        <Box ml={3} mt={2}>
+          <Typography
+            sx={{
+              fontSize: "16px",
+              color: "#0000004D",
+              fontWeight: "700",
+              bgcolor: "white",
+            }}
+          >
+            USABLE
+          </Typography>
+          {editing ? (
+            <CusSwitch
+              checked={object.is_usable}
+              handleSwitch={(checked) =>
+                setForm((prev) => ({
+                  ...prev,
+                  is_usable: checked,
+                }))
+              }
+            />
+          ) : (
+            <Typography sx={{ fontSize: "16px", fontWeight: "700" }}>
+              {object.is_usable === true ? "YES" : "NO"}
+            </Typography>
+          )}
         </Box>
-        <Grid container mt="25px">
+        <Grid container mt="25px" ml={3}>
           <FooterBox label="最近登录" content={object.at_last_login} />
         </Grid>
       </Box>

@@ -3,9 +3,8 @@ import { Typography, Box } from "@mui/material";
 import VarietyInput from "./VarietyInput";
 
 export default function InfoBox({
-  label,
-  content,
-  type,
+  field,
+  check,
   object,
   variant,
   noBox,
@@ -15,17 +14,16 @@ export default function InfoBox({
   curUser,
   curRole,
 }) {
-  //calculate if editable
-  let editable = editing && curRole < object.role;
-  if (type === "nome") {
-    editable =
-      editing && (curRole < object.role || curUser.code === object.code);
-  }
+  const { label, content, type, editable } = field;
+
+  const flag0 = editable == null ? true : editable;
+
+  let flag = flag0 && editing;
 
   return (
     <Box
       sx={{
-        border: noBox || !editable ? 0 : 1,
+        border: noBox || !flag ? 0 : 1,
         p: "10px",
         m: "17px",
         mt: "27px",
@@ -47,13 +45,13 @@ export default function InfoBox({
       >
         {label}
       </Typography>
-      {editable ? (
+      {flag && editing ? (
         <VarietyInput
-          editable={editable}
           content={content}
+          variant={variant}
+          check={check}
           object={object}
           type={type}
-          variant={variant}
           form={form}
           setForm={setForm}
           curUser={curUser}
