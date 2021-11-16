@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { useParams, useHistory } from "react-router";
-import { FormattedMessage } from "react-intl";
+// import { FormattedMessage } from "react-intl";
 import { useSelector, useDispatch } from "react-redux";
 
 import { getRolePath } from "../../../js/conf/confUser";
@@ -82,7 +82,7 @@ export default function User() {
 
   useEffect(() => {
     dispatch(getObjects({ flagSlice: flagSlice_Shops, api: api_Shops }));
-  }, []);
+  }, [dispatch]);
 
   const [form, setForm] = useState({});
   useEffect(() => {

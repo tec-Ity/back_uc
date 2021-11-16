@@ -20,7 +20,6 @@ import ListPageHeader from "../../../components/basic/ListPageHeader";
 import CusSelectSearch from "../../../components/basic/CusSelectSearch";
 import CusSwitch from "../../../components/basic/CusSwitch";
 import { useHistory } from "react-router";
-import { WindowRounded } from "@mui/icons-material";
 
 const useStyle = makeStyles({
   root: {},

@@ -11,23 +11,40 @@ import {
   // deleteObject,
   putObject,
 } from "../../../features/objectsSlice";
-import { ReactComponent as Delete } from "../../../components/icon/delete.svg";
+// import { ReactComponent as Delete } from "../../../components/icon/delete.svg";
 import shopDefaul from "../../../components/icon/Shop.jpg";
 import { getRolePath } from "../../../js/conf/confUser";
 import CusBtnGroup from "../../../components/basic/CusBtnGroup";
+import { useHistory } from "react-router";
 
 const useStyle = makeStyles({
   root: {},
   mainImg: {
     height: "300px",
     width: "300px",
-    background: "transparent",
+    position: "relative",
   },
   formItem: { width: "50%", marginTop: "10px" },
   flexStyle: {
     width: "100%",
     display: "flex",
     justifyContent: "space-between",
+  },
+  withBg: {
+    border: "2px solid #1d1d384d",
+    backgroundColor: "#fff",
+    position: "relative",
+    cursor: "pointer",
+  },
+  bgText: {
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    top: "0",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    fontSize: "20px",
   },
   btnStyle: { width: "80px" },
   deleteStyle: {
@@ -48,7 +65,8 @@ export default function ShopBasic(props) {
   const ref = useRef();
   const status = useSelector((state) => state.objects.status);
   const [justSubmitted, setJustSubmitted] = useState(null);
-
+  const [reset, setReset] = useState(0);
+  const hist = useHistory();
   //local img path for display on change
   const [imgLocal, setImgLocal] = useState(null);
   const [infoUpdate, setInfoUpdate] = useState({
@@ -77,7 +95,17 @@ export default function ShopBasic(props) {
     Shop?.img_url,
     Shop?.nome,
     Shop?.zip,
+    reset,
   ]);
+
+  React.useEffect(() => {
+    if (justSubmitted === "DELETE" && status === "succeed") {
+      window.location.replace(`/${rolePath}/shops`);
+    }
+    if (justSubmitted === "UPDATE" && status === "succeed") {
+      hist.push(`/${rolePath}/reload`);
+    }
+  });
 
   const handleSubmit = () => {
     const formData = new FormData();
@@ -91,6 +119,19 @@ export default function ShopBasic(props) {
         addr: infoUpdate.addr,
       })
     );
+
+    dispatch(
+      putObject({
+        flagSlice,
+        api,
+        data: formData,
+      })
+    );
+    setJustSubmitted("UPDATE");
+  };
+
+  const handleSubmitImg = () => {
+    const formData = new FormData();
     formData.append("img", infoUpdate.img);
     dispatch(
       putObject({
@@ -107,23 +148,13 @@ export default function ShopBasic(props) {
     setJustSubmitted("DELETE");
   };
 
-  React.useEffect(() => {
-    if (justSubmitted === "DELETE" && status === "succeed") {
-      window.location.replace(`/${rolePath}/shops`);
-    }
-  });
-
   return (
     <Container className={classes.root}>
       <div className={clsx(classes.formItem, classes.flexStyle)}>
         {/* img component */}
         <div
           onClick={() => modifyingImg === true && ref.current.click()}
-          style={{
-            padding: "5px",
-            position: "relative",
-            border: modifyingImg === true ? "2px solid #1d1d384d" : "none",
-          }}>
+          className={modifyingImg === true ? classes.withBg : ""}>
           <img
             alt={infoUpdate.code}
             src={
@@ -136,10 +167,14 @@ export default function ShopBasic(props) {
             className={classes.mainImg}
             style={{
               cursor: modifyingImg === true ? "pointer" : "default",
+              opacity: modifyingImg === true ? "0.6" : "1",
             }}
             title='更换图片'
           />
-          {/* {modifyingImg === true && <Delete className={classes.deleteStyle} />} */}
+          {modifyingImg === true && (
+            <div className={classes.bgText}>点击更换</div>
+          )}
+          {/* hidden img input */}
           <input
             ref={ref}
             type='file'
@@ -152,43 +187,25 @@ export default function ShopBasic(props) {
           />
         </div>
         <div>
-          {/* {modifying === false ? (
-            <>
-              <button
-                className={clsx("btn mx-3 btn-warning", classes.btnStyle)}
-                onClick={() => setModifying(true)}>
-                Edit
-              </button>
-              <button
-                className={clsx("btn mx-3 btn-danger", classes.btnStyle)}
-                onClick={handleDelete}>
-                Delete
-              </button>
-            </>
-          ) : (
-            <>
-              <button
-                className={clsx("btn mx-3 btn-success", classes.btnStyle)}
-                onClick={handleSubmit}>
-                Done
-              </button>
-              <button
-                className={clsx("btn mx-3 btn-warning", classes.btnStyle)}
-                onClick={() => setModifying(false)}>
-                Cancle
-              </button>
-              <button className={clsx("btn mx-3 btn-danger", classes.btnStyle)}>
-                Delete
-              </button>
-            </>
-          )} */}
           <CusBtnGroup
-            handleEdit={() => setModifyingImg(true)}
-            modifying={modifyingImg}
             disableDelete
+            modifying={modifyingImg}
+            handleEdit={() => {
+              if (modifying === true) {
+                alert("Please save last change");
+                return;
+              }
+              setModifyingImg(true);
+            }}
+            handleCancel={() => {
+              setModifyingImg(false);
+              setReset((prev) => prev + 1);
+            }}
+            handleSubmit={handleSubmitImg}
           />
         </div>
       </div>
+      {/* ------------------ hr ------------------------- */}
       <div
         style={{
           width: "100%",
@@ -197,7 +214,22 @@ export default function ShopBasic(props) {
           display: "flex",
           justifyContent: "flex-end",
         }}>
-        <CusBtnGroup handleEdit={() => setModifying(true)} />
+        <CusBtnGroup
+          modifying={modifying}
+          handleEdit={() => {
+            if (modifyingImg === true) {
+              alert("Please save last change");
+              return;
+            }
+            setModifying(true);
+          }}
+          handleCancel={() => {
+            setModifying(false);
+            setReset((prev) => prev + 1);
+          }}
+          handleSubmit={handleSubmit}
+          handleDelete={handleDelete}
+        />
       </div>
       <div className={classes.formItem}>
         <CusInput
@@ -220,15 +252,6 @@ export default function ShopBasic(props) {
         />
       </div>
       <div className={classes.formItem}>
-        {/* <CusInput
-          label='City'
-          disabled
-          value={infoUpdate.city?.code + " (" + infoUpdate.city?.nome + ")"}
-          handleChange={(e) =>
-            setInfoUpdate((prev) => ({ ...prev, city: e.target.value }))
-          }
-        /> */}
-
         <CusSelectSearch
           disabled={!modifying}
           label='City'
@@ -236,7 +259,6 @@ export default function ShopBasic(props) {
           api='/Citas'
           defaultSel={infoUpdate.city?.code}
           handleSelect={(val) => {
-            console.log(val);
             val &&
               setInfoUpdate((prev) => ({
                 ...prev,

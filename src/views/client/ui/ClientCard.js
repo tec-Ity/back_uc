@@ -1,6 +1,6 @@
 import React from "react";
 import { get_DNS } from "../../../js/api";
-import { FormattedMessage } from "react-intl";
+// import { FormattedMessage } from "react-intl";
 import {
   Card,
   CardActionArea,

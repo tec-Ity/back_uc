@@ -30,9 +30,9 @@ const confUser = {
     5: {
       path: "sfer",
       roleNav: [
-        { icon: "bx bx-building-house", label: "shops", to: "/sfer/shops" },
+        // { icon: "bx bx-building-house", label: "shops", to: "/sfer/shops" },
         { icon: "bx bx-package", label: "pds", to: "/sfer/pds" },
-        { icon: "bx bx-list-ul", label: "orders", to: "/ower/orders" },
+        { icon: "bx bx-list-ul", label: "orders", to: "/sfer/orders" },
         { icon: "bx bx-category", label: "categs", to: "/sfer/categs" },
         { icon: "bx bx-purchase-tag-alt", label: "brands", to: "/sfer/brands" },
         { icon: "bx bx-cog", label: "setting", to: "/sfer/setting" },
