@@ -12,6 +12,7 @@ const CustTextField = styled(TextField)(() => ({
 export default function VarietyInput({
   content,
   variant,
+  check,
   setForm,
   form,
   type,
@@ -24,16 +25,30 @@ export default function VarietyInput({
     setForm({ ...form, [type]: newValue?.id });
   }
 
+  //calculate error
+  let error = null;
+  if (check?.min && form[type].length < check?.min) {
+    error = { state: true, message: check?.errMsg.minMsg + check?.min };
+  }
+  if (check?.max && form[type].length > check?.max) {
+    error = { state: true, message: check?.errMsg.maxMsg + check?.max };
+  }
+  if (check?.trim && form[type].length === check?.trim) {
+    error = { state: true, message: check?.errMsg.trimMsg + check?.trim };
+  }
+
   switch (variant?.name) {
     case "select":
       return (
         <Autocomplete
           disablePortal
+          clearOnBlur={false}
           id={type}
           options={variant.variantObj.options}
+          getOptionLabel={(option) => option.label}
           onChange={handleList}
           fullWidth
-          value={content}
+          inputValue={form[type]}
           renderInput={(params) => {
             return (
               <TextField
@@ -47,9 +62,11 @@ export default function VarietyInput({
       );
     default:
       return (
-        <CustTextField
+        <TextField
           id={type}
           variant="standard"
+          error={error?.state}
+          helperText={error?.state ? error?.message : null}
           value={form[type]}
           onChange={handleChange}
           InputProps={{ disableUnderline: true }}

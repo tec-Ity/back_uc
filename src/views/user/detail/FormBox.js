@@ -34,8 +34,8 @@ export default function FormBox({
                         sm={variantField.type === "phonePre" ? 1 : 2}
                       >
                         <InfoBox
-                          label={variantField.label}
-                          type={variantField.type}
+                          field={variantField}
+                          check={field.check}
                           object={object}
                           editing={editing}
                           form={form}
@@ -55,9 +55,8 @@ export default function FormBox({
             return (
               <Grid item xs={1} sm={1} width="100%" borderTop={1}>
                 <InfoBox
-                  label={field.label}
-                  content={field.content}
-                  type={field.type}
+                  field={field}
+                  check={field.check}
                   object={object}
                   editing={editing}
                   form={form}
