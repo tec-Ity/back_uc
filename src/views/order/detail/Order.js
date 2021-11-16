@@ -478,7 +478,7 @@ function ProdsInfoSection({ orderProds }) {
       </Grid>
       <Grid>
         {orderProds?.map((op, index) => (
-          <Grid container item xs={12} className={classes.prodsListStyle}>
+          <Grid container item xs={12} className={classes.prodsListStyle} key={index}>
             <Grid container item xs={1}>
               {index + 1}
             </Grid>

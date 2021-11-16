@@ -115,7 +115,6 @@ export default function PdBasic({ Pd, flagSlice, api }) {
     for (let i = 0; i < imgsUpdate?.length; i++) {
       formData.append("img" + i, imgsUpdate[i]);
     }
-    // console.log(formData.getAll());
     dispatch(putObject({ flagSlice, api, data: formData }));
     setImgLocal([]);
   };
@@ -128,34 +127,8 @@ export default function PdBasic({ Pd, flagSlice, api }) {
   //   console.log(imgsUpdate);
   return (
     <Grid container className={classes.root}>
-      {modifyingImg === false && (
-        <button
-          className='btn btn-success mx-3'
-          onClick={() => setModifyingImg(true)}>
-          修改图片
-        </button>
-      )}
       {modifyingImg === true && (
         <>
-          {/* <button className='btn btn-success mx-3' onClick={handleSubmit}>
-            提交修改信息
-          </button> */}
-          <button
-            className='btn btn-warning mx-3'
-            onClick={() => {
-              setModifyingImg(false);
-              setImgLocal([]);
-              setImgsUpdate(null);
-            }}>
-            取消修改
-          </button>
-          <button
-            className='btn btn-success mx-3'
-            onClick={handleSubmitImg}
-            disabled={!imgsUpdate}>
-            提交图片
-          </button>
-
           {showImgDeleteBtn === false && (
             <button
               className='btn btn-danger mx-3'
@@ -172,15 +145,24 @@ export default function PdBasic({ Pd, flagSlice, api }) {
           )}
         </>
       )}
-
       {/* imgs */}
       <Grid container item xs={12} justifyContent='space-between'>
-        {/* <Grid item xs={2}>
-          产品图片
-        </Grid>
-        <Grid item xs={2}>
-          编辑
-        </Grid> */}
+        <div>产品图片</div>
+        <CusBtnGroup
+          disableDelete
+          modifying={modifyingImg}
+          handleEdit={() =>
+            modifying === true
+              ? alert("Please finish last change")
+              : setModifyingImg(true)
+          }
+          handleCancel={() => {
+            setModifyingImg(false);
+            setImgLocal([]);
+            setImgsUpdate(null);
+          }}
+          handleSubmit={handleSubmitImg}
+        />
       </Grid>
       <Grid
         item

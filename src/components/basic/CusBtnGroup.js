@@ -4,6 +4,7 @@ import { ReactComponent as Confirm } from "../icon/confirm.svg";
 import { ReactComponent as Cancel } from "../icon/cancel.svg";
 import { ReactComponent as Delete } from "../icon/delete.svg";
 import { ReactComponent as Edit } from "../icon/edit.svg";
+import clsx from "clsx";
 
 const useStyle = makeStyles({
   btnGroup: {
@@ -34,6 +35,9 @@ const useStyle = makeStyles({
     backgroundColor: "#d83535",
     color: "#fff",
   },
+  disableBg: {
+    opacity: "0.1",
+  },
 });
 
 export default function CusBtnGroup(props) {
@@ -44,6 +48,7 @@ export default function CusBtnGroup(props) {
     handleCancel,
     handleEdit,
     disableDelete = false,
+    disabled = false,
   } = props;
   const classes = useStyle();
   return (
@@ -51,22 +56,30 @@ export default function CusBtnGroup(props) {
       {modifying === true ? (
         <>
           {!disableDelete && (
-            <div onClick={handleDelete} className={classes.redMain}>
+            <div
+              onClick={handleDelete}
+              className={clsx(classes.redMain, disabled && classes.disableBg)}>
               <Delete className={classes.deleteRed} />
               <div>删除</div>
             </div>
           )}
-          <div onClick={handleSubmit} className={classes.blackMain}>
+          <div
+            onClick={handleSubmit}
+            className={clsx(classes.blackMain, disabled && classes.disableBg)}>
             <Confirm />
             <div>确认</div>
           </div>
-          <div onClick={handleCancel} className={classes.blackMain}>
+          <div
+            onClick={handleCancel}
+            className={clsx(classes.blackMain, disabled && classes.disableBg)}>
             <Cancel />
             <div>取消</div>
           </div>
         </>
       ) : (
-        <div onClick={handleEdit} className={classes.blackMain}>
+        <div
+          onClick={disabled === false ? handleEdit : () => {}}
+          className={clsx(classes.blackMain, disabled && classes.disableBg)}>
           <Edit />
           <div>编辑</div>
         </div>

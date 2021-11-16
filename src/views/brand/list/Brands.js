@@ -20,7 +20,7 @@ import ListPageHeader from "../../../components/basic/ListPageHeader";
 import CusSelectSearch from "../../../components/basic/CusSelectSearch";
 import CusSwitch from "../../../components/basic/CusSwitch";
 import { useHistory } from "react-router";
-
+import { default as defaultBrand } from "../../../components/icon/brandDefaultImg.svg";
 const useStyle = makeStyles({
   root: {},
   listGridContainer: {
@@ -32,7 +32,7 @@ const useStyle = makeStyles({
     position: "relative",
     // border: "1px solid",
     boxSizing: "border-box",
-    height: "350px",
+    height: "360px",
     width: "255px",
     // marginBottom: "20px",
     boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.1)",
@@ -47,34 +47,62 @@ const useStyle = makeStyles({
   childGroup: {
     padding: "0 5%",
   },
-
   brandBg: {
     height: "184px",
     width: "100%",
-    objectFit: "cover",
-    paddingBottom: "",
-    // borderBottom: "2px solid #000",
-    // position: "absolute",
-    zIndex: "-1",
+    objectFit: "scale-down",
     cursor: "pointer",
   },
+  updateText: {
+    position: "absolute",
+    top: "10px",
+    right: "10px",
+    left: "10px",
+    height: "184px",
+    border: "1px solid",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   infoContainer: {
-    borderTop: "2px solid",
+    borderTop: "1px solid",
     width: "100%",
     marginTop: "10px",
+    // other row
     "& > div": {
       marginTop: "5px",
       height: "28px",
       display: "flex",
       justifyContent: "space-between",
       width: "100%",
+      //key
       "& > :first-child": {
         color: "#00000080",
+        fontSize: "14px",
       },
+      //value
       "& > :nth-child(2)": {
-        fontWeight: 700,
-        //   fontSize:'14px'
+        fontWeight: 600,
+        fontSize: "14px",
+        width: "70%",
+        display: "flex",
+        justifyContent: "flex-end",
       },
+    },
+    //name row
+    "& > :nth-child(1)": {
+      marginTop: "5px",
+      height: "45px",
+      display: "flex",
+      justifyContent: "space-between",
+      width: "100%",
+      //name value
+    //   "& > :nth-child(2)": {
+    //     fontWeight: 600,
+    //     fontSize: "14px",
+    //     display: "flex",
+    //     justifyContent: "flex-end",
+    //   },
     },
   },
   inputStyle: {
@@ -281,9 +309,9 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
   //refresh after submit
   useEffect(() => {
     if (justSubmitted === "UPDATE" && status === "succeed") {
-        setModifying(false);
-        setJustSubmitted(false);
-        hist.push(`/${rolePath}/reload`);
+      setModifying(false);
+      setJustSubmitted(false);
+      hist.push(`/${rolePath}/reload`);
     } else if (justSubmitted === "POST" && status === "succeed") {
       window.location.reload();
     }
@@ -302,7 +330,7 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
           <>
             {/* bg img */}
             <img
-              src={api_DNS + brand.img_url}
+              src={brand.img_url ? api_DNS + brand.img_url : defaultBrand}
               alt={brandUpdateData.name}
               className={classes.brandBg}
             />
@@ -338,15 +366,22 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
                 <img src={imgLocal[0]} alt='logo' className={classes.brandBg} />
               ) : (
                 // when no selected img
-                <div
-                  className={classes.brandBg}
-                  style={{
-                    border: "1px solid",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}>
-                  Upload image{" (16:9)"}
+                <div className={classes.brandBg}>
+                  {addNew === true || !brand.img_url ? (
+                    <img src={defaultBrand} alt='' style={{ opacity: "0.1" }} />
+                  ) : (
+                    <img
+                      src={api_DNS + brand.img_url}
+                      alt=''
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        opacity: "0.3",
+                        objectFit: "scale-down",
+                      }}
+                    />
+                  )}
+                  <div className={classes.updateText}>Upload image</div>
                 </div>
               )}
             </div>
@@ -373,9 +408,10 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
             <div className={classes.infoContainer}>
               <div>
                 <div>品牌名称</div>
-                <input
+                <textarea
                   value={brandUpdateData.name}
                   className={classes.inputStyle}
+                  style={{ maxHeight: "45px",minHeight: "45px"}}
                   onChange={(e) =>
                     setBrandUpdateData((prev) => ({
                       ...prev,
@@ -399,7 +435,7 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
               </div>
               <div>
                 <div>国家</div>
-                <div style={{ width: "50%" }}>
+                <div style={{ width: "70%" }}>
                   <CusSelectSearch
                     useDefault
                     flagSlice='Nations'
