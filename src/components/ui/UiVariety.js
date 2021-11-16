@@ -89,7 +89,14 @@ export default function UiVariety(props) {
           <UiRows UiRow={UiRow} objects={objects} clickEvent={clickEvent} />
         );
       default:
-        return <div> Not exist this UI </div>;
+        return (
+          <UiCards
+            cols={cols}
+            propsCard={propsCard}
+            objects={objects}
+            clickEvent={clickEvent}
+          />
+        );
     }
   };
 
