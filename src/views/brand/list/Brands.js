@@ -20,6 +20,7 @@ import ListPageHeader from "../../../components/basic/ListPageHeader";
 import CusSelectSearch from "../../../components/basic/CusSelectSearch";
 import CusSwitch from "../../../components/basic/CusSwitch";
 import { useHistory } from "react-router";
+import { WindowRounded } from "@mui/icons-material";
 
 const useStyle = makeStyles({
   root: {},
@@ -130,7 +131,6 @@ export default function Brands() {
     );
   }, [dispatch]);
 
-  //   console.log(queryFixed);
   useEffect(() => {
     queryFixed && dispatch(getObjects({ flagSlice, api }));
   }, [dispatch, queryFixed]);
@@ -158,12 +158,7 @@ function BrandList(props) {
   return (
     <Grid container className={classes.listGridContainer}>
       {addNew === true && (
-        <BrandListItem
-          key='new'
-          addNew={addNew}
-          closeAddNew={closeAddNew}
-          brand={{}}
-        />
+        <BrandListItem key='new' addNew closeAddNew={closeAddNew} brand={{}} />
       )}
       {brands?.map((brand, index) => (
         <BrandListItem brand={brand} index={index} key={brand._id} />
@@ -181,7 +176,6 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
   const status = useSelector((state) => state.objects.status);
   const [modifying, setModifying] = useState(addNew);
   const [justSubmitted, setJustSubmitted] = useState(false);
-  //   console.log("init", initBrandInfo);
   const [brandUpdateData, setBrandUpdateData] = useState({
     sort: brand?.sort || 0,
     name: brand?.code || "",
@@ -191,7 +185,7 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
   });
 
   const [imgLocal, setImgLocal] = useState([]);
-  //   console.log(brandUpdateData);
+
   useEffect(() => {
     setBrandUpdateData({
       sort: brand?.sort || 0,
@@ -218,7 +212,6 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
     for (let i = 0; i < brandUpdateData.imgs.length; i++) {
       formData.append("image" + i, brandUpdateData.imgs[i]);
     }
-
     if (addNew === false) {
       dispatch(
         putObject({
@@ -228,7 +221,7 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
           isList: true,
         })
       );
-      setJustSubmitted(true);
+      setJustSubmitted("UPDATE");
     } else if (addNew === true) {
       if (brandUpdateData.name.length > 0) {
         dispatch(
@@ -238,8 +231,8 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
             data: formData,
           })
         );
-        closeAddNew();
-        setJustSubmitted(true);
+        setJustSubmitted("POST");
+        // closeAddNew();
       } else {
         alert("name is empty");
       }
@@ -285,12 +278,15 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
     setImgLocal([]);
     e.stopPropagation();
   };
-  console.log(brandUpdateData);
+
+  //refresh after submit
   useEffect(() => {
-    if (justSubmitted === true && status === "succeed") {
-      setModifying(false);
-      setJustSubmitted(false);
-      hist.push(`/${rolePath}/reload`);
+    if (justSubmitted === "UPDATE" && status === "succeed") {
+        setModifying(false);
+        setJustSubmitted(false);
+        hist.push(`/${rolePath}/reload`);
+    } else if (justSubmitted === "POST" && status === "succeed") {
+      window.location.reload();
     }
   }, [hist, justSubmitted, rolePath, status]);
 
@@ -361,7 +357,6 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
               style={{ display: "none" }}
               type='file'
               onChange={(e) => {
-                // console.log(e.target.files);
                 setBrandUpdateData((prev) => ({
                   ...prev,
                   imgs: e.target.files,
