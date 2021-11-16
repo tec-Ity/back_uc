@@ -42,11 +42,13 @@ export default function VarietyInput({
       return (
         <Autocomplete
           disablePortal
+          clearOnBlur={false}
           id={type}
           options={variant.variantObj.options}
+          getOptionLabel={(option) => option.label}
           onChange={handleList}
           fullWidth
-          value={content}
+          inputValue={form[type]}
           renderInput={(params) => {
             return (
               <TextField

@@ -3,10 +3,7 @@ import { Typography, Box } from "@mui/material";
 import VarietyInput from "./VarietyInput";
 
 export default function InfoBox({
-  label,
-  content,
-  type,
-  permissions,
+  field,
   check,
   object,
   variant,
@@ -17,30 +14,16 @@ export default function InfoBox({
   curUser,
   curRole,
 }) {
-  //calculate if editable
-  let editable;
-  if (false) {
-    let arr = permissions.map((permission) => {
-      switch (permission) {
-        case "hierachy":
-          return object.role > curRole;
-        case "self":
-          return object.code === curUser.code;
-        default:
-          console.log("not a permission");
-          return false;
-      }
-    });
-    console.log("[PERM]", arr);
-    editable = editing && arr.every((perm) => perm === true);
-  } else {
-    editable = editing;
-  }
+  const { label, content, type, editable } = field;
+
+  const flag0 = editable == null ? true : editable;
+
+  let flag = flag0 && editing;
 
   return (
     <Box
       sx={{
-        border: noBox || !editable ? 0 : 1,
+        border: noBox || !flag ? 0 : 1,
         p: "10px",
         m: "17px",
         mt: "27px",
@@ -62,7 +45,7 @@ export default function InfoBox({
       >
         {label}
       </Typography>
-      {editable ? (
+      {flag && editing ? (
         <VarietyInput
           content={content}
           variant={variant}
