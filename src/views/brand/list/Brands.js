@@ -23,17 +23,11 @@ import { useHistory } from "react-router";
 import { default as defaultBrand } from "../../../components/icon/brandDefaultImg.svg";
 const useStyle = makeStyles({
   root: {},
-  listGridContainer: {
-    // border: "1px solid",
-    display: "flex",
-    justifyContent: "space-between",
-  },
+  listGridContainer: {},
   listGridItem: {
     position: "relative",
-    // border: "1px solid",
     boxSizing: "border-box",
-    height: "360px",
-    width: "255px",
+
     // marginBottom: "20px",
     boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.1)",
     borderRadius: "5px",
@@ -97,12 +91,12 @@ const useStyle = makeStyles({
       justifyContent: "space-between",
       width: "100%",
       //name value
-    //   "& > :nth-child(2)": {
-    //     fontWeight: 600,
-    //     fontSize: "14px",
-    //     display: "flex",
-    //     justifyContent: "flex-end",
-    //   },
+      //   "& > :nth-child(2)": {
+      //     fontWeight: 600,
+      //     fontSize: "14px",
+      //     display: "flex",
+      //     justifyContent: "flex-end",
+      //   },
     },
   },
   inputStyle: {
@@ -318,166 +312,171 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
   }, [hist, justSubmitted, rolePath, status]);
 
   return (
-    <div>
-      <Grid
-        container
-        item
-        xs={12}
-        className={classes.listGridItem}
-        style={{ marginBottom: "20px" }}
-        alignContent='flex-start'>
-        {modifying === false ? (
-          <>
-            {/* bg img */}
-            <img
-              src={brand.img_url ? api_DNS + brand.img_url : defaultBrand}
-              alt={brandUpdateData.name}
-              className={classes.brandBg}
-            />
-            <div className={classes.infoContainer}>
-              <div>
-                <div>品牌名称</div>
-                <div>{brandUpdateData.name}</div>
-              </div>
-              <div>
-                <div>排序</div>
-                <div>{brandUpdateData.sort}</div>
-              </div>
-              <div>
-                <div>国家</div>
-                <div>{brandUpdateData.nation?.code}</div>
-              </div>
-              <div>
-                <div>可用</div>
-                <div>{brandUpdateData.isUsable === true ? "YES" : "NO"}</div>
-              </div>
-            </div>
-          </>
-        ) : (
-          // img upload  section
-          <>
-            <div
-              style={{ width: "100%" }}
-              onClick={() => {
-                modifying === true && ref.current.click();
-              }}>
-              {imgLocal.length > 0 ? (
-                // show selected img
-                <img src={imgLocal[0]} alt='logo' className={classes.brandBg} />
-              ) : (
-                // when no selected img
-                <div className={classes.brandBg}>
-                  {addNew === true || !brand.img_url ? (
-                    <img src={defaultBrand} alt='' style={{ opacity: "0.1" }} />
-                  ) : (
-                    <img
-                      src={api_DNS + brand.img_url}
-                      alt=''
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        opacity: "0.3",
-                        objectFit: "scale-down",
-                      }}
-                    />
-                  )}
-                  <div className={classes.updateText}>Upload image</div>
-                </div>
-              )}
-            </div>
-            {/* hidden input file */}
-            <input
-              ref={ref}
-              style={{ display: "none" }}
-              type='file'
-              onChange={(e) => {
-                setBrandUpdateData((prev) => ({
-                  ...prev,
-                  imgs: e.target.files,
-                }));
-                const imgs = e.target.files;
-                const imgLocalPath = [];
-                for (let i = 0; i < imgs.length; i++) {
-                  const img = URL.createObjectURL(imgs[i]);
-                  imgLocalPath.push(img);
-                }
-                setImgLocal(imgLocalPath);
-              }}
-            />
-            {/* ---modify form--- */}
-            <div className={classes.infoContainer}>
-              <div>
-                <div>品牌名称</div>
-                <textarea
-                  value={brandUpdateData.name}
-                  className={classes.inputStyle}
-                  style={{ maxHeight: "45px",minHeight: "45px"}}
-                  onChange={(e) =>
-                    setBrandUpdateData((prev) => ({
-                      ...prev,
-                      name: e.target.value,
-                    }))
-                  }
-                />
-              </div>
-              <div>
-                <div>排序</div>
-                <input
-                  value={brandUpdateData.sort}
-                  className={classes.inputStyle}
-                  onChange={(e) =>
-                    setBrandUpdateData((prev) => ({
-                      ...prev,
-                      sort: e.target.value,
-                    }))
-                  }
-                />
-              </div>
-              <div>
-                <div>国家</div>
-                <div style={{ width: "70%" }}>
-                  <CusSelectSearch
-                    useDefault
-                    flagSlice='Nations'
-                    api='/Nations'
-                    defaultSel={brandUpdateData.nation?.code}
-                    handleSelect={(val) =>
-                      setBrandUpdateData((prev) => ({
-                        ...prev,
-                        nation: { ...prev.nation, id: val.id, code: val.label },
-                      }))
-                    }
-                  />
-                </div>
-              </div>
-              <div>
-                <div>可用</div>
-                <div>
-                  <CusSwitch
-                    checked={brandUpdateData.isUsable}
-                    handleSwitch={(checked) =>
-                      setBrandUpdateData((prev) => ({
-                        ...prev,
-                        isUsable: checked,
-                      }))
-                    }
-                  />
-                </div>
-              </div>
-            </div>
-          </>
-        )}
-        {/* icon groups */}
-        <div className={classes.btnGroup}>
-          <CusBtnGroup
-            modifying={modifying}
-            handleSubmit={handleSubmit}
-            handleCancel={handleCancel}
-            handleDelete={handleDelete}
-            handleEdit={handleEdit}
+    <Grid
+      container
+      item
+      className={classes.listGridItem}
+      style={{
+        marginBottom: "20px",
+        marginRight: "10px",
+        height: "360px",
+        width: "255px",
+      }}
+      alignContent='flex-start'>
+      {modifying === false ? (
+        <>
+          {/* bg img */}
+          <img
+            src={brand.img_url ? api_DNS + brand.img_url : defaultBrand}
+            alt={brandUpdateData.name}
+            className={classes.brandBg}
+            style={{
+              filter: brandUpdateData.isUsable === false && "grayscale(100%)",
+            }}
           />
-        </div>
-      </Grid>
-    </div>
+          <div className={classes.infoContainer}>
+            <div>
+              <div>品牌名称</div>
+              <div>{brandUpdateData.name}</div>
+            </div>
+            <div>
+              <div>排序</div>
+              <div>{brandUpdateData.sort}</div>
+            </div>
+            <div>
+              <div>国家</div>
+              <div>{brandUpdateData.nation?.code}</div>
+            </div>
+            <div>
+              <div>可用</div>
+              <div>{brandUpdateData.isUsable === true ? "YES" : "NO"}</div>
+            </div>
+          </div>
+        </>
+      ) : (
+        // img upload  section
+        <>
+          <div
+            style={{ width: "100%" }}
+            onClick={() => {
+              modifying === true && ref.current.click();
+            }}>
+            {imgLocal.length > 0 ? (
+              // show selected img
+              <img src={imgLocal[0]} alt='logo' className={classes.brandBg} />
+            ) : (
+              // when no selected img
+              <div className={classes.brandBg}>
+                {addNew === true || !brand.img_url ? (
+                  <img src={defaultBrand} alt='' style={{ opacity: "0.1" }} />
+                ) : (
+                  <img
+                    src={api_DNS + brand.img_url}
+                    alt=''
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      opacity: "0.3",
+                      objectFit: "scale-down",
+                    }}
+                  />
+                )}
+                <div className={classes.updateText}>Upload image</div>
+              </div>
+            )}
+          </div>
+          {/* hidden input file */}
+          <input
+            ref={ref}
+            style={{ display: "none" }}
+            type='file'
+            onChange={(e) => {
+              setBrandUpdateData((prev) => ({
+                ...prev,
+                imgs: e.target.files,
+              }));
+              const imgs = e.target.files;
+              const imgLocalPath = [];
+              for (let i = 0; i < imgs.length; i++) {
+                const img = URL.createObjectURL(imgs[i]);
+                imgLocalPath.push(img);
+              }
+              setImgLocal(imgLocalPath);
+            }}
+          />
+          {/* ---modify form--- */}
+          <div className={classes.infoContainer}>
+            <div>
+              <div>品牌名称</div>
+              <textarea
+                value={brandUpdateData.name}
+                className={classes.inputStyle}
+                style={{ maxHeight: "45px", minHeight: "45px" }}
+                onChange={(e) =>
+                  setBrandUpdateData((prev) => ({
+                    ...prev,
+                    name: e.target.value,
+                  }))
+                }
+              />
+            </div>
+            <div>
+              <div>排序</div>
+              <input
+                value={brandUpdateData.sort}
+                className={classes.inputStyle}
+                onChange={(e) =>
+                  setBrandUpdateData((prev) => ({
+                    ...prev,
+                    sort: e.target.value,
+                  }))
+                }
+              />
+            </div>
+            <div>
+              <div>国家</div>
+              <div style={{ width: "70%" }}>
+                <CusSelectSearch
+                  useDefault
+                  flagSlice='Nations'
+                  api='/Nations'
+                  defaultSel={brandUpdateData.nation?.code}
+                  handleSelect={(val) =>
+                    setBrandUpdateData((prev) => ({
+                      ...prev,
+                      nation: { ...prev.nation, id: val.id, code: val.label },
+                    }))
+                  }
+                />
+              </div>
+            </div>
+            <div>
+              <div>可用</div>
+              <div>
+                <CusSwitch
+                  checked={brandUpdateData.isUsable}
+                  handleSwitch={(checked) =>
+                    setBrandUpdateData((prev) => ({
+                      ...prev,
+                      isUsable: checked,
+                    }))
+                  }
+                />
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+      {/* icon groups */}
+      <div className={classes.btnGroup}>
+        <CusBtnGroup
+          modifying={modifying}
+          handleSubmit={handleSubmit}
+          handleCancel={handleCancel}
+          handleDelete={handleDelete}
+          handleEdit={handleEdit}
+        />
+      </div>
+    </Grid>
   );
 }

@@ -80,7 +80,7 @@ export default function Shop() {
   ];
 
   return (
-    <>
+    <div>
       <ListPageHeader
         flagSlice={flagSlice}
         api={api}
@@ -107,6 +107,6 @@ export default function Shop() {
           <ShopProds shopId={Shop._id} flagSlice={flagSlice} api={api} />
         )}
       </div>
-    </>
+    </div>
   );
 }

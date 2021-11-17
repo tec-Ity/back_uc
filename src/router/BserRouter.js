@@ -18,7 +18,7 @@ import Reload from "../views/_index/Reload"; // 重新加载页面
 
 export default function BserRouter() {
   return (
-    <div className='container mt-3'>
+    <div className='container mt-3 pb-5'>
       <Switch>
         <Route path='/bser/home'>
           <HomeRole />

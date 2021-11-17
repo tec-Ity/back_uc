@@ -16,6 +16,7 @@ import shopDefaul from "../../../components/icon/Shop.jpg";
 import { getRolePath } from "../../../js/conf/confUser";
 import CusBtnGroup from "../../../components/basic/CusBtnGroup";
 import { useHistory } from "react-router";
+import CusSwitch from "../../../components/basic/CusSwitch";
 
 const useStyle = makeStyles({
   root: {},
@@ -76,6 +77,7 @@ export default function ShopBasic(props) {
     addr: "",
     zip: "",
     img: "",
+    isUsable: Shop?.isUsable || true,
   });
   const [modifying, setModifying] = useState(false);
   const [modifyingImg, setModifyingImg] = useState(false);
@@ -87,12 +89,14 @@ export default function ShopBasic(props) {
       addr: Shop?.addr || "",
       zip: Shop?.zip || "",
       img: Shop?.img_url || "",
+      isUsable: Shop?.isUsable || true,
     });
   }, [
     Shop?.Cita,
     Shop?.addr,
     Shop?.code,
     Shop?.img_url,
+    Shop?.isUsable,
     Shop?.nome,
     Shop?.zip,
     reset,
@@ -149,7 +153,26 @@ export default function ShopBasic(props) {
   };
 
   return (
-    <Container className={classes.root}>
+    <Container className={classes.root} disableGutters>
+      <div className={clsx(classes.formItem, classes.flexStyle)}>
+          <div style={{fontSize: "20px"}}>店铺图片</div>
+        <CusBtnGroup
+          disableDelete
+          modifying={modifyingImg}
+          handleEdit={() => {
+            if (modifying === true) {
+              alert("Please save last change");
+              return;
+            }
+            setModifyingImg(true);
+          }}
+          handleCancel={() => {
+            setModifyingImg(false);
+            setReset((prev) => prev + 1);
+          }}
+          handleSubmit={handleSubmitImg}
+        />
+      </div>
       <div className={clsx(classes.formItem, classes.flexStyle)}>
         {/* img component */}
         <div
@@ -186,34 +209,18 @@ export default function ShopBasic(props) {
             }}
           />
         </div>
-        <div>
-          <CusBtnGroup
-            disableDelete
-            modifying={modifyingImg}
-            handleEdit={() => {
-              if (modifying === true) {
-                alert("Please save last change");
-                return;
-              }
-              setModifyingImg(true);
-            }}
-            handleCancel={() => {
-              setModifyingImg(false);
-              setReset((prev) => prev + 1);
-            }}
-            handleSubmit={handleSubmitImg}
-          />
-        </div>
       </div>
       {/* ------------------ hr ------------------------- */}
       <div
         style={{
           width: "100%",
           borderTop: "2px solid #0000004d",
-          marginTop: "10px",
+          marginTop: "30px",
           display: "flex",
-          justifyContent: "flex-end",
+          justifyContent: "space-between",
+          paddingTop: "30px",
         }}>
+        <div style={{ fontSize: "20px" }}>店铺信息</div>
         <CusBtnGroup
           modifying={modifying}
           handleEdit={() => {
@@ -285,6 +292,18 @@ export default function ShopBasic(props) {
           handleChange={(e) =>
             !isNaN(e.target.value) &&
             setInfoUpdate((prev) => ({ ...prev, zip: e.target.value }))
+          }
+        />
+      </div>
+      <div className={classes.formItem}>
+        <div
+          style={{ fontSize: "14px", fontWeight: "700", color: "#0000004d" }}>
+          Usable
+        </div>
+        <CusSwitch
+          disabled={!modifying}
+          handleSwitch={(val) =>
+            setInfoUpdate((prev) => ({ ...prev, isUsable: val }))
           }
         />
       </div>

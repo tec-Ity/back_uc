@@ -17,6 +17,8 @@ import {
 import api_DNS from "../../../js/_dns";
 import { useHistory } from "react-router";
 // import CusTextArea from "../../../components/basic/CusTextArea";
+import { ReactComponent as Delete } from "../../../components/icon/delete.svg";
+import { ReactComponent as AddIcon } from "../../../components/icon/addBlack.svg";
 
 const useStyle = makeStyles({
   root: {
@@ -26,6 +28,41 @@ const useStyle = makeStyles({
     borderTop: "2px solid #1d1d384d",
     display: "flex",
     justifyContent: "flex-end",
+  },
+  imgDiv: {
+    height: "200px",
+    width: "200px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    padding: "10px",
+    position: "relative",
+    "& > img": {
+      height: "100%",
+      width: "100%",
+      objectFit: "scale-down",
+    },
+  },
+  deleteBtn: {
+    "& rect": { fill: "#d83535" },
+    position: "absolute",
+    top: "15px",
+    right: "15px",
+    cursor: "pointer",
+  },
+  imgAddBox: {
+    height: "180px",
+    width: "180px",
+    border: "2px solid #1d1d3840",
+    margin: "10px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    cursor: "pointer",
+    "& > :first-child": {
+      width: "25px",
+      height: "25px",
+    },
   },
 });
 
@@ -122,32 +159,13 @@ export default function PdBasic({ Pd, flagSlice, api }) {
   const ref = useRef();
   const [imgsUpdate, setImgsUpdate] = useState();
   const [imgLocal, setImgLocal] = useState([]);
-  const [showImgDeleteBtn, setShowImgDeleteBtn] = useState(false);
   const [modifyingImg, setModifyingImg] = useState(false);
-  //   console.log(imgsUpdate);
+
   return (
     <Grid container className={classes.root}>
-      {modifyingImg === true && (
-        <>
-          {showImgDeleteBtn === false && (
-            <button
-              className='btn btn-danger mx-3'
-              onClick={() => setShowImgDeleteBtn(true)}>
-              删除图片
-            </button>
-          )}
-          {showImgDeleteBtn === true && (
-            <button
-              className='btn btn-warning mx-3'
-              onClick={() => setShowImgDeleteBtn(false)}>
-              完成删除
-            </button>
-          )}
-        </>
-      )}
       {/* imgs */}
       <Grid container item xs={12} justifyContent='space-between'>
-        <div>产品图片</div>
+        <div style={{ fontSize: "20px", paddingLeft: "10px" }}>产品图片</div>
         <CusBtnGroup
           disableDelete
           modifying={modifyingImg}
@@ -164,33 +182,14 @@ export default function PdBasic({ Pd, flagSlice, api }) {
           handleSubmit={handleSubmitImg}
         />
       </Grid>
-      <Grid
-        item
-        container
-        xs={12}
-        onClick={() => modifyingImg === true && ref.current.click()}
-        style={{ cursor: modifyingImg === true ? "pointer" : "default" }}>
+      <Grid item container xs={12}>
+        {/* original img from server */}
         {Pd.img_urls?.map((img) => (
-          <div
-            key={img}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              paddingRight: "20px",
-            }}>
-            <img
-              src={api_DNS + img}
-              alt={Pd?.nome}
-              style={{
-                height: "100px",
-                width: "100px",
-                objectFit: "scale-down",
-              }}
-            />
-            {showImgDeleteBtn === true && (
-              <button
-                className='btn btn-danger'
+          <div key={img} className={classes.imgDiv}>
+            <img src={api_DNS + img} alt={Pd?.nome} />
+            {modifyingImg === true && (
+              <Delete
+                className={classes.deleteBtn}
                 onClick={(e) => {
                   e.stopPropagation();
                   const delete_img_urls = {
@@ -199,34 +198,19 @@ export default function PdBasic({ Pd, flagSlice, api }) {
                   dispatch(
                     putObject({ flagSlice, api, data: { delete_img_urls } })
                   );
-                }}>
-                删除
-              </button>
+                }}
+              />
             )}
           </div>
         ))}
+        {/* user upload image before submitting */}
         {imgLocal.length > 0 &&
           imgLocal.map((img, index) => (
-            <div
-              key={img}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                paddingRight: "20px",
-              }}>
-              <img
-                src={img}
-                alt={Pd?.nome}
-                style={{
-                  height: "100px",
-                  width: "100px",
-                  objectFit: "scale-down",
-                }}
-              />
-              {showImgDeleteBtn === true && (
-                <button
-                  className='btn btn-danger'
+            <div key={img} className={classes.imgDiv}>
+              <img src={img} alt={Pd?.nome} />
+              {modifyingImg === true && (
+                <Delete
+                  className={classes.deleteBtn}
                   onClick={(e) => {
                     e.stopPropagation();
                     //remove from local url
@@ -235,20 +219,22 @@ export default function PdBasic({ Pd, flagSlice, api }) {
                     setImgLocal(tempImgsLocal);
                     //remove from update imgs list
                     const tempImgsUpdate = [...imgsUpdate];
-                    console.log(imgsUpdate);
-                    console.log(tempImgsUpdate);
                     //   delete tempImgsUpdate[index];
                     tempImgsUpdate.splice(index, 1);
-                    console.log(index);
-                    console.log(tempImgsUpdate);
                     setImgsUpdate(tempImgsUpdate);
-                  }}>
-                  删除
-                </button>
+                  }}
+                />
               )}
             </div>
           ))}
-
+        {/* add image button box */}
+        {modifyingImg === true && (
+          <div
+            className={classes.imgAddBox}
+            onClick={() => modifyingImg === true && ref.current.click()}>
+            <AddIcon />
+          </div>
+        )}
         {/* hidden img input */}
         <input
           ref={ref}
@@ -268,7 +254,11 @@ export default function PdBasic({ Pd, flagSlice, api }) {
           }}
         />
       </Grid>
-      <Grid item xs={12} className={classes.hrStyle}>
+      <Grid
+        item
+        xs={12}
+        className={classes.hrStyle}
+        style={{ paddingTop: "30px", marginTop: "20px" }}>
         <CusBtnGroup
           modifying={modifying}
           handleEdit={() => setModifying(true)}
