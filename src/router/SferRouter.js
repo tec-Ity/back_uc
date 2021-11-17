@@ -18,6 +18,7 @@ import Categ from "../views/categ/detail/Categ";
 import Brands from "../views/brand/list/Brands";
 import Brand from "../views/brand/detail/Brand";
 import Order from "../views/order/detail/Order";
+import User from "../views/user/detail/User";
 
 export default function SferRouter() {
   return (
@@ -62,6 +63,10 @@ export default function SferRouter() {
 
         <Route path='/sfer/setting'>
           <Setting />
+        </Route>
+
+        <Route path='/sfer/user/:id'>
+          <User />
         </Route>
 
         <Route path='/sfer/reload'>

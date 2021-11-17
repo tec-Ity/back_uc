@@ -13,7 +13,6 @@ const useStyle = makeStyles({
     paddingRight: "5px",
     width: "255px",
     "& > div": {
-      cursor: "pointer",
       height: "30px",
       width: "74px",
       display: "flex",
@@ -28,15 +27,18 @@ const useStyle = makeStyles({
     "& rect": { fill: "#d83535" },
   },
   blackMain: {
+    cursor: "pointer",
     backgroundColor: "#000",
     color: "#fff",
   },
   redMain: {
     backgroundColor: "#d83535",
+    cursor: "pointer",
     color: "#fff",
   },
   disableBg: {
     opacity: "0.1",
+    cursor: "not-allowed",
   },
 });
 

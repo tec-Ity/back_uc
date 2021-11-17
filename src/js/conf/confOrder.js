@@ -3,14 +3,13 @@ const statusName = {
   responding: "等待商家接单",
   preparing: "备货中",
   inProgress: "配送中",
-  failPay: "付款失败",
   completed: "已完成",
   canceled: "已取消",
 };
 
 const statusCode = {
   100: "placing",
-  70: "failPay",
+  70: "canceled",
   200: "responding",
   400: "preparing",
   700: "inProgress",

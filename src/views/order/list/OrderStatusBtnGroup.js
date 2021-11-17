@@ -20,7 +20,6 @@ export default function OrderStatusBtnGroup(props) {
     responding: true,
     preparing: true,
     inProgress: true,
-    failPay: true,
     completed: true,
     canceled: true,
   });
@@ -33,7 +32,7 @@ export default function OrderStatusBtnGroup(props) {
   useEffect(() => {
     const queryTemp = [
       orderStatus.placing ? 100 : "",
-      orderStatus.failPay ? 70 : "",
+      orderStatus.canceled ? 70 : "",
       orderStatus.responding ? 200 : "",
       orderStatus.preparing ? 400 : "",
       orderStatus.inProgress ? 700 : "",

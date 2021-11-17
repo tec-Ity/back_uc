@@ -129,7 +129,10 @@ export default function PdBasic({ Pd, flagSlice, api }) {
       hist.goBack();
       setJustSubmitted(false);
     }
-    // if(justSubmitted === "UPDATE")
+    if (justSubmitted === "UPDATE" && status === "succeed") {
+      setModifying(false);
+      setModifyingImg(false);
+    }
   }, [hist, justSubmitted, status]);
 
   const handleSubmit = () => {
@@ -154,6 +157,7 @@ export default function PdBasic({ Pd, flagSlice, api }) {
     }
     dispatch(putObject({ flagSlice, api, data: formData }));
     setImgLocal([]);
+    setJustSubmitted("UPDATE");
   };
   //image funcitonality
   const ref = useRef();
@@ -180,6 +184,7 @@ export default function PdBasic({ Pd, flagSlice, api }) {
             setImgsUpdate(null);
           }}
           handleSubmit={handleSubmitImg}
+          disabled={parseInt(localStorage.getItem("role")) >= 100}
         />
       </Grid>
       <Grid item container xs={12}>
@@ -271,6 +276,7 @@ export default function PdBasic({ Pd, flagSlice, api }) {
             setJustSubmitted("DELETE");
           }}
           handleSubmit={handleSubmit}
+          disabled={parseInt(localStorage.getItem("role")) >= 100}
         />
       </Grid>
       {/* code */}
