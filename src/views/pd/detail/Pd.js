@@ -21,7 +21,17 @@ const populateObjs = [
   },
   { path: "Brand", select: "code nome" },
   { path: "Nation", select: "code nome" },
-  { path: "Prods", populate: { path: "Shop", select: "code nome" } },
+  {
+    path: "Prods",
+    select: "code nome Skus Shop",
+    populate: [
+      { path: "Shop", select: "code nome" },
+      {
+        path: "Skus",
+        select: "attrs price_regular price_sale quantity is_sell is_usable is_discount",
+      },
+    ],
+  },
 ];
 
 const switchList = [
@@ -45,7 +55,7 @@ export default function Pd(props) {
   const param = new URLSearchParams(useLocation().search);
   const section = param.get("section");
   const Pd = useSelector(selectObject(flagSlice));
-  //   console.log(Pd);
+  console.log(Pd);
   const [Key, setKey] = useState(1);
   const routeFunc = () => {
     switch (Key) {

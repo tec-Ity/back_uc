@@ -23,7 +23,7 @@ import { useHistory } from "react-router";
 import { default as defaultBrand } from "../../../components/icon/brandDefaultImg.svg";
 const useStyle = makeStyles({
   root: {},
-  listGridContainer: {},
+  listGridContainer: {width: "100%"},
   listGridItem: {
     position: "relative",
     boxSizing: "border-box",
@@ -157,7 +157,7 @@ export default function Brands() {
   }, [dispatch, queryFixed]);
 
   return (
-    <Container>
+    <>
       <ListPageHeader
         links={links}
         flagSlice={flagSlice}
@@ -168,7 +168,7 @@ export default function Brands() {
       />
       <BrandList addNew={addNew} closeAddNew={() => setAddNew(false)} />
       <PageNav flagSlice={flagSlice} api={api} />
-    </Container>
+    </>
   );
 }
 
@@ -315,12 +315,13 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
     <Grid
       container
       item
+    //   xs={3}
       className={classes.listGridItem}
       style={{
         marginBottom: "20px",
-        marginRight: "10px",
+        marginRight: "20px",
         height: "360px",
-        width: "255px",
+        maxWidth: "255px",
       }}
       alignContent='flex-start'>
       {modifying === false ? (

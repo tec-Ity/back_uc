@@ -12,6 +12,7 @@ import ProdBasic from "./ProdBasic";
 import ProdSku from "./ProdSku";
 // import { getRolePath } from "../../../js/conf/confUser";
 import ListPageHeader from "../../../components/basic/ListPageHeader";
+import CusSwitchTabs from "../../../components/basic/CusSwitchTabs";
 
 const populateObjs = [
   {
@@ -27,10 +28,22 @@ const populateObjs = [
       "Prod attrs price_regular price_sale limit_quantity purchase_note is_controlStock quantity quantity_alert allow_backorder",
   },
 ];
+const switchList = [
+  {
+    selKey: 1,
+    label: "Basic",
+    url: "basic",
+  },
+  {
+    selKey: 2,
+    label: "Attrs&Skus",
+    url: "attrandskus",
+  },
+];
+
 export default function Prod(props) {
   const { id } = useParams();
   const hist = useHistory();
-//   const rolePath = getRolePath();
   const dispatch = useDispatch();
   const flagSlice = "prod";
   const flagField = "object";
@@ -38,10 +51,10 @@ export default function Prod(props) {
   const Prod = useSelector(selectObject(flagSlice));
   const param = new URLSearchParams(useLocation().search);
   const section = param.get("section");
-  //   console.log(section);
+
   const [Key, setKey] = useState(1);
   useEffect(() => {
-    setKey(section === "sku" ? 2 : 1);
+    setKey(section === "attrandskus" ? 2 : 1);
   }, [section]);
   const routeFunc = () => {
     switch (Key) {
@@ -58,10 +71,6 @@ export default function Prod(props) {
         // return <ProdProds />;
         return "";
     }
-  };
-
-  const setComponentKey = (value) => {
-    setKey(value);
   };
 
   useEffect(() => {
@@ -83,33 +92,19 @@ export default function Prod(props) {
         api={api}
         links={[
           { label: "主页", to: "/home" },
-          { label: "商品列表", to: `/prods`, prevView: true  },
+          { label: "商品列表", to: `/prods`, prevView: true },
           { label: "商品详情" },
         ]}
         showAddIcon={false}
         showSearch={false}
       />
-      <div>
-        <div className='form-inline my-3'>
-          <CusSwitchBtn
-            label='Basic'
-            selected={Key === 1}
-            handleClick={() => {
-              hist.push("?section=basic");
-              setComponentKey(1);
-            }}
-          />
-          <CusSwitchBtn
-            label='Skus'
-            selected={Key === 2}
-            handleClick={() => {
-              hist.push("?section=sku");
-              setComponentKey(2);
-            }}
-          />
-        </div>
-        {routeFunc()}
-      </div>
+
+      <CusSwitchTabs
+        switchList={switchList}
+        setSel={(val) => setKey(val)}
+        selected={Key}
+      />
+      {routeFunc()}
     </>
   );
 }

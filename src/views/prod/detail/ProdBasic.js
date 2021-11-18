@@ -19,7 +19,6 @@ const useStyle = makeStyles({
 });
 
 export default function ProdBasic({ Prod, flagSlice, api }) {
-  console.log(Prod);
   const classes = useStyle();
   const rolePath = getRolePath();
   const dispatch = useDispatch();
@@ -63,7 +62,7 @@ export default function ProdBasic({ Prod, flagSlice, api }) {
       unit: prodInfo.unit,
       desp: prodInfo.desp,
     };
-    console.log(general);
+    // console.log(general);
     dispatch(putObject({ flagSlice, api, data: { general } }));
   };
 
@@ -80,15 +79,8 @@ export default function ProdBasic({ Prod, flagSlice, api }) {
 
   return (
     <Grid container className={classes.root}>
-      <button className='btn btn-success mx-3' onClick={handleSubmit}>
-        修改
-      </button>
-      <button className='btn btn-danger mx-3' onClick={handleDelete}>
-        删除
-      </button>
-
       {/* imgs */}
-      <Grid item container xs={12} style={{ cursor: "pointer" }}>
+      <Grid item container xs={12}>
         {Prod.img_urls?.map((img) => (
           <div
             key={img}
@@ -112,31 +104,32 @@ export default function ProdBasic({ Prod, flagSlice, api }) {
       </Grid>
       {/* code */}
       <Grid item xs={6}>
-        <CusInput label='Code' disabled value={prodInfo.code} />
+        <CusInput disabled label='Code' value={prodInfo.code} />
       </Grid>
       {/* name */}
       <Grid item xs={6}>
-        <CusInput label='Name' value={prodInfo.name} disabled />
+        <CusInput disabled label='Name' value={prodInfo.name} />
       </Grid>
       {/* brand */}
       <Grid item xs={6}>
-        <CusInput label='Brand' disabled value={prodInfo.brand?.code} />
+        <CusInput disabled label='Brand' value={prodInfo.brand?.code} />
       </Grid>
       {/* country */}
       <Grid item xs={6}>
-        <CusInput label='Code' disabled value={prodInfo.nation?.code} />
+        <CusInput disabled label='Code' value={prodInfo.nation?.code} />
       </Grid>
       {/* categ 1 */}
       <Grid item xs={6}>
-        <CusInput label='First Categ' disabled value={prodInfo.categ1?.code} />
+        <CusInput disabled label='First Categ' value={prodInfo.categ1?.code} />
       </Grid>
       {/* categ 2 */}
       <Grid item xs={6}>
-        <CusInput label='First Categ' disabled value={prodInfo.categ2?.code} />
+        <CusInput disabled label='First Categ' value={prodInfo.categ2?.code} />
       </Grid>
       {/* sort */}
       <Grid item xs={6}>
         <CusInput
+          disabled
           label='Sort'
           value={prodInfo.sort}
           handleChange={(e) =>
@@ -149,18 +142,19 @@ export default function ProdBasic({ Prod, flagSlice, api }) {
       {/* price regular */}
       <Grid item xs={6}>
         <CusInput
+          disabled
           label='Price'
           value={
             Prod?.price_max === Prod?.price_min
               ? prodInfo?.price?.toFixed(2)
               : Prod.price_min?.toFixed(2) + "~" + Prod.price_max?.toFixed(2)
           }
-          disabled
         />
       </Grid>
       {/* unit */}
       <Grid item xs={6}>
         <CusInput
+          disabled
           label='Unit'
           value={prodInfo.unit}
           handleChange={(e) =>
@@ -171,6 +165,7 @@ export default function ProdBasic({ Prod, flagSlice, api }) {
       {/* desp */}
       <Grid item xs={12}>
         <CusInput
+          disabled
           label='Description'
           value={prodInfo.desp}
           handleChange={(e) =>
