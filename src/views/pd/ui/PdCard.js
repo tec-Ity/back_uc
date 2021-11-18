@@ -102,7 +102,8 @@ export default function PdCard(props) {
     // console.log(Prods);
     if (justPosted === true) {
       const prodId = Prods?.find((prod) => prod.Pd === object?._id)?._id;
-      prodId && hist.push(`/${rolePath}/prod/${prodId}`);
+    //   prodId && hist.push(`/${rolePath}/prod/${prodId}`);
+    prodId&&hist.push(`/${rolePath}/reload`)
     }
   }, [Prods, hist, justPosted, object?._id, rolePath]);
 

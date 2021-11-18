@@ -8,7 +8,7 @@ import ListPageHeader from "../../../components/basic/ListPageHeader";
 import UiVariety from "../../../components/ui/UiVariety";
 import ProdCard from "../ui/ProdCard";
 import ProdRow from "../ui/ProdRow";
-
+import PageNav from "../../../components/universal/query/PageNav";
 const links = [{ label: "主页", to: "/home" }, { label: "商品列表" }];
 
 export default function Prods(props) {
@@ -48,6 +48,7 @@ export default function Prods(props) {
           clickEvent={clickEvent}
         />
       </div>
+      <PageNav flagSlice={flagSlice} api={api} />
     </>
   );
 }
