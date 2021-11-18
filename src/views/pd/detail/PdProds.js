@@ -74,7 +74,12 @@ export default function PdProds({ prods }) {
       title: "是否打折",
       size: 2,
       field: "is_discount",
-      content: (isD) => (isD === true ? "YES" : "NO"),
+      content: (isD) =>
+        isD === true ? (
+          <div style={{ color: "green" }}>{"YES"} </div>
+        ) : (
+          <div style={{ color: "red" }}>{"NO"}</div>
+        ),
     },
     { title: "库存", size: 2, field: "quantity", content: (qty) => qty },
     {
@@ -84,7 +89,7 @@ export default function PdProds({ prods }) {
       content: (isU) => (isU === true ? "YES" : "NO"),
     },
   ];
-  const defaultSkusRowNumber = 1;
+  const defaultSkusRowNumber = 3;
   return (
     <Grid container className={classes.root} rowSpacing={4}>
       {prods?.map((prod) => (
@@ -126,7 +131,13 @@ function ItemTable({ prod, tableContent, defaultSkusRowNumber }) {
             (index < defaultSkusRowNumber || expand === true) && (
               <Grid key={sku._id} xs={12} className={classes.tableContentStyle}>
                 {/* default sku row */}
-                <Grid xs={2}>sku{index}</Grid>
+                <Grid xs={2}>
+                  {prod.Skus?.length === 1
+                    ? "单品"
+                    : index === 0
+                    ? "默认"
+                    : "sku" + index}
+                </Grid>
                 {/* skus rows */}
                 {tableContent.map((tc) => (
                   <Grid xs={tc.size} style={tc.style}>
