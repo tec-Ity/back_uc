@@ -7,14 +7,28 @@ import {
   useDispatch,
   useSelector,
 } from "react-redux";
-import { deleteObject, putObject } from "../../../features/objectsSlice";
+import { deleteObject } from "../../../features/objectsSlice";
 import api_DNS from "../../../js/_dns";
 import { getRolePath } from "../../../js/conf/confUser";
 // import CusTextArea from "../../../components/basic/CusTextArea";
+import { ReactComponent as Delete } from "../../../components/icon/delete.svg";
 
 const useStyle = makeStyles({
   root: {
     "& > div": { padding: "10px 5px" },
+  },
+  delBtn: {
+    height: "30px",
+    paddingRight: "5px",
+    display: "flex",
+    fontSize: "16px",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: "4px",
+    backgroundColor: "#d83535",
+    cursor: "pointer",
+    color: "#fff",
+    "& rect": { fill: "#d83535" },
   },
 });
 
@@ -24,48 +38,8 @@ export default function ProdBasic({ Prod, flagSlice, api }) {
   const dispatch = useDispatch();
   const [justSubmitted, setjustSubmitted] = useState(false);
   const status = useSelector((state) => state.objects.status);
-  const [prodInfo, setProdInfo] = useState({
-    code: Prod.code || "",
-    name: Prod.nome || "",
-    brand: Prod.Brand || { code: "", _id: "" }, //code id
-    nation: Prod.Nation || { code: "", _id: "" }, //code nome
-    categ2: Prod.Categ || { code: "", _id: "" }, //code nome
-    categ1: Prod.Categ?.Categ_far || { code: "", _id: "" }, //code nome
-    sort: Prod.sort || 0,
-    price: Prod.price || 0,
-    unit: Prod.unit || "",
-    desp: Prod.desp || "",
-  });
-  useEffect(() => {
-    setProdInfo({
-      code: Prod.code || "",
-      name: Prod.nome || "",
-      brand: Prod.Brand || { code: "", _id: "" }, //code id
-      nation: Prod.Nation || { code: "", _id: "" }, //code nome
-      categ2: Prod.Categ || { code: "", _id: "" }, //code nome
-      categ1: Prod.Categ?.Categ_far || { code: "", _id: "" }, //code nome
-      sort: Prod.sort || 0,
-      price: Prod.price || 0,
-      unit: Prod.unit || "",
-      desp: Prod.desp || "",
-    });
-  }, [Prod]);
-
-  const handleSubmit = () => {
-    const general = {
-      nome: prodInfo.name,
-      Nation: prodInfo.nation._id,
-      code: prodInfo.code,
-      Brand: prodInfo.brand._id,
-      Categ: prodInfo.categ2._id,
-      sort: prodInfo.sort,
-      unit: prodInfo.unit,
-      desp: prodInfo.desp,
-    };
-    // console.log(general);
-    dispatch(putObject({ flagSlice, api, data: { general } }));
-  };
-
+  console.log(Prod);
+  
   const handleDelete = () => {
     dispatch(deleteObject({ flagSlice, api, id: Prod._id }));
     setjustSubmitted(true);
@@ -79,6 +53,12 @@ export default function ProdBasic({ Prod, flagSlice, api }) {
 
   return (
     <Grid container className={classes.root}>
+      <Grid item container xs={12} justifyContent='flex-end'>
+        <div className={classes.delBtn} onClick={handleDelete}>
+          <Delete />
+          取消同步此产品
+        </div>
+      </Grid>
       {/* imgs */}
       <Grid item container xs={12}>
         {Prod.img_urls?.map((img) => (
@@ -104,38 +84,35 @@ export default function ProdBasic({ Prod, flagSlice, api }) {
       </Grid>
       {/* code */}
       <Grid item xs={6}>
-        <CusInput disabled label='Code' value={prodInfo.code} />
+        <CusInput disabled label='Code' value={Prod.code || " "} />
       </Grid>
       {/* name */}
       <Grid item xs={6}>
-        <CusInput disabled label='Name' value={prodInfo.name} />
+        <CusInput disabled label='Name' value={Prod.nome} />
       </Grid>
       {/* brand */}
       <Grid item xs={6}>
-        <CusInput disabled label='Brand' value={prodInfo.brand?.code} />
+        <CusInput disabled label='Brand' value={Prod.Brand?.code} />
       </Grid>
       {/* country */}
       <Grid item xs={6}>
-        <CusInput disabled label='Code' value={prodInfo.nation?.code} />
+        <CusInput disabled label='Nation' value={Prod.Nation?.code} />
       </Grid>
       {/* categ 1 */}
       <Grid item xs={6}>
-        <CusInput disabled label='First Categ' value={prodInfo.categ1?.code} />
+        <CusInput
+          disabled
+          label='First Categ'
+          value={Prod.Categ?.Categ_far?.code}
+        />
       </Grid>
       {/* categ 2 */}
       <Grid item xs={6}>
-        <CusInput disabled label='First Categ' value={prodInfo.categ2?.code} />
+        <CusInput disabled label='First Categ' value={Prod.Categ?.code} />
       </Grid>
       {/* sort */}
       <Grid item xs={6}>
-        <CusInput
-          disabled
-          label='Sort'
-          value={prodInfo.sort}
-          handleChange={(e) =>
-            setProdInfo((prev) => ({ ...prev, sort: e.target.value }))
-          }
-        />
+        <CusInput disabled label='Sort' value={Prod.sort} />
       </Grid>
       {/* offSet */}
       <Grid item xs={6}></Grid>
@@ -146,32 +123,18 @@ export default function ProdBasic({ Prod, flagSlice, api }) {
           label='Price'
           value={
             Prod?.price_max === Prod?.price_min
-              ? prodInfo?.price?.toFixed(2)
+              ? Prod?.price?.toFixed(2)
               : Prod.price_min?.toFixed(2) + "~" + Prod.price_max?.toFixed(2)
           }
         />
       </Grid>
       {/* unit */}
       <Grid item xs={6}>
-        <CusInput
-          disabled
-          label='Unit'
-          value={prodInfo.unit}
-          handleChange={(e) =>
-            setProdInfo((prev) => ({ ...prev, unit: e.target.value }))
-          }
-        />
+        <CusInput disabled label='Unit' value={Prod.unit} />
       </Grid>
       {/* desp */}
       <Grid item xs={12}>
-        <CusInput
-          disabled
-          label='Description'
-          value={prodInfo.desp}
-          handleChange={(e) =>
-            setProdInfo((prev) => ({ ...prev, desp: e.target.value }))
-          }
-        />
+        <CusInput disabled label='Description' value={Prod.desp} />
       </Grid>
     </Grid>
   );

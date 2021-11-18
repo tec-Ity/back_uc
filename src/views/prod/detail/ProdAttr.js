@@ -12,14 +12,29 @@ import cancel from "../../../components/icon/cancelBlack.svg";
 import add from "../../../components/icon/addBlack.svg";
 import { getRolePath } from "../../../js/conf/confUser";
 import { useHistory } from "react-router";
+
 export default function ProdAttr({ Attrs, flagSlice, prodId }) {
   const [showAddNew, setShowAddNew] = useState(false);
   return (
     <Container>
       <Grid container>
-        <Grid item xs={12}>
+        <Grid container item xs={12} justifyContent='space-between'>
           <h3>商品属性</h3>
-          <button onClick={() => setShowAddNew(true)}>添加商品属性</button>
+          <div
+            onClick={() => setShowAddNew(true)}
+            style={{
+              backgroundColor: "#000",
+              color: "#fff",
+              height: "40px",
+              width: "286px",
+              borderRadius: "4px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              marginBottom:'30px'
+            }}>
+            添加商品属性
+          </div>
         </Grid>
         {/* attrs */}
         <Grid container item xs={12}>
@@ -34,6 +49,7 @@ export default function ProdAttr({ Attrs, flagSlice, prodId }) {
           {Attrs && Attrs.length > 0
             ? Attrs?.map((attr, index) => (
                 <AttrRow
+                  key={index}
                   attr={attr}
                   flagSlice={flagSlice}
                   prodId={prodId}

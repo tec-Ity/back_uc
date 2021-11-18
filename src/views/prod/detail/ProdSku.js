@@ -32,8 +32,31 @@ export default function ProdSku({ Skus, Attrs }) {
   };
   return (
     <Container>
-      <h3>商品SKU</h3>
-      <button onClick={() => setExpanded("new")}>添加商品SKU</button>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          margin: "50px 0 20px 0",
+          paddingTop: "30px",
+          borderTop: "1px solid #0000004d",
+        }}>
+        <h3>商品SKU</h3>
+        <div
+          onClick={() => setExpanded("new")}
+          style={{
+            backgroundColor: "#000",
+            color: "#fff",
+            height: "40px",
+            width: "286px",
+            borderRadius: "4px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            marginBottom: "30px",
+          }}>
+          添加商品SKU
+        </div>
+      </div>
       {expanded === "new" && (
         <SkuRow
           isNew
@@ -148,8 +171,9 @@ const SkuRow = ({
     setJustSubmitted(true);
   };
   const handleEdit = (e) => {
-    // e.stopPropagation();
+    e.stopPropagation();
     setModifying(true);
+    handleChangeExpand(isNew === true ? "new" : sku?._id);
   };
   const handleCancel = (e) => {
     setModifying(false);

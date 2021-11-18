@@ -22,6 +22,7 @@ const populateObjs = [
   },
   { path: "Brand", select: "code nome" },
   { path: "Attrs", select: "nome options Prod" },
+  { path: "Nation", select: "code" },
   {
     path: "Skus",
     select:
