@@ -145,11 +145,15 @@ export default function PdBasic({ Pd, flagSlice, api }) {
       sort: pdInfo.sort,
       unit: pdInfo.unit,
       desp: pdInfo.desp,
+      price_regular:
+        typeof pdInfo.price === "string"
+          ? parseFloat(pdInfo.price?.replace(",", "."))
+          : parseFloat(pdInfo.price),
     };
-    console.log(general);
     dispatch(putObject({ flagSlice, api, data: { general } }));
     setJustSubmitted("UPDATE");
   };
+
   const handleSubmitImg = () => {
     const formData = new FormData();
     for (let i = 0; i < imgsUpdate?.length; i++) {
@@ -159,6 +163,7 @@ export default function PdBasic({ Pd, flagSlice, api }) {
     setImgLocal([]);
     setJustSubmitted("UPDATE");
   };
+  
   //image funcitonality
   const ref = useRef();
   const [imgsUpdate, setImgsUpdate] = useState();
@@ -247,7 +252,6 @@ export default function PdBasic({ Pd, flagSlice, api }) {
           type='file'
           multiple
           onChange={(e) => {
-            // console.log(e.target.files);
             const imgs = e.target.files;
             const imgLocalPath = [];
             for (let i = 0; i < imgs.length; i++) {

@@ -143,14 +143,21 @@ const SkuRow = ({
       initAttrs();
     }
   }, [initAttrs, isNew]);
+
   //btn group functions
   const handleSubmit = (e) => {
     e.stopPropagation();
     const obj = {};
     obj.Prod = attrs[0].Prod;
     obj.attrs = attrsUpdate;
-    obj.price_regular = parseFloat(skuUpdate.price_regular);
-    obj.price_sale = parseFloat(skuUpdate.price_sale);
+    obj.price_regular =
+      typeof skuUpdate.price_regular === "string"
+        ? parseFloat(skuUpdate.price_regular?.replace(",", "."))
+        : parseFloat(skuUpdate.price_regular);
+    obj.price_sale =
+      typeof skuUpdate.price_sale === "string"
+        ? parseFloat(skuUpdate.price_sale?.replace(",", "."))
+        : parseFloat(skuUpdate.price_sale);
     obj.limit_quantity = parseInt(skuUpdate.limit_quantity);
     obj.purchase_note = skuUpdate.purchase_note;
     obj.is_controlStock = Boolean(skuUpdate.is_controlStock);
@@ -158,6 +165,7 @@ const SkuRow = ({
     obj.quantity_alert = parseInt(skuUpdate.quantity_alert);
     obj.quantity = parseInt(skuUpdate.quantity);
     obj.is_usable = Boolean(skuUpdate.is_usable);
+    // console.log(obj)
     if (isNew === true) {
       dispatch(postObject({ flagSlice, api: "/Sku", data: { general: obj } }));
     } else if (isNew === false) {
@@ -171,6 +179,7 @@ const SkuRow = ({
     }
     setJustSubmitted(true);
   };
+
   const handleEdit = (e) => {
     e.stopPropagation();
     setModifying(true);
@@ -208,6 +217,7 @@ const SkuRow = ({
       setAttrsUpdate(attrsTemp);
     }
   };
+
   //sku form modified
   const handleSkuUpdate = (type) => (e) => {
     if (type && e) {

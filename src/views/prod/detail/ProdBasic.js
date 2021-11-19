@@ -38,8 +38,7 @@ export default function ProdBasic({ Prod, flagSlice, api }) {
   const dispatch = useDispatch();
   const [justSubmitted, setjustSubmitted] = useState(false);
   const status = useSelector((state) => state.objects.status);
-  console.log(Prod);
-  
+
   const handleDelete = () => {
     dispatch(deleteObject({ flagSlice, api, id: Prod._id }));
     setjustSubmitted(true);
