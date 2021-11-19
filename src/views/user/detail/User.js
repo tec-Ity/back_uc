@@ -87,7 +87,6 @@ export default function User() {
   }, [dispatch]);
 
   const [form, setForm] = useState({});
-
   function initForm(obj, setter) {
     const { nome, code, phonePre, phone, role } = obj;
     setter({ nome, code, phonePre, phone, role, Shop: object.Shop?._id });
@@ -95,6 +94,12 @@ export default function User() {
   useEffect(() => {
     initForm(object, setForm);
   }, [object]);
+
+  const status = useSelector((state) => state.objects.status);
+  useEffect(() => {
+    if (justSubmitted === "UPDATE" && status === "succeed") {
+    }
+  }, [status, rolePath, justSubmitted, object._id]);
 
   function handleEdit() {
     //load object to form
@@ -104,7 +109,13 @@ export default function User() {
 
   function handleSave() {
     console.log("[SAVE]", form);
-    dispatch(putObject({ flagSlice, api, data: { general: form } }));
+    dispatch(
+      putObject({
+        flagSlice,
+        api: api + "?populateObjs=" + JSON.stringify(populateObjs),
+        data: { general: form },
+      })
+    );
     setEditing(!editing);
     setJustSubmitted("UPDATE");
   }
@@ -145,16 +156,26 @@ export default function User() {
     return (
       <>
         <Grid item xs={12} sm={3}>
-          <Typography sx={{ fontSize: "16px", color: "#0000004D", fontWeight: "700" }}>{label}</Typography>
+          <Typography
+            sx={{ fontSize: "16px", color: "#0000004D", fontWeight: "700" }}
+          >
+            {label}
+          </Typography>
         </Grid>
-        <Grid item xs='auto' sm='auto'>
-          <Typography sx={{ fontSize: "16px", fontWeight: "700" }}>{content}</Typography>
+        <Grid item xs="auto" sm="auto">
+          <Typography sx={{ fontSize: "16px", fontWeight: "700" }}>
+            {content}
+          </Typography>
         </Grid>
       </>
     );
   }
 
-  const links = [{ label: "主页", to: `/home` }, { label: "用户列表", to: `/users` }, { label: "详情" }];
+  const links = [
+    { label: "主页", to: `/home` },
+    { label: "用户列表", to: `/users` },
+    { label: "详情" },
+  ];
 
   let fields = [
     {
@@ -279,7 +300,11 @@ export default function User() {
       {
         // 数据正确
         object._id && String(object._id) === String(id) && (
-          <Box height='180px' width='100%' sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Box
+            height="180px"
+            width="100%"
+            sx={{ display: "flex", justifyContent: "space-between" }}
+          >
             <UserProfileLightGrey />
             <CusBtnGroup
               modifying={editing}
@@ -295,31 +320,48 @@ export default function User() {
               handleSubmit={handleSave}
             />
             <Box>
-              <div className='text-right'>
+              <div className="text-right">
                 {/* {
               // 如果比自己等级低 可删除
             } */}
-                <button className='btn btn-info' onClick={() => setModalPut(true)}>
+                <button
+                  className="btn btn-info"
+                  onClick={() => setModalPut(true)}
+                >
                   {" "}
-                  <i className='bx bx-edit-alt'></i>{" "}
+                  <i className="bx bx-edit-alt"></i>{" "}
                 </button>
-                <UserPutModal show={modalPut} onHide={() => setModalPut(false)} object={object} flagSlice={flagSlice} />
+                <UserPutModal
+                  show={modalPut}
+                  onHide={() => setModalPut(false)}
+                  object={object}
+                  flagSlice={flagSlice}
+                />
 
                 <IconButton onClick={handleLog}>
                   <DoneIcon />
                 </IconButton>
 
                 {editing && curRole < object.role && (
-                  <Button variant='contained' color='error' onClick={deleteDB}>
+                  <Button variant="contained" color="error" onClick={deleteDB}>
                     删除此用户
                   </Button>
                 )}
                 {editing && (
-                  <Button variant='contained' color='secondary' onClick={() => setModalPwd(true)}>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => setModalPwd(true)}
+                  >
                     修改密码
                   </Button>
                 )}
-                <UserPwdModal show={modalPwd} onHide={() => setModalPwd(false)} object={object} flagSlice={flagSlice} />
+                <UserPwdModal
+                  show={modalPwd}
+                  onHide={() => setModalPwd(false)}
+                  object={object}
+                  flagSlice={flagSlice}
+                />
                 {editing && (
                   <IconButton onClick={handleSave}>
                     <DoneIcon />
@@ -327,8 +369,8 @@ export default function User() {
                 )}
                 {!editing ? (
                   <Button
-                    variant='contained'
-                    color='primary'
+                    variant="contained"
+                    color="primary"
                     startIcon={!editing ? <EditIcon /> : <CancelIcon />}
                     onClick={handleEdit}
                   >
@@ -349,7 +391,7 @@ export default function User() {
         )
       }
 
-      <Box mt='46px' sx={{ maxWidth: "100%" }}>
+      <Box mt="46px" sx={{ maxWidth: "100%" }}>
         {/* main details */}
         <FormBox
           data={{ fields: fields, object: object }}
@@ -389,8 +431,8 @@ export default function User() {
             </Typography>
           )}
         </Box>
-        <Grid container mt='25px' ml={3}>
-          <FooterBox label='最近登录' content={object.at_last_login} />
+        <Grid container mt="25px" ml={3}>
+          <FooterBox label="最近登录" content={object.at_last_login} />
         </Grid>
       </Box>
       {/* <div className="row mt-3">
