@@ -18,7 +18,19 @@ import PdRow from "../ui/PdRow";
 import PageNav from "../../../components/universal/query/PageNav";
 import PdPostModal from "../modal/PdPostModal";
 
-const populateObjs = [{ path: "Prods", select: "code Shop" }];
+const populateObjs = [
+  { path: "Prods", select: "code Shop" },
+  { path: "Brand", select: "nome" },
+  { path: "Nation", select: "code" },
+  {
+    path: "Categ",
+    select: "code Categ_far",
+    populate: {
+      path: "Categ_far",
+      select: "code",
+    },
+  },
+];
 
 export default function Pds(props) {
   // const {isShop} = props
@@ -61,10 +73,10 @@ export default function Pds(props) {
         flagSlice={flagSlice}
         api={api}
         links={links}
-        addLabel='添加产品'
+        addLabel="添加产品"
         showAddNew={() => setAddNew(true)}
       />
-      <div className='mt-4'>
+      <div className="mt-4">
         <UiVariety
           propsCard={PdCard}
           UiRow={PdRow}

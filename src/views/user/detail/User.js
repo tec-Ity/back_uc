@@ -87,32 +87,41 @@ export default function User() {
   }, [dispatch]);
 
   const [form, setForm] = useState({});
-
-  function initObj(obj, setter) {
+  function initForm(obj, setter) {
     const { nome, code, phonePre, phone, role } = obj;
-    setter({ nome, code, phonePre, phone, role, Shop: object.Shop?.code });
+    setter({ nome, code, phonePre, phone, role, Shop: object.Shop?._id });
   }
   useEffect(() => {
-    initObj(object, setForm);
+    initForm(object, setForm);
   }, [object]);
+
+  const status = useSelector((state) => state.objects.status);
+  useEffect(() => {
+    if (justSubmitted === "UPDATE" && status === "succeed") {
+    }
+  }, [status, rolePath, justSubmitted, object._id]);
 
   function handleEdit() {
     //load object to form
-    const { nome, code, phonePre, phone, role } = object;
-    setForm({ nome, code, phonePre, phone, role, Shop: object.Shop?.code });
-
-    setEditing(!editing);
+    initForm(object, setForm);
+    setEditing(true);
   }
 
   function handleSave() {
     console.log("[SAVE]", form);
-    dispatch(putObject({ flagSlice, api, data: { general: form } }));
+    dispatch(
+      putObject({
+        flagSlice,
+        api: api + "?populateObjs=" + JSON.stringify(populateObjs),
+        data: { general: form },
+      })
+    );
     setEditing(!editing);
     setJustSubmitted("UPDATE");
   }
 
   function handleLog() {
-    console.log("[LOG]", form, fields);
+    console.log("[LOG]", object, form, fields);
   }
 
   function populateShops(Shops) {
@@ -299,9 +308,9 @@ export default function User() {
             <UserProfileLightGrey />
             <CusBtnGroup
               modifying={editing}
-              handleEdit={() => setEditing(true)}
+              handleEdit={handleEdit}
               handleCancel={() => {
-                initObj(object, setForm);
+                initForm(object, setForm);
                 setEditing(false);
               }}
               handleDelete={() => {
