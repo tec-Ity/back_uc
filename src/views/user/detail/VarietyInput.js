@@ -1,13 +1,13 @@
 import { TextField, Autocomplete } from "@mui/material";
-import { styled } from "@mui/system";
+// import { styled } from "@mui/system";
 
-const CustTextField = styled(TextField)(() => ({
-  marginRight: 8,
-  "& .Mui-disabled": {
-    fontWeight: 700,
-    color: "rgba(0, 0, 0, 1)", // (default alpha is 0.38)
-  },
-}));
+// const CustTextField = styled(TextField)(() => ({
+//   marginRight: 8,
+//   "& .Mui-disabled": {
+//     fontWeight: 700,
+//     color: "rgba(0, 0, 0, 1)", // (default alpha is 0.38)
+//   },
+// }));
 
 export default function VarietyInput({
   content,
@@ -17,6 +17,7 @@ export default function VarietyInput({
   form,
   type,
 }) {
+
   function handleChange(event) {
     setForm({ ...form, [type]: event.target.value });
   }
@@ -52,7 +53,7 @@ export default function VarietyInput({
           renderInput={(params) => {
             return (
               <TextField
-                variant="standard"
+                variant='standard'
                 {...params}
                 InputProps={{ ...params.InputProps, disableUnderline: true }}
               />
@@ -64,7 +65,7 @@ export default function VarietyInput({
       return (
         <TextField
           id={type}
-          variant="standard"
+          variant='standard'
           error={error?.state}
           helperText={error?.state ? error?.message : null}
           value={form[type]}
