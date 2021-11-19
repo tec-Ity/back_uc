@@ -261,7 +261,7 @@ export default function User() {
 
   function setEditable(field) {
     let flag = null;
-    field.permissions?.map((permission) => {
+    for (const permission of field.permissions) {
       let tmp_flag = null;
       switch (permission) {
         case "hierachy":
@@ -279,20 +279,20 @@ export default function User() {
           break;
       }
       flag = flag || tmp_flag;
-    });
+    }
     if (flag == null) return;
     field.editable = flag;
   }
 
-  fields.map((field) => {
+  for (const field of fields) {
     if (field.variant?.variantObj.fields != null) {
-      field.variant?.variantObj.fields.map((v_field) => {
+      for (const v_field of field.variant?.variantObj.fields) {
         setEditable(v_field);
-      });
+      }
     } else {
       setEditable(field);
     }
-  });
+  }
 
   return (
     <>
