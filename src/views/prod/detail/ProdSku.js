@@ -173,12 +173,16 @@ const SkuRow = ({
   const handleEdit = (e) => {
     e.stopPropagation();
     setModifying(true);
-    handleChangeExpand(isNew === true ? "new" : sku?._id);
+    handleChangeExpand(isNew === true ? "new" : sku?._id)(null, true);
   };
+
   const handleCancel = (e) => {
+    e.stopPropagation();
     setModifying(false);
+    handleChangeExpand(isNew === true ? "new" : sku?._id)(null, false);
     initAttrs();
   };
+
   const handleDelete = (e) => {
     e.stopPropagation();
     dispatch(deleteObject({ flagSlice, api: `/Sku/${sku?._id}` }));
@@ -213,6 +217,12 @@ const SkuRow = ({
       setSkuUpdate((prev) => ({ ...prev, [type]: value }));
     }
   };
+
+  //change modifying status based on open/collapse
+  useEffect(() => {
+    expanded === sku?._id ? setModifying(true) : setModifying(false);
+  }, [expanded, sku?._id]);
+
   return (
     <Accordion
       key={sku?._id}
