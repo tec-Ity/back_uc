@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import makeStyles from "@mui/styles/makeStyles";
-import Container from "@mui/material/Container";
 // import clsx from "clsx";
 import { getRolePath } from "../../../js/conf/confUser";
 import { Grid } from "@mui/material";
@@ -23,11 +22,10 @@ import { useHistory } from "react-router";
 import { default as defaultBrand } from "../../../components/icon/brandDefaultImg.svg";
 const useStyle = makeStyles({
   root: {},
-  listGridContainer: {width: "100%"},
+  listGridContainer: { width: "100%" },
   listGridItem: {
     position: "relative",
     boxSizing: "border-box",
-
     // marginBottom: "20px",
     boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.1)",
     borderRadius: "5px",
@@ -315,7 +313,7 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
     <Grid
       container
       item
-    //   xs={3}
+      //   xs={3}
       className={classes.listGridItem}
       style={{
         marginBottom: "20px",

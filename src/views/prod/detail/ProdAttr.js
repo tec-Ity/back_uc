@@ -31,7 +31,8 @@ export default function ProdAttr({ Attrs, flagSlice, prodId }) {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              marginBottom:'30px'
+              marginBottom: "30px",
+              cursor: "pointer"
             }}>
             添加商品属性
           </div>
@@ -186,7 +187,7 @@ function AttrRow({
       {/* attr row */}
       <Grid container item xs={12}>
         <Grid container item xs={1} alignItems='center'>
-          属性值{index + 1}
+          属性值{index + 1 || "new"}
         </Grid>
         <Grid item xs={3}>
           <CusInputWithExtLabel

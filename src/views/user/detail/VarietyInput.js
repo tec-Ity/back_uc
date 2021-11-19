@@ -1,14 +1,7 @@
 import { TextField, Autocomplete } from "@mui/material";
-import { styled } from "@mui/system";
 import { useState } from "react";
 
-const CustTextField = styled(TextField)(() => ({
-  marginRight: 8,
-  "& .Mui-disabled": {
-    fontWeight: 700,
-    color: "rgba(0, 0, 0, 1)", // (default alpha is 0.38)
-  },
-}));
+
 
 export default function VarietyInput({ content, variant, check, setForm, form, type }) {
   function handleChange(event) {
@@ -50,6 +43,7 @@ export default function VarietyInput({ content, variant, check, setForm, form, t
           value={listValue}
           renderInput={(params) => {
             return (
+
               <TextField variant='standard' {...params} InputProps={{ ...params.InputProps, disableUnderline: true }} />
             );
           }}
