@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useParams, useHistory } from "react-router";
+import { useLocation, useParams } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
-import CusSwitchBtn from "../../../components/basic/CusSwitchBtn";
 import {
   getObject,
   selectObject,
@@ -44,7 +43,6 @@ const switchList = [
 
 export default function Prod(props) {
   const { id } = useParams();
-  const hist = useHistory();
   const dispatch = useDispatch();
   const flagSlice = "prod";
   const flagField = "object";
