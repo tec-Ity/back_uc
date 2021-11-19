@@ -1,5 +1,6 @@
 import { TextField, Autocomplete } from "@mui/material";
 import { styled } from "@mui/system";
+import { useState } from "react";
 
 const CustTextField = styled(TextField)(() => ({
   marginRight: 8,
@@ -9,20 +10,18 @@ const CustTextField = styled(TextField)(() => ({
   },
 }));
 
-export default function VarietyInput({
-  content,
-  variant,
-  check,
-  setForm,
-  form,
-  type,
-}) {
+export default function VarietyInput({ content, variant, check, setForm, form, type }) {
   function handleChange(event) {
     setForm({ ...form, [type]: event.target.value });
   }
 
+  const [listValue, setListValue] = useState({
+    label: variant?.variantObj?.options?.filter((option) => option.id === form[type])[0]?.label || "",
+    id: form[type],
+  });
   function handleList(event, newValue) {
-    setForm({ ...form, [type]: newValue?.id });
+    setListValue(newValue);
+    setForm({ ...form, [type]: newValue.id });
   }
 
   //calculate error
@@ -42,20 +41,16 @@ export default function VarietyInput({
       return (
         <Autocomplete
           disablePortal
-          clearOnBlur={false}
           id={type}
           options={variant.variantObj.options}
+          isOptionEqualToValue={(option, value) => option.id === value.id}
           getOptionLabel={(option) => option.label}
           onChange={handleList}
           fullWidth
-          inputValue={form[type]}
+          value={listValue}
           renderInput={(params) => {
             return (
-              <TextField
-                variant="standard"
-                {...params}
-                InputProps={{ ...params.InputProps, disableUnderline: true }}
-              />
+              <TextField variant='standard' {...params} InputProps={{ ...params.InputProps, disableUnderline: true }} />
             );
           }}
         />
@@ -64,7 +59,7 @@ export default function VarietyInput({
       return (
         <TextField
           id={type}
-          variant="standard"
+          variant='standard'
           error={error?.state}
           helperText={error?.state ? error?.message : null}
           value={form[type]}
