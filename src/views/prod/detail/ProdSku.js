@@ -53,6 +53,7 @@ export default function ProdSku({ Skus, Attrs }) {
             justifyContent: "center",
             alignItems: "center",
             marginBottom: "30px",
+            cursor: "pointer",
           }}>
           添加商品SKU
         </div>
