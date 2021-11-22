@@ -33,7 +33,7 @@ export const getObjects = createAsyncThunk(
       // console.log(objects);
       return { flagSlice, objects, pageNum };
     } else {
-      alert("faild to load");
+      alert("faild to load objects", res.message);
       return rejectWithValue("getObjects error info");
       // return rejectWithValue({flagSlice, info:'my error info'});
     }
@@ -43,12 +43,15 @@ export const getObjects = createAsyncThunk(
 export const getObject = createAsyncThunk(
   "objects/getObject",
   async ({ flagSlice, api }, { rejectWithValue }) => {
+    //   console.log(flagSlice)
+    //   console.log(api)
     const res = await fetch_Prom(api);
+    // console.log(res);
     if (res.status === 200) {
       const object = res.data.object;
       return { flagSlice, object };
     } else {
-      alert("faild to load");
+      alert("faild to load object" + res.message);
       return rejectWithValue("getObject error info");
       // return rejectWithValue({flagSlice, info:'my error info'});
     }

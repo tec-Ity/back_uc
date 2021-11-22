@@ -13,7 +13,14 @@ export default function Setting() {
   return (
     <>
       <ListPageHeader links={links} showAddIcon={false} showSearch={false} />
-      <Grid container justifyContent='space-around'>
+      <Grid container rowSpacing={3}>
+        <Grid container item xs={4}>
+          <CusSettingCart
+            title='COMPANY'
+            img={CountryIcon}
+            handleClick={() => hist.push(`/${rolePath}/company`)}
+          />
+        </Grid>
         <Grid container item xs={4}>
           <CusSettingCart
             title='PAESI'

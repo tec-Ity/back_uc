@@ -31,6 +31,7 @@ import Citas from "../views/setting/city/list/Citas";
 import Cita from "../views/setting/city/detail/Cita";
 
 import Reload from "../views/_index/Reload"; // 重新加载页面
+import Company from "../views/setting/company/Company";
 
 export default function OwerRouter() {
   return (
@@ -94,6 +95,9 @@ export default function OwerRouter() {
 
         <Route path='/ower/setting'>
           <Setting />
+        </Route>
+        <Route path='/ower/company'>
+          <Company />
         </Route>
         <Route path='/ower/nations'>
           <Nations />

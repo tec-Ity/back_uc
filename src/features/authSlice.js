@@ -38,6 +38,7 @@ const curUserObtSucceed = (state, action) => {
   localStorage.setItem("accessToken", action.payload.accessToken);
   localStorage.setItem("refreshToken", action.payload.refreshToken);
   localStorage.setItem("role", action.payload.payload?.role);
+  localStorage.setItem("Firm", action.payload.payload?.Firm);
   state.accessToken = action.payload.accessToken;
   state.curUser = action.payload.payload;
   state.roleLinks = getRoleLinks(action.payload.payload.role);
@@ -57,6 +58,7 @@ export const authSlice = createSlice({
       localStorage.removeItem("name_curUser");
       localStorage.removeItem("role_curUser");
       localStorage.removeItem("crShop");
+      localStorage.removeItem("Firm");
     },
   },
   extraReducers: {

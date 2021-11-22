@@ -24,6 +24,7 @@ import Order from "../views/order/detail/Order";
 import Nations from "../views/setting/nation/list/Nations";
 import Areas from "../views/setting/area/list/Areas";
 import Citas from "../views/setting/city/list/Citas";
+import Company from "../views/setting/company/Company";
 
 export default function MgerRouter() {
   return (
@@ -73,6 +74,9 @@ export default function MgerRouter() {
 
         <Route path='/mger/setting'>
           <Setting />
+        </Route>
+        <Route path='/ower/company'>
+          <Company />
         </Route>
         <Route path='/mger/nations'>
           <Nations />
