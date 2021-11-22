@@ -152,7 +152,7 @@ export default function PdBasic({ Pd, flagSlice, api }) {
       price_regular: parseFloat(pdInfo.price_regular?.replace(",", ".")),
       price_sale: parseFloat(pdInfo.price_sale?.replace(",", ".")),
     };
-    console.log(general);
+    // console.log(general);
     dispatch(putObject({ flagSlice, api, data: { general } }));
     setJustSubmitted("UPDATE");
   };
@@ -172,7 +172,7 @@ export default function PdBasic({ Pd, flagSlice, api }) {
   const [imgsUpdate, setImgsUpdate] = useState();
   const [imgLocal, setImgLocal] = useState([]);
   const [modifyingImg, setModifyingImg] = useState(false);
-//   console.log(Pd);
+    //   console.log(Pd);
   return (
     <Grid container className={classes.root}>
       {/* imgs */}

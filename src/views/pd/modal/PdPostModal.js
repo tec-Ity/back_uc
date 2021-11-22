@@ -85,13 +85,12 @@ export default function PdPostModal({ show, handleClose, timeout = 500 }) {
     <Modal
       onHide={handleClose}
       show={show}
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-    >
+      size='lg'
+      aria-labelledby='contained-modal-title-vcenter'
+      centered>
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
-          <FormattedMessage id="create" defaultMessage="Create" />
+        <Modal.Title id='contained-modal-title-vcenter'>
+          <FormattedMessage id='create' defaultMessage='Create' />
         </Modal.Title>
       </Modal.Header>
 
@@ -99,9 +98,8 @@ export default function PdPostModal({ show, handleClose, timeout = 500 }) {
         <Grid container className={classes.root}>
           {/* imgs */}
           <button
-            className="btn btn-success mx-3"
-            onClick={() => ref.current.click()}
-          >
+            className='btn btn-success mx-3'
+            onClick={() => ref.current.click()}>
             添加/修改图片
           </button>
           <Grid item container xs={12} style={{ cursor: "pointer" }}>
@@ -114,11 +112,10 @@ export default function PdPostModal({ show, handleClose, timeout = 500 }) {
                     flexDirection: "column",
                     alignItems: "center",
                     paddingRight: "20px",
-                  }}
-                >
+                  }}>
                   <img
                     src={img}
-                    alt=""
+                    alt=''
                     style={{
                       height: "100px",
                       width: "100px",
@@ -127,7 +124,7 @@ export default function PdPostModal({ show, handleClose, timeout = 500 }) {
                   />
                   {showImgDeleteBtn === true && (
                     <button
-                      className="btn btn-danger"
+                      className='btn btn-danger'
                       onClick={(e) => {
                         e.stopPropagation();
                         //remove from local url
@@ -136,15 +133,9 @@ export default function PdPostModal({ show, handleClose, timeout = 500 }) {
                         setImgLocal(tempImgsLocal);
                         //remove from update imgs list
                         const tempImgsUpdate = [...imgsUpdate];
-                        // console.log(imgsUpdate);
-                        // console.log(tempImgsUpdate);
-                        //   delete tempImgsUpdate[index];
                         tempImgsUpdate.splice(index, 1);
-                        // console.log(index);
-                        // console.log(tempImgsUpdate);
                         setImgsUpdate(tempImgsUpdate);
-                      }}
-                    >
+                      }}>
                       删除
                     </button>
                   )}
@@ -155,10 +146,9 @@ export default function PdPostModal({ show, handleClose, timeout = 500 }) {
             <input
               ref={ref}
               style={{ display: "none" }}
-              type="file"
+              type='file'
               multiple
               onChange={(e) => {
-                // console.log(e.target.files);
                 const imgs = e.target.files;
                 const imgLocalPath = [];
                 for (let i = 0; i < imgs.length; i++) {
@@ -172,12 +162,18 @@ export default function PdPostModal({ show, handleClose, timeout = 500 }) {
           </Grid>
           {/* code */}
           <Grid item xs={6}>
-            <CusInput label="Code" disabled value={pdInfo.code} />
+            <CusInput
+              label='Code'
+              value={pdInfo.code}
+              handleChange={(e) =>
+                setPdInfo((prev) => ({ ...prev, code: e.target.value }))
+              }
+            />
           </Grid>
           {/* name */}
           <Grid item xs={6}>
             <CusInput
-              label="Name"
+              label='Name'
               value={pdInfo.name}
               handleChange={(e) =>
                 setPdInfo((prev) => ({ ...prev, name: e.target.value }))
@@ -187,7 +183,7 @@ export default function PdPostModal({ show, handleClose, timeout = 500 }) {
           {/* brand */}
           <Grid item xs={6}>
             <CusSelectSearch
-              label="Brand"
+              label='Brand'
               flagSlice={brandSlice}
               api={brandApi}
               defaultSel={pdInfo.brand?.code}
@@ -203,7 +199,7 @@ export default function PdPostModal({ show, handleClose, timeout = 500 }) {
           {/* country */}
           <Grid item xs={6}>
             <CusSelectSearch
-              label="Nation"
+              label='Nation'
               flagSlice={nationSlice}
               api={nationApi}
               defaultSel={pdInfo.nation?.code}
@@ -219,7 +215,7 @@ export default function PdPostModal({ show, handleClose, timeout = 500 }) {
           {/* categ 1 */}
           <Grid item xs={6}>
             <CusSelectSearch
-              label="First Categ"
+              label='First Categ'
               flagSlice={categSlice + "1"}
               api={categApi}
               defaultSel={pdInfo.categ1?.code}
@@ -241,7 +237,7 @@ export default function PdPostModal({ show, handleClose, timeout = 500 }) {
           {/* categ 2 */}
           <Grid item xs={6}>
             <CusSelectSearch
-              label="Second Categ"
+              label='Second Categ'
               flagSlice={pdInfo.categ1?.code && categSlice + "2"}
               api={categApi}
               queryUrl={"&Categ_far=" + pdInfo.categ1?._id + "&level=2"}
@@ -258,7 +254,7 @@ export default function PdPostModal({ show, handleClose, timeout = 500 }) {
           {/* sort */}
           <Grid item xs={6}>
             <CusInput
-              label="Sort"
+              label='Sort'
               value={pdInfo.sort}
               handleChange={(e) =>
                 setPdInfo((prev) => ({ ...prev, sort: e.target.value }))
@@ -270,7 +266,7 @@ export default function PdPostModal({ show, handleClose, timeout = 500 }) {
           {/* price regular */}
           <Grid item xs={6}>
             <CusInput
-              label="Price"
+              label='Price'
               value={pdInfo.price_regular}
               handleChange={(e) =>
                 setPdInfo((prev) => ({
@@ -283,7 +279,7 @@ export default function PdPostModal({ show, handleClose, timeout = 500 }) {
           {/* unit */}
           <Grid item xs={6}>
             <CusInput
-              label="Unit"
+              label='Unit'
               value={pdInfo.unit}
               handleChange={(e) =>
                 setPdInfo((prev) => ({ ...prev, unit: e.target.value }))
@@ -293,7 +289,7 @@ export default function PdPostModal({ show, handleClose, timeout = 500 }) {
           {/* desp */}
           <Grid item xs={12}>
             <CusInput
-              label="Description"
+              label='Description'
               value={pdInfo.desp}
               handleChange={(e) =>
                 setPdInfo((prev) => ({ ...prev, desp: e.target.value }))
@@ -304,11 +300,11 @@ export default function PdPostModal({ show, handleClose, timeout = 500 }) {
       </Modal.Body>
 
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
-          <FormattedMessage id="close" defaultMessage="Close" />
+        <Button variant='secondary' onClick={handleClose}>
+          <FormattedMessage id='close' defaultMessage='Close' />
         </Button>
-        <Button variant="primary" onClick={handleSubmit}>
-          <FormattedMessage id="confirm" defaultMessage="Confirm" />
+        <Button variant='primary' onClick={handleSubmit}>
+          <FormattedMessage id='confirm' defaultMessage='Confirm' />
         </Button>
       </Modal.Footer>
     </Modal>
