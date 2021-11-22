@@ -122,8 +122,10 @@ export default function ProdBasic({ Prod, flagSlice, api }) {
           label='Price'
           value={
             Prod?.price_max === Prod?.price_min
-              ? Prod?.price?.toFixed(2)
-              : Prod.price_min?.toFixed(2) + "~" + Prod.price_max?.toFixed(2)
+              ? String(Prod?.price?.toFixed(2))?.replace(".", ",")
+              : String(Prod?.price_min?.toFixed(2))?.replace(".", ",") +
+                "~" +
+                String(Prod?.price_max?.toFixed(2))?.replace(".", ",")
           }
         />
       </Grid>

@@ -55,7 +55,7 @@ export default function Pd(props) {
   const param = new URLSearchParams(useLocation().search);
   const section = param.get("section");
   const Pd = useSelector(selectObject(flagSlice));
-  console.log(Pd);
+
   const [Key, setKey] = useState(1);
   const routeFunc = () => {
     switch (Key) {

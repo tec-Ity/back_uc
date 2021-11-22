@@ -72,6 +72,7 @@ const nationSlice = "nations";
 const nationApi = "/Nations";
 const categSlice = "categs";
 const categApi = "/Categs";
+
 export default function PdBasic({ Pd, flagSlice, api }) {
   const classes = useStyle();
   const dispatch = useDispatch();
@@ -146,10 +147,11 @@ export default function PdBasic({ Pd, flagSlice, api }) {
       unit: pdInfo.unit,
       desp: pdInfo.desp,
       price_regular:
-        typeof pdInfo.price === "string"
-          ? parseFloat(pdInfo.price?.replace(",", "."))
-          : parseFloat(pdInfo.price),
+        typeof pdInfo.price_regular === "string"
+          ? parseFloat(pdInfo.price_regular?.replace(",", "."))
+          : parseFloat(pdInfo.price_regular),
     };
+    console.log(general);
     dispatch(putObject({ flagSlice, api, data: { general } }));
     setJustSubmitted("UPDATE");
   };
@@ -163,7 +165,7 @@ export default function PdBasic({ Pd, flagSlice, api }) {
     setImgLocal([]);
     setJustSubmitted("UPDATE");
   };
-  
+
   //image funcitonality
   const ref = useRef();
   const [imgsUpdate, setImgsUpdate] = useState();
@@ -398,9 +400,9 @@ export default function PdBasic({ Pd, flagSlice, api }) {
         <CusInput
           disabled={!modifying}
           label='Price'
-          value={pdInfo.price_regular}
+          value={String(pdInfo.price_regular)?.replace(".", ",")}
           handleChange={(e) =>
-            setPdInfo((prev) => ({ ...prev, price: e.target.value }))
+            setPdInfo((prev) => ({ ...prev, price_regular: e.target.value }))
           }
         />
       </Grid>
