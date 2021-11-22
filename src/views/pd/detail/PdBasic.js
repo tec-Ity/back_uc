@@ -88,7 +88,8 @@ export default function PdBasic({ Pd, flagSlice, api }) {
     categ2: Pd.Categ || { code: "", _id: "" }, //code nome
     categ1: Pd.Categ?.Categ_far || { code: "", _id: "" }, //code nome
     sort: Pd.sort || 0,
-    price_regular: Pd.price_regular || 0,
+    price_regular: String(Pd.price_regular?.toFixed(2) || "0,00"),
+    price_sale: String(Pd.price_sale?.toFixed(2) || "0,00"),
     unit: Pd.unit || "",
     desp: Pd.desp || "",
   });
@@ -101,7 +102,8 @@ export default function PdBasic({ Pd, flagSlice, api }) {
       categ2: Pd.Categ || { code: "", _id: "" }, //code nome
       categ1: Pd.Categ?.Categ_far || { code: "", _id: "" }, //code nome
       sort: Pd.sort || 0,
-      price_regular: Pd.price_regular || 0,
+      price_regular: String(Pd.price_regular?.toFixed(2) || "0,00"),
+      price_sale: String(Pd.price_sale?.toFixed(2) || "0,00"),
       unit: Pd.unit || "",
       desp: Pd.desp || "",
     });
@@ -119,7 +121,8 @@ export default function PdBasic({ Pd, flagSlice, api }) {
       categ2: Pd.Categ || { code: "", _id: "" }, //code nome
       categ1: Pd.Categ?.Categ_far || { code: "", _id: "" }, //code nome
       sort: Pd.sort || 0,
-      price_regular: Pd.price_regular || 0,
+      price_regular: String(Pd.price_regular?.toFixed(2) || "0,00"),
+      price_sale: String(Pd.price_sale?.toFixed(2) || "0,00"),
       unit: Pd.unit || "",
       desp: Pd.desp || "",
     });
@@ -146,10 +149,8 @@ export default function PdBasic({ Pd, flagSlice, api }) {
       sort: pdInfo.sort,
       unit: pdInfo.unit,
       desp: pdInfo.desp,
-      price_regular:
-        typeof pdInfo.price_regular === "string"
-          ? parseFloat(pdInfo.price_regular?.replace(",", "."))
-          : parseFloat(pdInfo.price_regular),
+      price_regular: parseFloat(pdInfo.price_regular?.replace(",", ".")),
+      price_sale: parseFloat(pdInfo.price_sale?.replace(",", ".")),
     };
     console.log(general);
     dispatch(putObject({ flagSlice, api, data: { general } }));
@@ -171,7 +172,7 @@ export default function PdBasic({ Pd, flagSlice, api }) {
   const [imgsUpdate, setImgsUpdate] = useState();
   const [imgLocal, setImgLocal] = useState([]);
   const [modifyingImg, setModifyingImg] = useState(false);
-
+  console.log(Pd);
   return (
     <Grid container className={classes.root}>
       {/* imgs */}
@@ -393,19 +394,6 @@ export default function PdBasic({ Pd, flagSlice, api }) {
           }
         />
       </Grid>
-      {/* offSet */}
-      <Grid item xs={6}></Grid>
-      {/* price regular */}
-      <Grid item xs={6}>
-        <CusInput
-          disabled={!modifying}
-          label='Price'
-          value={String(pdInfo.price_regular)?.replace(".", ",")}
-          handleChange={(e) =>
-            setPdInfo((prev) => ({ ...prev, price_regular: e.target.value }))
-          }
-        />
-      </Grid>
       {/* unit */}
       <Grid item xs={6}>
         <CusInput
@@ -417,6 +405,32 @@ export default function PdBasic({ Pd, flagSlice, api }) {
           }
         />
       </Grid>
+      {/* offSet */}
+      {/* price regular */}
+      <Grid item xs={6}>
+        <CusInput
+          disabled={!modifying}
+          label='Price Regular'
+          value={String(pdInfo.price_regular)?.replace(".", ",")}
+          handleChange={(e) =>
+            setPdInfo((prev) => ({ ...prev, price_regular: e.target.value }))
+          }
+        />
+      </Grid>
+      <Grid item xs={6}></Grid>
+      {/* price sale */}
+      <Grid item xs={6}>
+        <CusInput
+          disabled={!modifying}
+          label='Price Sale'
+          value={String(pdInfo.price_sale)?.replace(".", ",")}
+          handleChange={(e) =>
+            setPdInfo((prev) => ({ ...prev, price_sale: e.target.value }))
+          }
+        />
+      </Grid>
+      <Grid item xs={6}></Grid>
+
       {/* desp */}
       <Grid item xs={12}>
         <CusInput
