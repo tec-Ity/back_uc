@@ -101,8 +101,8 @@ const SkuRow = ({
     allow_backorder: sku?.allow_backorder || false,
     is_controlStock: sku?.is_controlStock || false,
     limit_quantity: sku?.limit_quantity || 0,
-    price_regular: sku?.price_regular || 0,
-    price_sale: sku?.price_sale || 0,
+    price_regular: String(sku?.price_regular?.toFixed(2) || "0,00"),
+    price_sale: String(sku?.price_sale?.toFixed(2) || "0,00"),
     quantity: sku?.quantity || 0,
     quantity_alert: sku?.quantity_alert || 0,
     purchase_note: sku?.purchase_note || "",
@@ -129,8 +129,8 @@ const SkuRow = ({
       allow_backorder: sku?.allow_backorder || false,
       is_controlStock: sku?.is_controlStock || false,
       limit_quantity: sku?.limit_quantity || 0,
-      price_regular: sku?.price_regular || 0,
-      price_sale: sku?.price_sale || 0,
+      price_regular: String(sku?.price_regular?.toFixed(2) || "0,00"),
+      price_sale: String(sku?.price_sale?.toFixed(2) || "0,00"),
       quantity: sku?.quantity || 0,
       quantity_alert: sku?.quantity_alert || 0,
       purchase_note: sku?.purchase_note || "",
@@ -150,14 +150,8 @@ const SkuRow = ({
     const obj = {};
     obj.Prod = attrs[0].Prod;
     obj.attrs = attrsUpdate;
-    obj.price_regular =
-      typeof skuUpdate.price_regular === "string"
-        ? parseFloat(skuUpdate.price_regular?.replace(",", "."))
-        : parseFloat(skuUpdate.price_regular);
-    obj.price_sale =
-      typeof skuUpdate.price_sale === "string"
-        ? parseFloat(skuUpdate.price_sale?.replace(",", "."))
-        : parseFloat(skuUpdate.price_sale);
+    obj.price_regular = parseFloat(skuUpdate.price_regular?.replace(",", "."));
+    obj.price_sale = parseFloat(skuUpdate.price_sale?.replace(",", "."));
     obj.limit_quantity = parseInt(skuUpdate.limit_quantity);
     obj.purchase_note = skuUpdate.purchase_note;
     obj.is_controlStock = Boolean(skuUpdate.is_controlStock);

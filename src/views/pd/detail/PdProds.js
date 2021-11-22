@@ -62,13 +62,13 @@ export default function PdProds({ prods }) {
       title: "标价",
       size: 1,
       field: "price_regular",
-      content: (pr) => "€" + pr,
+      content: (pr) => "€" + String(pr.toFixed(2)).replace(".", ","),
     },
     {
       title: "卖价",
       size: 1,
       field: "price_sale",
-      content: (ps) => "€" + ps,
+      content: (ps) => "€" + String(ps.toFixed(2)).replace(".", ","),
     },
     {
       title: "是否打折",
