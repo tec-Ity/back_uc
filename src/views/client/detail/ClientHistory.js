@@ -27,7 +27,7 @@ export default function ClientHistory({ object }) {
         flagSlice,
         api:
           api +
-          `?client=[` +
+          `?Clients=[` +
           object._id +
           "]&populateObjs=" +
           JSON.stringify(populateObjs),
