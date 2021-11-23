@@ -1,6 +1,7 @@
 import React from "react";
 import { get_DNS } from "../../../js/api";
 import { makeStyles } from "@mui/styles";
+import { Link } from "react-router-dom";
 
 const useStyle = makeStyles({
   cardBox: {
@@ -73,26 +74,25 @@ export default function ProdRow(props) {
   return (
     <>
       {object ? (
-        <div className={classes.cardBox} key={object._id}>
-          <img alt={object.code} src={img_url} className={classes.imgStyle} />
-          {/* <div
-            className='col-1 text-primary'
-            onClick={clickEvent && clickEvent(object)}>
-            {object.code}
-          </div> */}
-          <div className={classes.infoContainer}>
-            <div className='col-1'>{object.nome}</div>
-          </div>
-          <div className={classes.detailsContainer}>
-            <div className='col-1'>
-              {object.price_max === object.price_min ? object.price_min : object.price_min + "~" + object.price_max}
+        <Link to={`prod/${object._id}`} style={{ textDecoration: "none" }}>
+          <span className={classes.cardBox} key={object._id}>
+            <img alt={object.code} src={img_url} className={classes.imgStyle} />
+            <div className={classes.infoContainer}>
+              <div className={classes.nome}>{object.nome}</div>
             </div>
-            <div className='col-1'>{object.desp}</div>
-            <div className='col-1'>{object.addr}</div>
-          </div>
-        </div>
+            <div className={classes.detailsContainer}>
+              <div className={classes.text}>
+                {object.price_max === object.price_min
+                  ? object.price_min
+                  : object.price_min + "~" + object.price_max}
+              </div>
+              <div className={classes.text}>{object.desp}</div>
+              <div className={classes.text}>{object.addr}</div>
+            </div>
+          </span>
+        </Link>
       ) : (
-        <h3 className='text-danger'> PdRow parameter Error! </h3>
+        <h3 className="text-danger"> PdRow parameter Error! </h3>
       )}
     </>
   );
