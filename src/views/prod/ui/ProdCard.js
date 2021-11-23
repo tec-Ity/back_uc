@@ -1,5 +1,32 @@
 import React from "react";
 import { get_DNS } from "../../../js/api";
+import { makeStyles } from "@mui/styles";
+
+const useStyle = makeStyles({
+  cardBox: {
+    height: "350px",
+    width: "200px",
+    padding: "10px",
+    boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.1)",
+    borderRadius: "5px",
+    overflow: "hidden",
+  },
+  imgStyle: {
+    height: "180px",
+    width: "180px",
+    marginBottom: "10px",
+    objectFit: "scale-down",
+  },
+  mainBox: {
+    borderTop: "1px solid #000",
+  },
+  nome: {
+    fontSize: "14px",
+    fontWeight: "700",
+    color: "#000000",
+    overflowWrap: "anywhere",
+  },
+});
 
 export default function ProdCard(props) {
   const { object, clickEvent } = props;
@@ -9,26 +36,17 @@ export default function ProdCard(props) {
   } else if (object?.img_urls?.length > 0) {
     img_url = get_DNS() + object.img_urls[0];
   }
-//   console.log(img_url);
+  //   console.log(img_url);
+
+  const classes = useStyle();
+
   return (
     <>
       {object ? (
-        <div className='card' onClick={clickEvent && clickEvent(object)}>
-          <img
-            src={img_url}
-            className='img-neat'
-            alt={object.code}
-            style={{ width: "100px", height: "100px" }}
-          />
-          <div className='card-body'>
-            <h5 className='card-title'>{object.code}</h5>
-            <p className='card-text'>{object.nome}</p>
-            <p>{object.Shop?.nome}</p>
-            <p className='card-text'>
-              {object.price_max === object.price_min
-                ? object.price_min
-                : object.price_min + "~" + object.price_max}
-            </p>
+        <div className={classes.cardBox} onClick={clickEvent && clickEvent(object)}>
+          <img src={img_url} className={classes.imgStyle} alt={object.code} />
+          <div className={classes.mainBox}>
+            <p className={classes.nome}>{object.nome}</p>
           </div>
         </div>
       ) : (
