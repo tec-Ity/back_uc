@@ -1,6 +1,7 @@
 import React from "react";
 import {
   Breadcrumbs,
+  Grid,
   // Link as MuiLink,
   Typography,
 } from "@mui/material";
@@ -18,7 +19,7 @@ const useStyle = makeStyles({
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: "20px",
-    height: "100px",
+    // height: "100px",
   },
   searchSection: {
     display: "flex",
@@ -72,30 +73,32 @@ export default function ListPageHeader({
   //   const dispatch = useDispatch();
   //   console.log(prevView);
   return (
-    <div className={classes.headerContainer}>
-      <Breadcrumbs className={classes.bread}>
-        {links?.map((link, index) =>
-          index === links.length - 1 ? (
-            <Typography key={index} color='text.primary'>
-              {link.label}
-            </Typography>
-          ) : (
-            <Link
-              key={index}
-              to={
-                "/" +
-                rolePath +
-                (link.prevView === true
-                  ? link.to + `?view=${prevView}`
-                  : link.to)
-              }
-              className={classes.linkStyle}>
-              {link.label}
-            </Link>
-          )
-        )}
-      </Breadcrumbs>
-      <div className={classes.searchSection}>
+    <Grid container className={classes.headerContainer} rowSpacing={3}>
+      <Grid item xs={12} sm={3}>
+        <Breadcrumbs className={classes.bread}>
+          {links?.map((link, index) =>
+            index === links.length - 1 ? (
+              <Typography key={index} color='text.primary'>
+                {link.label}
+              </Typography>
+            ) : (
+              <Link
+                key={index}
+                to={
+                  "/" +
+                  rolePath +
+                  (link.prevView === true
+                    ? link.to + `?view=${prevView}`
+                    : link.to)
+                }
+                className={classes.linkStyle}>
+                {link.label}
+              </Link>
+            )
+          )}
+        </Breadcrumbs>
+      </Grid>
+      <Grid item xs={12} sm={9} className={classes.searchSection}>
         {showSearch === true && <SearchInput flagSlice={flagSlice} api={api} />}
         {showAddIcon === true && addLabel && (
           <div onClick={showAddNew} className={classes.addButton}>
@@ -103,7 +106,7 @@ export default function ListPageHeader({
             {addLabel}
           </div>
         )}
-      </div>
-    </div>
+      </Grid>
+    </Grid>
   );
 }

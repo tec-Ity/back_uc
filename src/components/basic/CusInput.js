@@ -46,7 +46,7 @@ export default function CusInput({
     <div className={classes.inputBox} ref={ref}>
       <input
         value={value}
-        onChange={handleChange}
+        onChange={!disabled ? handleChange : () => {}}
         {...autoCompleteParam}
         disabled={disabled}
         className={classes.inputStyle}

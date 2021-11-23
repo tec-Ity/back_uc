@@ -21,7 +21,7 @@ const mainShopQuery = "?is_main=true";
 const populateObjs = [{}];
 
 const companyInfoList = [
-  { title: "公司编号", field: "code" },
+  { title: "公司编号", field: "code", disabled: true },
   { title: "公司名称", field: "nome" },
   { title: "公司负责人", field: "resp" },
   { title: "公司地址", field: "addr" },
@@ -46,10 +46,6 @@ export default function Company() {
     );
   }, [dispatch]);
 
-  //   console.log(companyInfo);
-  //   console.log(mainShopInfo);
-  //   console.log(msUpdate);
-
   useEffect(() => {
     companyInfo &&
       setCiUpdate(() => {
@@ -70,17 +66,37 @@ export default function Company() {
 
   return (
     <Grid container rowSpacing={3}>
-      <Grid container item xs={12} justifyContent='space-between'>
+      <Grid item xs={12}>
         <h1>公司信息</h1>
-        <CusBtnGroup />
       </Grid>
+      <Grid container item xs={12} justifyContent='space-between'>
+        <h3>基础信息</h3>
+        <CusBtnGroup
+          modifying={modifying}
+          handleEdit={() => setModifying(true)}
+          handleCancel={() => setModifying(false)}
+          handleSubmit={() => {
+            const general = {};
+            companyInfoList.forEach(
+              (ci) => !ci.disabled && (general[ci.field] = ciUpdate[ci.field])
+            );
+            console.log(general);
+            dispatch(putObject({ flagSlice, api, data:  {general} }));
+          }}
+        />
+      </Grid>
+
       {companyInfoList.map((ci) => (
         <React.Fragment key={ci.title}>
           <Grid item xs={5}>
             <CusInput
               label={ci.title}
-              disabled={!modifying}
-              value={ciUpdate[ci.field]}
+              disabled={!modifying || ci.disabled}
+              value={ciUpdate[ci.field] || ""}
+              handleChange={(e) =>
+                !ci.disabled &&
+                setCiUpdate((prev) => ({ ...prev, [ci.field]: e.target.value }))
+              }
             />
           </Grid>
           <Grid item xs={7} />
@@ -103,6 +119,7 @@ export default function Company() {
               })
             )
           }
+          handleCancel={() => setModifyingMS(false)}
         />
       </Grid>
       <Grid item xs={5}>
@@ -118,12 +135,3 @@ export default function Company() {
     </Grid>
   );
 }
-
-// {ci.selection === true ? (
-//     <CusSelectSearch
-//       disabled={!modifying}
-//       label={ci.title}
-//       flagSlice={shopFlagSlice}
-//       api={shopsApi}
-//       />
-//       ) : (

@@ -57,9 +57,16 @@ export default function AppHeaderMb() {
                   <>
                     {roleLinks?.map((link) => {
                       return (
-                        <li key={link.label} className='nav-item' >
+                        <li
+                          key={link.label}
+                          className='nav-item '
+                          data-bs-toggle='offcanvas'
+                          data-bs-target='#offcanvasNavbar'
+                          aria-controls='offcanvasNavbar'>
                           <NavLink className='nav-link' to={link.to}>
-                            <i className={link.icon} style={{position:'relative'}}>
+                            <i
+                              className={link.icon}
+                              style={{ position: "relative" }}>
                               {link.to.split("/")[2] === "orders" && (
                                 <div
                                   style={{
