@@ -1,12 +1,18 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router";
+import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import { get_DNS } from "../../../js/api";
+import { getRolePath } from "../../../js/conf/confUser";
 import { makeStyles } from "@mui/styles";
+import { selectUser } from "../../../features/authSlice";
+import { postObject } from "../../../features/objectsSlice";
 
 const useStyle = makeStyles({
   cardBox: {
     minHeight: "84px",
     width: "100%",
-    margin: "20px",
+    margin: "20px 0px 20px 0px",
     backgroundColor: "#fff",
     boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.1)",
     borderRadius: "5px",
@@ -72,7 +78,20 @@ const useStyle = makeStyles({
       cursor: "pointer",
     },
   },
+  statusDone: {
+    width: "74px",
+    backgroundColor: "#F0F0F0",
+    borderRadius: "0px 5px 5px 0px",
+    fontSize: "12px",
+    fontWeight: "400",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });
+
+const prodSyncSlice = "prods";
+const prodSyncApi = "/Prod";
 
 export default function PdRow(props) {
   const { object, clickEvent } = props;
@@ -84,20 +103,46 @@ export default function PdRow(props) {
   }
 
   const classes = useStyle();
-  console.log("[object]", object);
+  const hist = useHistory();
+  const curUser = useSelector(selectUser);
+  const rolePath = getRolePath();
+  const [justPosted, setJustPosted] = useState(false);
+  const Prods = useSelector((state) => state.objects[prodSyncSlice]?.objects);
+
+  const dispatch = useDispatch();
+  const syncProd = (e) => {
+    e.stopPropagation();
+    dispatch(
+      postObject({
+        flagSlice: prodSyncSlice,
+        api: prodSyncApi,
+        data: { Pd: object?._id, Shop: curUser.Shop },
+      })
+    );
+    setJustPosted(true);
+  };
+
+  useEffect(() => {
+    // console.log(Prods);
+    if (justPosted === true) {
+      const prodId = Prods?.find((prod) => prod.Pd === object?._id)?._id;
+      //   prodId && hist.push(`/${rolePath}/prod/${prodId}`);
+      prodId && hist.push(`/${rolePath}/reload`);
+    }
+  }, [Prods, hist, justPosted, object?._id, rolePath]);
 
   return (
     <>
       {object ? (
         <div className={classes.cardBox}>
-          <div
+          <Link
+            to={`pd/${object._id}`}
             className={classes.mainBox}
-            onClick={clickEvent && clickEvent(object)}
+            style={{ textDecoration: "none" }}
             key={object._id}
           >
             <img alt={object.code} src={img_url} className={classes.imgStyle} />
             <div className={classes.infoContainer}>
-              {/* <div className={classes.code}>{object.code}</div> */}
               <div className={classes.nome}>
                 {object.nome.length < 100
                   ? object.nome
@@ -119,16 +164,23 @@ export default function PdRow(props) {
                 {"€" + object.price_regular.toFixed(2)}
               </div>
             </div>
-          </div>
-          <div
-            onClick={(e) => {
-              e.stopPropagation();
-              console.log("status");
-            }}
-            className={classes.status}
-          >
-            Status
-          </div>
+          </Link>
+          {curUser.role > 100 &&
+            (object?.Prods &&
+            object.Prods.length > 0 &&
+            object.Prods.find((prod) => prod.Shop === curUser.Shop) ? (
+              <div className={classes.statusDone}>Synced</div>
+            ) : (
+              <div
+                className={classes.status}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  syncProd(e);
+                }}
+              >
+                Sync
+              </div>
+            ))}
         </div>
       ) : (
         <h3 className="text-danger"> PdRow parameter Error! </h3>
