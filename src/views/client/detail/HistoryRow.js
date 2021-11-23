@@ -37,7 +37,7 @@ export default function HistoryRow({ object }) {
       <div>
         <div>{object.Shop?.code}</div>
         <div>{object.code}</div>
-        <div>{moment(object.at_confirm).format("MM/DD/YYYY")}</div>
+        <div>{moment(object.at_crt).format("MM/DD/YYYY")}</div>
         <div>{object.total_quantity}</div>
         <div>{"€" + object.imp.toFixed(2)}</div>
         <div>{object.status}</div>
