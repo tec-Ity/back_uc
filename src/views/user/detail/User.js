@@ -210,7 +210,7 @@ export default function User() {
               label: "电话",
               content: object.phonePre,
               type: "phonePre",
-              permissions: ["hierachy"],
+              permissions: ["hierachy", "self"],
               check: {
                 regexp: "^[0-9]*$",
                 trim: 4,
@@ -281,9 +281,10 @@ export default function User() {
       flag = flag || tmp_flag;
     }
     if (flag == null) return;
-    field.editable = flag;
+    field.editable = curRole === 1 ? true : flag;
   }
 
+  //set permissions
   for (const field of fields) {
     if (field.variant?.variantObj.fields != null) {
       for (const v_field of field.variant?.variantObj.fields) {
