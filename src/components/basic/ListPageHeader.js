@@ -102,7 +102,7 @@ export default function ListPageHeader({
           )}
         </Breadcrumbs>
       </Grid>
-      <Grid item xs={12} sm={9} className={classes.searchSection}>
+      <Grid container item xs={12} sm={9} className={classes.searchSection} justifyContent='flex-end'>
         {showSearch === true && <SearchInput flagSlice={flagSlice} api={api} />}
         {showAddIcon === true && addLabel && (
           <div onClick={showAddNew} className={classes.addButton}>
