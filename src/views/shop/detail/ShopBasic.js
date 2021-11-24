@@ -17,6 +17,7 @@ import { getRolePath } from "../../../js/conf/confUser";
 import CusBtnGroup from "../../../components/basic/CusBtnGroup";
 import { useHistory } from "react-router";
 import CusSwitch from "../../../components/basic/CusSwitch";
+import { FormattedMessage } from "react-intl";
 
 const useStyle = makeStyles({
   root: {},
@@ -155,7 +156,9 @@ export default function ShopBasic(props) {
   return (
     <Container className={classes.root} disableGutters>
       <div className={clsx(classes.formItem, classes.flexStyle)}>
-          <div style={{fontSize: "20px"}}>店铺图片</div>
+        <div style={{ fontSize: "20px" }}>
+          <FormattedMessage id='infoSection-shopImg' />
+        </div>
         <CusBtnGroup
           disableDelete
           modifying={modifyingImg}
@@ -220,7 +223,9 @@ export default function ShopBasic(props) {
           justifyContent: "space-between",
           paddingTop: "30px",
         }}>
-        <div style={{ fontSize: "20px" }}>店铺信息</div>
+        <div style={{ fontSize: "20px" }}>
+          <FormattedMessage id='infoSection-shopInfo' />
+        </div>
         <CusBtnGroup
           modifying={modifying}
           handleEdit={() => {
@@ -240,7 +245,7 @@ export default function ShopBasic(props) {
       </div>
       <div className={classes.formItem}>
         <CusInput
-          label='Code'
+          label={<FormattedMessage id='inputLabel-code' />}
           disabled={!modifying}
           value={infoUpdate.code}
           handleChange={(e) =>
@@ -250,7 +255,7 @@ export default function ShopBasic(props) {
       </div>
       <div className={classes.formItem}>
         <CusInput
-          label='Name'
+          label={<FormattedMessage id='inputLabel-name' />}
           disabled={!modifying}
           value={infoUpdate.name}
           handleChange={(e) =>
@@ -261,7 +266,7 @@ export default function ShopBasic(props) {
       <div className={classes.formItem}>
         <CusSelectSearch
           disabled={!modifying}
-          label='City'
+          label={<FormattedMessage id='inputLabel-city' />}
           flagSlice='Citas'
           api='/Citas'
           defaultSel={infoUpdate.city?.code}
@@ -276,7 +281,7 @@ export default function ShopBasic(props) {
       </div>
       <div className={classes.formItem}>
         <CusInput
-          label='Address'
+          label={<FormattedMessage id='inputLabel-addr' />}
           disabled={!modifying}
           value={infoUpdate.addr}
           handleChange={(e) =>
@@ -286,7 +291,7 @@ export default function ShopBasic(props) {
       </div>
       <div className={classes.formItem}>
         <CusInput
-          label='Zip'
+          label={<FormattedMessage id='inputLabel-zip' />}
           disabled={!modifying}
           value={infoUpdate.zip}
           handleChange={(e) =>
@@ -298,7 +303,7 @@ export default function ShopBasic(props) {
       <div className={classes.formItem}>
         <div
           style={{ fontSize: "14px", fontWeight: "700", color: "#0000004d" }}>
-          Usable
+          <FormattedMessage id='inputLabel-isUsable' />
         </div>
         <CusSwitch
           disabled={!modifying}

@@ -125,9 +125,8 @@ const useStyle = makeStyles({
 });
 // const rolePath = getRolePath();
 const links = [
-  { label: "主页", to: "/home" },
-  { label: "设置", to: `/setting` },
-  { label: "大区列表" },
+  { label: "setting", to: `/setting` },
+  { label: "areas" },
 ];
 const flagSlice = "areas";
 const api = "/Areas";

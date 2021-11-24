@@ -18,8 +18,6 @@ const shopsApi = "/shops";
 const shopApi = "/shop";
 const mainShopQuery = "?is_main=true";
 
-const populateObjs = [{}];
-
 const companyInfoList = [
   { title: "公司编号", field: "code", disabled: true },
   { title: "公司名称", field: "nome" },
@@ -53,7 +51,6 @@ export default function Company() {
         companyInfoList.forEach(
           (ci) => (tempInfo[ci.field] = companyInfo[ci.field] || "")
         );
-        console.log(tempInfo);
         return tempInfo;
       });
   }, [companyInfo]);
@@ -80,7 +77,6 @@ export default function Company() {
             companyInfoList.forEach(
               (ci) => !ci.disabled && (general[ci.field] = ciUpdate[ci.field])
             );
-            console.log(general);
             dispatch(putObject({ flagSlice, api, data:  {general} }));
           }}
         />

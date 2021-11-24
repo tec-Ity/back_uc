@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useLocation, } from "react-router";
+import { useParams, useLocation } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 // import { getRolePath } from "../../../js/conf/confUser";
 import {
@@ -19,7 +19,7 @@ const populateObjs = [
 ];
 
 export default function Shop() {
-//   const rolePath = getRolePath();
+  //   const rolePath = getRolePath();
   const dispatch = useDispatch();
   const { id } = useParams();
   const flagSlice = "shop";
@@ -64,17 +64,17 @@ export default function Shop() {
   const switchList = [
     {
       selKey: 1,
-      label: "Basic",
+      label: "basic",
       url: "basic",
     },
     {
       selKey: 2,
-      label: "Service Areas",
+      label: "servCita",
       url: "serviceAreas",
     },
     {
       selKey: 3,
-      label: "Products",
+      label: "prods",
       url: "products",
     },
   ];
@@ -84,11 +84,7 @@ export default function Shop() {
       <ListPageHeader
         flagSlice={flagSlice}
         api={api}
-        links={[
-          { label: "主页", to: "/home" },
-          { label: "店铺列表", to: `/shops` },
-          { label: "店铺详情" },
-        ]}
+        links={[{ label: "shops", to: `/shops` }, { label: "shop" }]}
         showAddIcon={false}
         showSearch={false}
       />

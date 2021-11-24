@@ -16,7 +16,7 @@ import ListPageHeader from "../../../components/basic/ListPageHeader";
 import PageNav from "../../../components/universal/query/PageNav";
 
 
-const links = [{ label: "主页", to: "/home" }, { label: "客户列表" }];
+const links = [{ label: "clients" }];
 
 export default function Clients(props) {
   const dispatch = useDispatch();

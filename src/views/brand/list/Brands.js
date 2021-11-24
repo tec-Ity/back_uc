@@ -128,7 +128,7 @@ const useStyle = makeStyles({
   },
 });
 
-const links = [{ label: "主页", to: "/home" }, { label: "品牌列表" }];
+const links = [ { label: "brands" }];
 const flagSlice = "brands";
 const api = "/Brands";
 const populateObjs = [

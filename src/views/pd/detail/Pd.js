@@ -28,7 +28,8 @@ const populateObjs = [
       { path: "Shop", select: "code nome" },
       {
         path: "Skus",
-        select: "attrs price_regular price_sale quantity is_sell is_usable is_discount",
+        select:
+          "attrs price_regular price_sale quantity is_sell is_usable is_discount",
       },
     ],
   },
@@ -37,12 +38,12 @@ const populateObjs = [
 const switchList = [
   {
     selKey: 1,
-    label: "Basic",
+    label: "basic",
     url: "basic",
   },
   {
     selKey: 2,
-    label: "Products",
+    label: "prods",
     url: "products",
   },
 ];
@@ -96,11 +97,7 @@ export default function Pd(props) {
       <ListPageHeader
         flagSlice={flagSlice}
         api={api}
-        links={[
-          { label: "主页", to: "/home" },
-          { label: "产品列表", to: `/pds`, prevView: true },
-          { label: "产品详情" },
-        ]}
+        links={[{ label: "pds", to: `/pds`, prevView: true }, { label: "pd" }]}
         showAddIcon={false}
         showSearch={false}
       />

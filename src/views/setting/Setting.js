@@ -6,7 +6,7 @@ import { default as RegionIcon } from "../../components/icon/RegionIcon.svg";
 import { default as CityIcon } from "../../components/icon/cityIcon.svg";
 import { useHistory } from "react-router";
 import CusSettingCart from "../../components/basic/CusSettingCard";
-const links = [{ label: "主页", to: "/home" }, { label: "设置" }];
+const links = [{ label: "setting" }];
 export default function Setting() {
   const rolePath = getRolePath();
   const hist = useHistory();

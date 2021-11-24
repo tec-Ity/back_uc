@@ -29,6 +29,7 @@ import ListPageHeader from "../../../components/basic/ListPageHeader.js";
 import CusSwitch from "../../../components/basic/CusSwitch";
 import CusBtnGroup from "../../../components/basic/CusBtnGroup";
 import FormBox from "./FormBox";
+import { FormattedMessage } from "react-intl";
 
 const populateObjs = [{ path: "Shop", select: "code nome" }];
 
@@ -157,12 +158,11 @@ export default function User() {
       <>
         <Grid item xs={12} sm={3}>
           <Typography
-            sx={{ fontSize: "16px", color: "#0000004D", fontWeight: "700" }}
-          >
+            sx={{ fontSize: "16px", color: "#0000004D", fontWeight: "700" }}>
             {label}
           </Typography>
         </Grid>
-        <Grid item xs="auto" sm="auto">
+        <Grid item xs='auto' sm='auto'>
           <Typography sx={{ fontSize: "16px", fontWeight: "700" }}>
             {content}
           </Typography>
@@ -171,21 +171,17 @@ export default function User() {
     );
   }
 
-  const links = [
-    { label: "主页", to: `/home` },
-    { label: "用户列表", to: `/users` },
-    { label: "详情" },
-  ];
+  const links = [{ label: "users", to: `/users` }, { label: "user" }];
 
   let fields = [
     {
-      label: "用户姓名",
+      label: <FormattedMessage id='inputLabel-name' />,
       content: object.nome,
       type: "nome",
       permissions: ["hierachy", "self"],
     },
     {
-      label: "登录账号",
+      label: <FormattedMessage id='inputLabel-code' />,
       content: object.code,
       type: "code",
       permissions: ["hierachy"],
@@ -207,7 +203,7 @@ export default function User() {
         variantObj: {
           fields: [
             {
-              label: "电话",
+              label: <FormattedMessage id='inputLabel-phone' />,
               content: object.phonePre,
               type: "phonePre",
               permissions: ["hierachy", "self"],
@@ -231,7 +227,7 @@ export default function User() {
       },
     },
     {
-      label: "用户角色",
+      label: <FormattedMessage id='inputLabel-role' />,
       content: roleName(object.role),
       type: "role",
       permissions: ["hierachy"],
@@ -246,7 +242,7 @@ export default function User() {
 
   if (object.role > 100) {
     fields.push({
-      label: "Shop",
+      label: <FormattedMessage id='inputLabel-shop' />,
       content: object.Shop?.nome,
       type: "Shop",
       permissions: ["hierachy", "shop"],
@@ -302,10 +298,9 @@ export default function User() {
         // 数据正确
         object._id && String(object._id) === String(id) && (
           <Box
-            height="180px"
-            width="100%"
-            sx={{ display: "flex", justifyContent: "space-between" }}
-          >
+            height='180px'
+            width='100%'
+            sx={{ display: "flex", justifyContent: "space-between" }}>
             <UserProfileLightGrey />
             <CusBtnGroup
               modifying={editing}
@@ -321,16 +316,15 @@ export default function User() {
               handleSubmit={handleSave}
             />
             <Box>
-              <div className="text-right">
+              <div className='text-right'>
                 {/* {
               // 如果比自己等级低 可删除
             } */}
                 <button
-                  className="btn btn-info"
-                  onClick={() => setModalPut(true)}
-                >
+                  className='btn btn-info'
+                  onClick={() => setModalPut(true)}>
                   {" "}
-                  <i className="bx bx-edit-alt"></i>{" "}
+                  <i className='bx bx-edit-alt'></i>{" "}
                 </button>
                 <UserPutModal
                   show={modalPut}
@@ -344,16 +338,15 @@ export default function User() {
                 </IconButton>
 
                 {editing && curRole < object.role && (
-                  <Button variant="contained" color="error" onClick={deleteDB}>
+                  <Button variant='contained' color='error' onClick={deleteDB}>
                     删除此用户
                   </Button>
                 )}
                 {editing && (
                   <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => setModalPwd(true)}
-                  >
+                    variant='contained'
+                    color='secondary'
+                    onClick={() => setModalPwd(true)}>
                     修改密码
                   </Button>
                 )}
@@ -370,19 +363,17 @@ export default function User() {
                 )}
                 {!editing ? (
                   <Button
-                    variant="contained"
-                    color="primary"
+                    variant='contained'
+                    color='primary'
                     startIcon={!editing ? <EditIcon /> : <CancelIcon />}
-                    onClick={handleEdit}
-                  >
+                    onClick={handleEdit}>
                     编辑
                   </Button>
                 ) : (
                   <IconButton
                     onClick={() => {
                       setEditing(!editing);
-                    }}
-                  >
+                    }}>
                     <CancelIcon />
                   </IconButton>
                 )}
@@ -392,7 +383,7 @@ export default function User() {
         )
       }
 
-      <Box mt="46px" sx={{ maxWidth: "100%" }}>
+      <Box mt='46px' sx={{ maxWidth: "100%" }}>
         {/* main details */}
         <FormBox
           data={{ fields: fields, object: object }}
@@ -412,9 +403,8 @@ export default function User() {
               color: "#0000004D",
               fontWeight: "700",
               bgcolor: "white",
-            }}
-          >
-            USABLE
+            }}>
+            <FormattedMessage id='inputLabel-isUsable' />
           </Typography>
           {editing ? (
             <CusSwitch
@@ -432,8 +422,11 @@ export default function User() {
             </Typography>
           )}
         </Box>
-        <Grid container mt="25px" ml={3}>
-          <FooterBox label="最近登录" content={object.at_last_login} />
+        <Grid container mt='25px' ml={3}>
+          <FooterBox
+            label={<FormattedMessage id='inputLabel-lastLogin' />}
+            content={object.at_last_login}
+          />
         </Grid>
       </Box>
       {/* <div className="row mt-3">

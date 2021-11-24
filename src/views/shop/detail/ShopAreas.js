@@ -12,6 +12,7 @@ import CusSelectSearch from "../../../components/basic/CusSelectSearch";
 import { makeStyles } from "@mui/styles";
 import { useHistory } from "react-router";
 import { getRolePath } from "../../../js/conf/confUser";
+import { FormattedMessage } from "react-intl";
 export default function ShopAreas(props) {
   const { Shop, flagSlice, api } = props;
   const [ServeCitasUpdate, setServeCitasUpdate] = useState([]);
@@ -48,9 +49,14 @@ export default function ShopAreas(props) {
 }
 
 function ServeCitaRow({ flagSlice, serveCita = {}, search, api }) {
-//   console.log(serveCita);
+  //   console.log(serveCita);
   const dispatch = useDispatch();
-  const [serveCitaUpdate, setServeCitasUpdate] = useState(serveCita);
+  console.log(serveCita);
+  const [serveCitaUpdate, setServeCitasUpdate] = useState({
+    ...serveCita,
+    price_ship: String(serveCita.price_ship?.toFixed(2)).replace(".", ""),
+  });
+  // console.log(serveCitaUpdate);
   const [modifying, setModifying] = useState(false);
   useEffect(() => {
     setServeCitasUpdate(serveCita);
@@ -61,6 +67,21 @@ function ServeCitaRow({ flagSlice, serveCita = {}, search, api }) {
   };
   const handleCancel = () => {
     setModifying(false);
+  };
+  const handleSubmit = () => {
+    console.log(serveCitaUpdate);
+    dispatch(
+      putObject({
+        flagSlice,
+        api,
+        data: {
+          serveCitaPut: {
+            _id: serveCita?._id,
+            price_ship: serveCitaUpdate?.price_ship,
+          },
+        },
+      })
+    );
   };
   const handleDelete = () => {
     dispatch(
@@ -79,7 +100,7 @@ function ServeCitaRow({ flagSlice, serveCita = {}, search, api }) {
       <Grid item xs={2}>
         <CusInput
           disabled
-          label='City Code'
+          label={<FormattedMessage id='inputLabel-code' />}
           value={serveCitaUpdate?.Cita?.code || ""}
           onChange={(e) => {
             // setServeCitasUpdate(prev=>({...prev, Cita:{...Cita,}}));
@@ -90,16 +111,21 @@ function ServeCitaRow({ flagSlice, serveCita = {}, search, api }) {
       <Grid item xs={2}>
         <CusInput
           disabled
-          label='City Name'
+          label={<FormattedMessage id='inputLabel-name' />}
           value={serveCitaUpdate?.Cita?.nome || ""}
         />
       </Grid>
       <Grid item xs={4}>
         <CusInput
           disabled={!modifying}
-          label='Price Ship'
+          label={<FormattedMessage id='inputLabel-priceShip' />}
           value={serveCitaUpdate?.price_ship}
-          onChange={(e) => setServeCitasUpdate(1)}
+          handleChange={(e) =>
+            setServeCitasUpdate((prev) => ({
+              ...prev,
+              price_ship: e.target.value,
+            }))
+          }
         />
       </Grid>
       <Grid container item xs={3} alignItems='flex-end' justifyContent='center'>
@@ -108,6 +134,7 @@ function ServeCitaRow({ flagSlice, serveCita = {}, search, api }) {
           handleEdit={handleEdit}
           handleCancel={handleCancel}
           handleDelete={handleDelete}
+          handleSubmit={handleSubmit}
         />
       </Grid>
     </Grid>
@@ -124,9 +151,9 @@ const useStyle = makeStyles({
     justifyContent: "center",
     alignItems: "center",
     cursor: "pointer",
-    '&:hover':{
-        backgroundColor: "#000000cc",
-    }
+    "&:hover": {
+      backgroundColor: "#000000cc",
+    },
   },
   addNewLabel: {
     display: "flex",
@@ -148,7 +175,7 @@ function ServeCitaNew(props) {
   const [justSubmitted, setJustSubmitted] = useState(false);
   const [selected, setSelected] = useState(null);
   const [priceShip, setPriceShip] = useState("");
-//   console.log(selected);
+  //   console.log(selected);
 
   useEffect(() => {
     if (justSubmitted === true && status === "succeed") {
@@ -191,7 +218,7 @@ function ServeCitaNew(props) {
         </div>
       </Grid>
       <Grid item xs={2} className={classes.addNewLabel}>
-        添加新服务城市
+        <FormattedMessage id='btnLabel-newServCita' />
       </Grid>
       <Grid item xs={4}></Grid>
       <Grid item xs={3}></Grid>
@@ -202,59 +229,30 @@ function ServeCitaNew(props) {
       justifyContent='space-between'
       style={{ marginTop: "10px" }}>
       <Grid item xs={2}>
-        {/* <CusSelect
-          label='City Code'
-          handleSelect={(e, val) => {
-            setSelectedId(val?.id);
-          }}
-          value={
-            selectedId && {
-              label: Citas.find((cita) => cita._id === selectedId)?.code,
-              id: selectedId,
-            }
-          }
-          options={Citas.map((cita) => ({ label: cita.code, id: cita._id }))}
-        /> */}
         <CusSelectSearch
           api='/Citas'
-          label='City Code'
+          label={<FormattedMessage id='inputLabel-code' />}
           flagSlice={citaFlag}
-          placeholder='输入城市代码'
           extraValueType='nome'
           defaultSel={selected?.code || ""}
           handleSelect={(val) => val && setSelected(val)}
         />
       </Grid>
       <Grid item xs={2}>
-        {/* <CusSelect
-          label='City Name'
-          handleSelect={(e, val) => {
-            setSelectedId(val?.id);
-          }}
-          value={
-            selectedId && {
-              label: Citas.find((cita) => cita._id === selectedId)?.nome,
-              id: selectedId,
-            }
-          }
-          options={Citas.map((cita) => ({ label: cita.nome, id: cita._id }))}
-        /> */}
         <CusSelectSearch
           api='/Citas'
-          label='City Name'
+          label={<FormattedMessage id='inputLabel-name' />}
           flagSlice={citaFlag}
           optionLabelType='nome'
           extraValueType='code'
-          placeholder='输入城市名称'
           defaultSel={selected?.nome || ""}
           handleSelect={(val) => val && setSelected(val)}
         />
       </Grid>
       <Grid item xs={4}>
         <CusInput
-          label='Price Ship'
+          label={<FormattedMessage id='inputLabel-priceShip' />}
           value={priceShip}
-          placeholder='输入运费'
           handleChange={(e) => {
             !isNaN(e.target.value) && setPriceShip(e.target.value);
           }}

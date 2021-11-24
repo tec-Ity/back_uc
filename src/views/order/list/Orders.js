@@ -70,7 +70,7 @@ const useStyle = makeStyles({
 
 const flagSlice = "orders";
 const api = "/Orders";
-const links = [{ label: "主页", to: "/home" }, { label: "订单列表" }];
+const links = [ { label: "orders" }];
 export default function Orders() {
   const dispatch = useDispatch();
   const hist = useHistory();

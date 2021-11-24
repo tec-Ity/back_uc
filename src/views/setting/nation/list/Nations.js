@@ -124,9 +124,8 @@ const useStyle = makeStyles({
 });
 // const rolePath = getRolePath();
 const links = [
-  { label: "主页", to: "/home" },
-  { label: "设置", to: `/setting` },
-  { label: "国家列表" },
+ { label: "setting", to: `/setting` },
+  { label: "nations" },
 ];
 const flagSlice = "nations";
 const api = "/Nations";

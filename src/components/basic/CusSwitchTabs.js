@@ -2,6 +2,7 @@ import React from "react";
 import { makeStyles } from "@mui/styles";
 import { useHistory } from "react-router";
 import clsx from "clsx";
+import { FormattedMessage } from "react-intl";
 
 const useStyle = makeStyles({
   tabBox: {
@@ -47,7 +48,7 @@ export default function CusSwitchTabs({ switchList, setSel, selected }) {
     <div className={classes.tabBox}>
       {switchList?.map((switchTab, index) => (
         <div
-          key={switchTab.label}
+          key={index}
           className={clsx(
             classes.tabStyle,
             switchTab.selKey === selected
@@ -58,7 +59,7 @@ export default function CusSwitchTabs({ switchList, setSel, selected }) {
             setSel(switchTab?.selKey);
             hist.push(`?section=${switchTab.url}`);
           }}>
-          {switchTab.label}
+          <FormattedMessage id={`switchLabel-${switchTab.label}`} />
         </div>
       ))}
     </div>

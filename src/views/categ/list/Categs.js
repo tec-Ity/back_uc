@@ -149,7 +149,7 @@ const useStyle = makeStyles({
   },
 });
 
-const links = [{ label: "主页", to: "/home" }, { label: "分类列表" }];
+const links = [{ label: "categs" }];
 const flagSlice = "categs";
 const populateObjs = [
   {

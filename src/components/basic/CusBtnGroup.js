@@ -5,6 +5,7 @@ import { ReactComponent as Cancel } from "../icon/cancel.svg";
 import { ReactComponent as Delete } from "../icon/delete.svg";
 import { ReactComponent as Edit } from "../icon/edit.svg";
 import clsx from "clsx";
+import { FormattedMessage } from "react-intl";
 
 const useStyle = makeStyles({
   btnGroup: {
@@ -62,20 +63,25 @@ export default function CusBtnGroup(props) {
               onClick={handleDelete}
               className={clsx(classes.redMain, disabled && classes.disableBg)}>
               <Delete className={classes.deleteRed} />
-              <div>删除</div>
+              <FormattedMessage id='btnLabel-delete' />
+              <div></div>
             </div>
           )}
           <div
             onClick={handleSubmit}
             className={clsx(classes.blackMain, disabled && classes.disableBg)}>
             <Confirm />
-            <div>确认</div>
+            <div>
+              <FormattedMessage id='btnLabel-submit' />
+            </div>
           </div>
           <div
             onClick={handleCancel}
             className={clsx(classes.blackMain, disabled && classes.disableBg)}>
             <Cancel />
-            <div>取消</div>
+            <div>
+              <FormattedMessage id='btnLabel-cancel' />
+            </div>
           </div>
         </>
       ) : (
@@ -83,7 +89,9 @@ export default function CusBtnGroup(props) {
           onClick={disabled === false ? handleEdit : () => {}}
           className={clsx(classes.blackMain, disabled && classes.disableBg)}>
           <Edit />
-          <div>编辑</div>
+          <div>
+            <FormattedMessage id='btnLabel-edit' />
+          </div>
         </div>
       )}
     </div>

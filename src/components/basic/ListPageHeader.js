@@ -11,6 +11,7 @@ import SearchInput from "../universal/query/SearchInput";
 import { ReactComponent as AddIcon } from "../icon/addIconWhite.svg";
 import { getRolePath } from "../../js/conf/confUser";
 import { useSelector } from "react-redux";
+import { FormattedMessage } from "react-intl";
 // import { setPrevView } from "../../features/objectsSlice";
 
 const useStyle = makeStyles({
@@ -73,13 +74,16 @@ export default function ListPageHeader({
   //   const dispatch = useDispatch();
   //   console.log(prevView);
   return (
-    <Grid container className={classes.headerContainer} rowSpacing={3}>
+    <Grid container className={classes.headerContainer}>
       <Grid item xs={12} sm={3}>
         <Breadcrumbs className={classes.bread}>
+          <Link className={classes.linkStyle} to={`/${rolePath}/home`}>
+            <FormattedMessage id='homepage' />
+          </Link>
           {links?.map((link, index) =>
             index === links.length - 1 ? (
               <Typography key={index} color='text.primary'>
-                {link.label}
+                <FormattedMessage id={`navLabel-${link.label}`} />
               </Typography>
             ) : (
               <Link
@@ -92,7 +96,7 @@ export default function ListPageHeader({
                     : link.to)
                 }
                 className={classes.linkStyle}>
-                {link.label}
+                <FormattedMessage id={`navLabel-${link.label}`} />
               </Link>
             )
           )}
@@ -103,7 +107,7 @@ export default function ListPageHeader({
         {showAddIcon === true && addLabel && (
           <div onClick={showAddNew} className={classes.addButton}>
             <AddIcon className={classes.AddIconStyle} />
-            {addLabel}
+            <FormattedMessage id={`navLabelAdd-${addLabel}`}/>
           </div>
         )}
       </Grid>

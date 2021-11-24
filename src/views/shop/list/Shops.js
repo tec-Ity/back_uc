@@ -13,6 +13,7 @@ import ShopRow from "../ui/ShopRow";
 import ListPageHeader from "../../../components/basic/ListPageHeader";
 // const ShopPostModal = lazy(() => import("../modal/ShopPostModal"));
 import PageNav from "../../../components/universal/query/PageNav";
+import { FormattedMessage } from "react-intl";
 
 const flagSlice = "shops";
 const api = "/Shops";
@@ -20,10 +21,7 @@ export default function Shops(props) {
   const rolePath = getRolePath();
   const dispatch = useDispatch();
   const hist = useHistory();
-  const links = [
-    { label: "主页", to: `/home` },
-    { label: "店铺列表" },
-  ];
+  const links = [{ label: "shops" }];
 
   const [modalShow, setModalShow] = useState(false);
 
@@ -44,7 +42,7 @@ export default function Shops(props) {
         api={api}
         links={links}
         showAddNew={() => setModalShow(true)}
-        addLabel='添加店铺'
+        addLabel='shop'
       />
       <ShopPostModal
         flagSlice={flagSlice}

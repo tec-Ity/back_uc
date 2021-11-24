@@ -162,9 +162,8 @@ const populateObjs = [
   { path: "ship_info", select: "Cita.code" },
 ];
 const links = [
-  { label: "主页", to: "/home" },
-  { label: "订单列表", to: `/orders`, prevView: true },
-  { label: "订单详情" },
+  { label: "orders", to: `/orders`, prevView: true },
+  { label: "order" },
 ];
 ////////////////////////////////////////////////////////////////
 export default function Order() {
@@ -478,7 +477,12 @@ function ProdsInfoSection({ orderProds }) {
       </Grid>
       <Grid>
         {orderProds?.map((op, index) => (
-          <Grid container item xs={12} className={classes.prodsListStyle} key={index}>
+          <Grid
+            container
+            item
+            xs={12}
+            className={classes.prodsListStyle}
+            key={index}>
             <Grid container item xs={1}>
               {index + 1}
             </Grid>

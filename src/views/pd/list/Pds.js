@@ -42,7 +42,7 @@ export default function Pds(props) {
   const [addNew, setAddNew] = useState(false);
   const objects = useSelector(selectObjects(flagSlice));
   const queryFixed = useSelector(selectQueryFixed(flagSlice));
-  const links = [{ label: "主页", to: `/home` }, { label: "产品列表" }];
+  const links = [{ label: "pds" }];
   const clickEvent = (obj) => (e) => {
     hist.push(`/${rolePath}/pd/${obj._id}`);
   };
@@ -73,10 +73,10 @@ export default function Pds(props) {
         flagSlice={flagSlice}
         api={api}
         links={links}
-        addLabel="添加产品"
+        addLabel='pd'
         showAddNew={() => setAddNew(true)}
       />
-      <div className="mt-4">
+      <div className='mt-4'>
         <UiVariety
           propsCard={PdCard}
           UiRow={PdRow}
