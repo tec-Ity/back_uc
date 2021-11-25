@@ -121,7 +121,7 @@ export const putObject = createAsyncThunk(
   async ({ flagSlice, api, data, isList = false }, { rejectWithValue }) => {
     // console.log(api);
     const put_res = await axios_Prom(api, "PUT", data);
-    // console.log(put_res);
+    console.log(put_res);
     if (put_res.status === 200) {
       //   console.log("yes");
       const object = put_res.data?.object;
@@ -270,7 +270,6 @@ export const objectsSlice = createSlice({
     [putObject.fulfilled]: (state, action) => {
       const { flagSlice, object, isList } = action.payload;
       state.status = "succeed";
-      console.log("succeed");
       if (!state[flagSlice]) state[flagSlice] = {};
       if (isList) {
         let i = 0;

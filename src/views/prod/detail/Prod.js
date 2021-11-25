@@ -31,12 +31,12 @@ const populateObjs = [
 const switchList = [
   {
     selKey: 1,
-    label: "Basic",
+    label: "basic",
     url: "basic",
   },
   {
     selKey: 2,
-    label: "Attrs&Skus",
+    label: "attr&sku",
     url: "attrandskus",
   },
 ];
@@ -90,9 +90,8 @@ export default function Prod(props) {
         flagSlice={flagSlice}
         api={api}
         links={[
-          { label: "主页", to: "/home" },
-          { label: "商品列表", to: `/prods`, prevView: true },
-          { label: "商品详情" },
+          { label: "prods", to: `/prods`, prevView: true },
+          { label: "prod" },
         ]}
         showAddIcon={false}
         showSearch={false}

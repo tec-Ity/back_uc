@@ -19,6 +19,7 @@ import { useHistory } from "react-router";
 // import CusTextArea from "../../../components/basic/CusTextArea";
 import { ReactComponent as Delete } from "../../../components/icon/delete.svg";
 import { ReactComponent as AddIcon } from "../../../components/icon/addBlack.svg";
+import CusSwitch from "../../../components/basic/CusSwitch";
 
 const useStyle = makeStyles({
   root: {
@@ -92,6 +93,7 @@ export default function PdBasic({ Pd, flagSlice, api }) {
     price_sale: String(Pd.price_sale?.toFixed(2) || "0,00"),
     unit: Pd.unit || "",
     desp: Pd.desp || "",
+    isUsable: Pd.is_usable || false,
   });
   useEffect(() => {
     setPdInfo({
@@ -106,8 +108,10 @@ export default function PdBasic({ Pd, flagSlice, api }) {
       price_sale: String(Pd.price_sale?.toFixed(2) || "0,00"),
       unit: Pd.unit || "",
       desp: Pd.desp || "",
+      isUsable: Pd.is_usable || false,
     });
   }, [Pd]);
+
   useEffect(() => {
     dispatch(getObjects({ flagSlice: brandSlice, api: brandApi }));
   }, [dispatch]);
@@ -125,6 +129,7 @@ export default function PdBasic({ Pd, flagSlice, api }) {
       price_sale: String(Pd.price_sale?.toFixed(2) || "0,00"),
       unit: Pd.unit || "",
       desp: Pd.desp || "",
+      isUsable: Pd.is_usable || false,
     });
   };
 
@@ -149,10 +154,10 @@ export default function PdBasic({ Pd, flagSlice, api }) {
       sort: pdInfo.sort,
       unit: pdInfo.unit,
       desp: pdInfo.desp,
+      is_usable: pdInfo.isUsable,
       price_regular: parseFloat(pdInfo.price_regular?.replace(",", ".")),
       price_sale: parseFloat(pdInfo.price_sale?.replace(",", ".")),
     };
-    // console.log(general);
     dispatch(putObject({ flagSlice, api, data: { general } }));
     setJustSubmitted("UPDATE");
   };
@@ -172,7 +177,6 @@ export default function PdBasic({ Pd, flagSlice, api }) {
   const [imgsUpdate, setImgsUpdate] = useState();
   const [imgLocal, setImgLocal] = useState([]);
   const [modifyingImg, setModifyingImg] = useState(false);
-    //   console.log(Pd);
   return (
     <Grid container className={classes.root}>
       {/* imgs */}
@@ -426,6 +430,21 @@ export default function PdBasic({ Pd, flagSlice, api }) {
           value={String(pdInfo.price_sale)?.replace(".", ",")}
           handleChange={(e) =>
             setPdInfo((prev) => ({ ...prev, price_sale: e.target.value }))
+          }
+        />
+      </Grid>
+      <Grid item xs={6}></Grid>
+      {/* is usable */}
+      <Grid item xs={6}>
+        <div
+          style={{ color: "#1d1d384d", fontSize: "14px", fontWeight: "700" }}>
+          Usable
+        </div>
+        <CusSwitch
+          disabled={!modifying}
+          checked={pdInfo.isUsable}
+          handleSwitch={(val) =>
+            setPdInfo((prev) => ({ ...prev, isUsable: val }))
           }
         />
       </Grid>

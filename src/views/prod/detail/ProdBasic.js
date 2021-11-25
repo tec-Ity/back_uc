@@ -7,11 +7,13 @@ import {
   useDispatch,
   useSelector,
 } from "react-redux";
-import { deleteObject } from "../../../features/objectsSlice";
+import { deleteObject, putObject } from "../../../features/objectsSlice";
 import api_DNS from "../../../js/_dns";
 import { getRolePath } from "../../../js/conf/confUser";
 // import CusTextArea from "../../../components/basic/CusTextArea";
 import { ReactComponent as Delete } from "../../../components/icon/delete.svg";
+import CusSwitch from "../../../components/basic/CusSwitch";
+import CusBtnGroup from "../../../components/basic/CusBtnGroup";
 
 const useStyle = makeStyles({
   root: {
@@ -38,10 +40,46 @@ export default function ProdBasic({ Prod, flagSlice, api }) {
   const dispatch = useDispatch();
   const [justSubmitted, setjustSubmitted] = useState(false);
   const status = useSelector((state) => state.objects.status);
+  const [modifying, setModifying] = useState(false);
+  //   const initProd = React.useMemo(
+  //     () => ({
+  //       isUsable: Prod.is_usable || false,
+  //       desp: Prod.desp || "",
+  //       unit: Prod.unit || "",
+  //     }),
+  //     [Prod.desp, Prod.is_usable, Prod.unit]
+  //   );
+  const initProd = {
+    isUsable: Prod.is_usable || false,
+    desp: Prod.desp || "",
+    unit: Prod.unit || "",
+  };
+
+  const [prodUpdate, setProdUpdate] = useState(initProd);
+
+  useEffect(() => {
+    setProdUpdate(initProd);
+  }, [Prod]);
 
   const handleDelete = () => {
     dispatch(deleteObject({ flagSlice, api, id: Prod._id }));
     setjustSubmitted(true);
+  };
+
+  const handleSubmit = () => {
+    dispatch(
+      putObject({
+        flagSlice,
+        api,
+        data: {
+          general: {
+            is_usable: prodUpdate.isUsable,
+            unit: prodUpdate.unit,
+            desp: prodUpdate.desp,
+          },
+        },
+      })
+    );
   };
 
   useEffect(() => {
@@ -52,12 +90,26 @@ export default function ProdBasic({ Prod, flagSlice, api }) {
 
   return (
     <Grid container className={classes.root}>
-      <Grid item container xs={12} justifyContent='flex-end'>
-        <div className={classes.delBtn} onClick={handleDelete}>
-          <Delete />
-          取消同步此产品
-        </div>
+      <Grid
+        item
+        container
+        xs={12}
+        justifyContent='flex-end'
+        alignItems='center'>
+        {modifying && (
+          <div className={classes.delBtn} onClick={handleDelete}>
+            <Delete />
+            取消同步此产品
+          </div>
+        )}
+        <CusBtnGroup
+          modifying={modifying}
+          handleEdit={() => setModifying(true)}
+          handleSubmit={handleSubmit}
+          disableDelete
+        />
       </Grid>
+
       {/* imgs */}
       <Grid item container xs={12}>
         {Prod.img_urls?.map((img) => (
@@ -114,7 +166,17 @@ export default function ProdBasic({ Prod, flagSlice, api }) {
         <CusInput disabled label='Sort' value={Prod.sort} />
       </Grid>
       {/* offSet */}
-      <Grid item xs={6}></Grid>
+      <Grid item xs={6}>
+        <div style={{ fontSize: "14px", color: "#1d1d384d", fontWeight: 700 }}>
+          Usable
+        </div>
+        <CusSwitch
+          disabled={!modifying}
+          handleSwitch={(val) =>
+            setProdUpdate((prev) => ({ ...prev, isUsable: val }))
+          }
+        />
+      </Grid>
       {/* price regular */}
       <Grid item xs={6}>
         <CusInput
@@ -131,11 +193,25 @@ export default function ProdBasic({ Prod, flagSlice, api }) {
       </Grid>
       {/* unit */}
       <Grid item xs={6}>
-        <CusInput disabled label='Unit' value={Prod.unit} />
+        <CusInput
+          disabled={!modifying}
+          label='Unit'
+          value={prodUpdate.unit}
+          handleChange={(e) =>
+            setProdUpdate((prev) => ({ ...prev, unit: e.target.value }))
+          }
+        />
       </Grid>
       {/* desp */}
       <Grid item xs={12}>
-        <CusInput disabled label='Description' value={Prod.desp} />
+        <CusInput
+          disabled={!modifying}
+          label='Description'
+          value={prodUpdate.desp}
+          handleChange={(e) =>
+            setProdUpdate((prev) => ({ ...prev, desp: e.target.value }))
+          }
+        />
       </Grid>
     </Grid>
   );

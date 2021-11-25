@@ -9,7 +9,7 @@ import UiVariety from "../../../components/ui/UiVariety";
 import ProdCard from "../ui/ProdCard";
 import ProdRow from "../ui/ProdRow";
 import PageNav from "../../../components/universal/query/PageNav";
-const links = [{ label: "主页", to: "/home" }, { label: "商品列表" }];
+const links = [{ label: "prods" }];
 
 export default function Prods(props) {
   const dispatch = useDispatch();
@@ -34,9 +34,9 @@ export default function Prods(props) {
         flagSlice={flagSlice}
         api={api}
         links={links}
-        addLabel='同步产品'
+        addLabel='prod'
         showAddNew={() => {
-          hist.push(`/${rolePath}/pds`);
+          hist.push(`/${rolePath}/prods`);
         }}
         // showAddIcon={false}
       />

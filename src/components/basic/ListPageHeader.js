@@ -59,6 +59,7 @@ const useStyle = makeStyles({
     },
   },
 });
+
 export default function ListPageHeader({
   showAddNew,
   showAddIcon = true,
@@ -71,8 +72,6 @@ export default function ListPageHeader({
   const rolePath = getRolePath();
   const classes = useStyle();
   const prevView = useSelector((state) => state.objects.prevView);
-  //   const dispatch = useDispatch();
-  //   console.log(prevView);
   return (
     <Grid container className={classes.headerContainer}>
       <Grid item xs={12} sm={3}>
@@ -102,12 +101,18 @@ export default function ListPageHeader({
           )}
         </Breadcrumbs>
       </Grid>
-      <Grid container item xs={12} sm={9} className={classes.searchSection} justifyContent='flex-end'>
+      <Grid
+        container
+        item
+        xs={12}
+        sm={9}
+        className={classes.searchSection}
+        justifyContent='flex-end'>
         {showSearch === true && <SearchInput flagSlice={flagSlice} api={api} />}
         {showAddIcon === true && addLabel && (
           <div onClick={showAddNew} className={classes.addButton}>
             <AddIcon className={classes.AddIconStyle} />
-            <FormattedMessage id={`navLabelAdd-${addLabel}`}/>
+            <FormattedMessage id={`navLabelAdd-${addLabel}`} />
           </div>
         )}
       </Grid>
