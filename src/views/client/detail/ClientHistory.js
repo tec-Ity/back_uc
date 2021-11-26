@@ -45,7 +45,7 @@ export default function ClientHistory({ object }) {
   return (
     <div>
       {orders.map((order) => (
-        <HistoryRow object={order} />
+        <HistoryRow object={order} client={object} />
       ))}
     </div>
   );

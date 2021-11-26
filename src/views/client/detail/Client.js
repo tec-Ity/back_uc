@@ -63,13 +63,11 @@ export default function Client() {
       case 2:
         return <ClientHistory object={object} />;
       case 3:
-        return <ClientPurchased />;
+        return <ClientPurchased object={object} />;
       default:
         return <div>empty</div>;
     }
   };
-
-  console.log(object);
 
   return (
     <>

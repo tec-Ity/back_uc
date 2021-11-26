@@ -27,13 +27,13 @@ const useStyle = makeStyles({
   },
 });
 
-export default function HistoryRow({ object }) {
+export default function HistoryRow({ object, client }) {
   const classes = useStyle();
 
   console.log(object);
 
   return (
-    <Link to={`${object._id}`} className={classes.cardBox}>
+    <Link to={`${client._id}/${object._id}`} className={classes.cardBox}>
       <div>
         <div>{object.Shop?.code}</div>
         <div>{object.code}</div>
