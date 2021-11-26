@@ -15,26 +15,22 @@ import ClientPurchased from "./ClientPurchased.js";
 const flagSlice = "client";
 const flagField = "object";
 
-const links = [
-  { label: "主页", to: `/home` },
-  { label: "客户列表", to: `/clients` },
-  { label: "详情" },
-];
+const links = [{ label: "clients", to: `/clients` }, { label: "client" }];
 
 const switchList = [
   {
     selKey: 1,
-    label: "基本信息",
+    label: "basic",
     url: "basic",
   },
   {
     selKey: 2,
-    label: "历史订单",
+    label: "history",
     url: "history",
   },
   {
     selKey: 3,
-    label: "已购商品",
+    label: "purchased",
     url: "purchased",
   },
 ];
