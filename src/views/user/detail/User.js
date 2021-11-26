@@ -94,6 +94,7 @@ export default function User() {
   }
   useEffect(() => {
     initForm(object, setForm);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [object]);
 
   const status = useSelector((state) => state.objects.status);

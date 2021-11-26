@@ -14,7 +14,7 @@ import UserCard from "../ui/UserCard";
 import { selectObjects, getObjects } from "../../../features/objectsSlice";
 import ListPageHeader from "../../../components/basic/ListPageHeader";
 import PageNav from "../../../components/universal/query/PageNav";
-import { FormattedMessage } from "react-intl";
+// import { FormattedMessage } from "react-intl";
 
 // const UserPostModal = lazy(() => import("../modal/UserPostModal"));
 const populateObjs = [{ path: "Shop", select: "code" }];

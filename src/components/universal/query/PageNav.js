@@ -9,7 +9,7 @@ import {
 } from "../../../features/objectsSlice";
 
 export default function PageNav(props) {
-  const { flagSlice, api, pagesize = 50 } = props;
+  const { flagSlice, api, pagesize = 30 } = props;
   const dispatch = useDispatch();
   const page = useSelector(selectQuery(flagSlice))?.page || 1;
   const pageNum = useSelector(selectPageNum(flagSlice));
@@ -30,9 +30,8 @@ export default function PageNav(props) {
     // page !== 1 && dispatch(getObjects({ flagSlice, api, isReload: true }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
-
   useEffect(() => {
-    if (pagesize !== 50) {
+    if (pagesize !== 30) {
       dispatch(
         setQuery({ flagSlice, query: { key: "pagesize", val: pagesize } })
       );

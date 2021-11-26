@@ -46,7 +46,7 @@ const useStyle = makeStyles({
     //   overflow: "hidden",
     // },
   },
-  
+
   bottomBtn: {
     position: "absolute",
     height: "30px",
@@ -64,7 +64,7 @@ const useStyle = makeStyles({
   },
 });
 
-const prodSyncSlice = "prods";
+const prodSyncSlice = "syncs";
 const prodSyncApi = "/Prod";
 export default function PdCard(props) {
   const { object, clickEvent } = props;
@@ -73,9 +73,9 @@ export default function PdCard(props) {
   const rolePath = getRolePath();
   const hist = useHistory();
   const curUser = useSelector(selectUser);
+  const [synced, setSynced] = useState(false);
   //   const status = useSelector((state) => state.objects.status);
   const Prods = useSelector((state) => state.objects[prodSyncSlice]?.objects);
-  //   console.log(Prods);
   const [justPosted, setJustPosted] = useState(false);
   const curRole = localStorage.getItem("role");
   let img_url = `${process.env.PUBLIC_URL}/favicon.ico`;
@@ -84,8 +84,6 @@ export default function PdCard(props) {
   } else if (object?.img_urls?.length > 0) {
     img_url = get_DNS() + object.img_urls[0];
   }
-  //   console.log(object);
-  //   console.log(curUser);
   const syncProd = (e) => {
     e.stopPropagation();
     dispatch(
@@ -99,11 +97,11 @@ export default function PdCard(props) {
   };
 
   useEffect(() => {
-    // console.log(Prods);
     if (justPosted === true) {
       const prodId = Prods?.find((prod) => prod.Pd === object?._id)?._id;
-    //   prodId && hist.push(`/${rolePath}/prod/${prodId}`);
-    prodId&&hist.push(`/${rolePath}/reload`)
+      //   prodId && hist.push(`/${rolePath}/prod/${prodId}`);
+      prodId && setSynced(true);
+      // prodId&&hist.push(`/${rolePath}/reload`)
     }
   }, [Prods, hist, justPosted, object?._id, rolePath]);
 
@@ -121,9 +119,10 @@ export default function PdCard(props) {
             </div>
 
             {curRole > 100 &&
-              (object?.Prods &&
-              object.Prods.length > 0 &&
-              object.Prods.find((prod) => prod.Shop === curUser.Shop) ? (
+              ((object?.Prods &&
+                object.Prods.length > 0 &&
+                object.Prods.find((prod) => prod.Shop === curUser.Shop)) ||
+              synced === true ? (
                 <div
                   className={classes.bottomBtn}
                   style={{ backgroundColor: "#F0F0F0", cursor: "default" }}

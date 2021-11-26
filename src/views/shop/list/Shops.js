@@ -13,7 +13,7 @@ import ShopRow from "../ui/ShopRow";
 import ListPageHeader from "../../../components/basic/ListPageHeader";
 // const ShopPostModal = lazy(() => import("../modal/ShopPostModal"));
 import PageNav from "../../../components/universal/query/PageNav";
-import { FormattedMessage } from "react-intl";
+// import { FormattedMessage } from "react-intl";
 
 const flagSlice = "shops";
 const api = "/Shops";

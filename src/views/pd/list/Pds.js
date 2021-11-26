@@ -48,14 +48,17 @@ export default function Pds(props) {
   };
 
   useEffect(() => {
+    //shop user has at_crt sort attr for sync pords bug
+    let queryFixed = "&populateObjs=" + JSON.stringify(populateObjs);
+    localStorage.getItem("role") > 100 &&
+      (queryFixed += "&sortKey=at_crt&sortVal=-1");
     dispatch(
       setQueryFixed({
         flagSlice,
-        queryFixed: "&populateObjs=" + JSON.stringify(populateObjs),
+        queryFixed,
       })
     );
   }, [dispatch]);
-
   useEffect(() => {
     queryFixed &&
       dispatch(
@@ -66,7 +69,6 @@ export default function Pds(props) {
         })
       );
   }, [dispatch, queryFixed]);
-
   return (
     <>
       <ListPageHeader
@@ -76,6 +78,7 @@ export default function Pds(props) {
         addLabel='pd'
         showAddNew={() => setAddNew(true)}
       />
+
       <div className='mt-4'>
         <UiVariety
           propsCard={PdCard}

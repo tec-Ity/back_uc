@@ -56,7 +56,10 @@ const useStyle = makeStyles({
 });
 
 export default function UserCard(props) {
-  const { object, clickEvent } = props;
+  const {
+    object,
+    // clickEvent
+  } = props;
   const classes = useStyle();
 
   let img_url = customerProfile;
@@ -117,7 +120,7 @@ export default function UserCard(props) {
           </Card> */}
         </Link>
       ) : (
-        <h3 className="text-danger"> UserCard parameter Error! </h3>
+        <h3 className='text-danger'> UserCard parameter Error! </h3>
       )}
     </>
   );

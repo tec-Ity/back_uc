@@ -333,7 +333,7 @@ export const selectQuery = (flagSlice) => (state) => {
 export const selectQueryFixed = (flagSlice) => (state) => {
   if (state.objects[flagSlice] && state.objects[flagSlice].queryFixed)
     return state.objects[flagSlice].queryFixed;
-  return {};
+  return null;
 };
 
 const genQueryStr = (flagSlice, state) => {

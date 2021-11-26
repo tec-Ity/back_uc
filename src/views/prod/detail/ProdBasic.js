@@ -59,6 +59,7 @@ export default function ProdBasic({ Prod, flagSlice, api }) {
 
   useEffect(() => {
     setProdUpdate(initProd);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [Prod]);
 
   const handleDelete = () => {
