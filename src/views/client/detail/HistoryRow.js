@@ -2,6 +2,7 @@ import React from "react";
 import { makeStyles } from "@mui/styles";
 import { Link } from "react-router-dom";
 import moment from "moment";
+import { getRolePath } from "../../../js/conf/confUser";
 
 const useStyle = makeStyles({
   cardBox: {
@@ -27,17 +28,18 @@ const useStyle = makeStyles({
   },
 });
 
-export default function HistoryRow({ object }) {
+export default function HistoryRow({ object, client }) {
   const classes = useStyle();
+  const rolePath = getRolePath();
 
   console.log(object);
 
   return (
-    <Link to={`${object._id}`} className={classes.cardBox}>
+    <Link to={`/${rolePath}/order/${object._id}`} className={classes.cardBox}>
       <div>
         <div>{object.Shop?.code}</div>
         <div>{object.code}</div>
-        <div>{moment(object.at_confirm).format("MM/DD/YYYY")}</div>
+        <div>{moment(object.at_crt).format("MM/DD/YYYY")}</div>
         <div>{object.total_quantity}</div>
         <div>{"€" + object.imp.toFixed(2)}</div>
         <div>{object.status}</div>
