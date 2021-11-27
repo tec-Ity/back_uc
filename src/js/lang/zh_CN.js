@@ -51,6 +51,8 @@ const zh_CN = {
   "switchLabel-servCita": "服务城市",
   "switchLabel-prods": "同步商品",
   "switchLabel-attr&sku": "属性&SKU",
+  "switchLabel-history": "历史订单",
+  "switchLabel-purchased": "已购商品",
 
   "infoSection-shopImg": "店铺图片",
   "infoSection-shopInfo": "店铺信息",
