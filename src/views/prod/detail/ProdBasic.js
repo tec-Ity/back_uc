@@ -185,7 +185,7 @@ export default function ProdBasic({ Prod, flagSlice, api }) {
           label='Price'
           value={
             Prod?.price_max === Prod?.price_min
-              ? String(Prod?.price?.toFixed(2))?.replace(".", ",")
+              ? String(Prod?.price_unit?.toFixed(2))?.replace(".", ",")
               : String(Prod?.price_min?.toFixed(2))?.replace(".", ",") +
                 "~" +
                 String(Prod?.price_max?.toFixed(2))?.replace(".", ",")
