@@ -41,18 +41,11 @@ export default function ProdBasic({ Prod, flagSlice, api }) {
   const [justSubmitted, setjustSubmitted] = useState(false);
   const status = useSelector((state) => state.objects.status);
   const [modifying, setModifying] = useState(false);
-  //   const initProd = React.useMemo(
-  //     () => ({
-  //       isUsable: Prod.is_usable || false,
-  //       desp: Prod.desp || "",
-  //       unit: Prod.unit || "",
-  //     }),
-  //     [Prod.desp, Prod.is_usable, Prod.unit]
-  //   );
+
+
   const initProd = {
     isUsable: Prod.is_usable || false,
     desp: Prod.desp || "",
-    unit: Prod.unit || "",
   };
 
   const [prodUpdate, setProdUpdate] = useState(initProd);
@@ -75,7 +68,6 @@ export default function ProdBasic({ Prod, flagSlice, api }) {
         data: {
           general: {
             is_usable: prodUpdate.isUsable,
-            unit: prodUpdate.unit,
             desp: prodUpdate.desp,
           },
         },
@@ -194,14 +186,7 @@ export default function ProdBasic({ Prod, flagSlice, api }) {
       </Grid>
       {/* unit */}
       <Grid item xs={6}>
-        <CusInput
-          disabled={!modifying}
-          label='Unit'
-          value={prodUpdate.unit}
-          handleChange={(e) =>
-            setProdUpdate((prev) => ({ ...prev, unit: e.target.value }))
-          }
-        />
+        <CusInput disabled label='Unit' value={prodUpdate.unit} />
       </Grid>
       {/* desp */}
       <Grid item xs={12}>

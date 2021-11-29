@@ -81,6 +81,7 @@ export default function PdBasic({ Pd, flagSlice, api }) {
   const status = useSelector((state) => state.objects.status);
   const [modifying, setModifying] = useState(false);
   const [justSubmitted, setJustSubmitted] = useState(false);
+//   console.log(Pd);
   const [pdInfo, setPdInfo] = useState({
     code: Pd.code || "",
     name: Pd.nome || "",
@@ -90,7 +91,9 @@ export default function PdBasic({ Pd, flagSlice, api }) {
     categ1: Pd.Categ?.Categ_far || { code: "", _id: "" }, //code nome
     sort: Pd.sort || 0,
     price_regular: String(Pd.price_regular?.toFixed(2) || "0,00"),
-    price_sale: String(Pd.price_sale?.toFixed(2) || "0,00"),
+    price_sale: String(
+      typeof Pd.price_sale === "number" ? Pd.price_sale?.toFixed(2) : "0,00"
+    ),
     unit: Pd.unit || "",
     desp: Pd.desp || "",
     isUsable: Pd.is_usable || false,
@@ -105,7 +108,9 @@ export default function PdBasic({ Pd, flagSlice, api }) {
       categ1: Pd.Categ?.Categ_far || { code: "", _id: "" }, //code nome
       sort: Pd.sort || 0,
       price_regular: String(Pd.price_regular?.toFixed(2) || "0,00"),
-      price_sale: String(Pd.price_sale?.toFixed(2) || "0,00"),
+      price_sale: String(
+        typeof Pd.price_sale === "number" ? Pd.price_sale?.toFixed(2) : "0,00"
+      ),
       unit: Pd.unit || "",
       desp: Pd.desp || "",
       isUsable: Pd.is_usable || false,
@@ -158,6 +163,7 @@ export default function PdBasic({ Pd, flagSlice, api }) {
       price_regular: parseFloat(pdInfo.price_regular?.replace(",", ".")),
       price_sale: parseFloat(pdInfo.price_sale?.replace(",", ".")),
     };
+    console.log(general);
     dispatch(putObject({ flagSlice, api, data: { general } }));
     setJustSubmitted("UPDATE");
   };
