@@ -38,6 +38,7 @@ export default function Pds(props) {
   const flagSlice = "pds";
   const api = "/Pds";
   const rolePath = getRolePath();
+  const curRole = localStorage.getItem("role");
   const hist = useHistory();
   const [addNew, setAddNew] = useState(false);
   const objects = useSelector(selectObjects(flagSlice));
@@ -79,6 +80,7 @@ export default function Pds(props) {
         links={links}
         addLabel='pd'
         showAddNew={() => setAddNew(true)}
+        showAddIcon={Boolean(curRole < 100)}
       />
 
       <div className='mt-4'>
