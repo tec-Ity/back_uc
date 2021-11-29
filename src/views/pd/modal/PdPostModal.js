@@ -37,7 +37,8 @@ export default function PdPostModal({ show, handleClose, timeout = 500 }) {
     categ2: { code: "", _id: "" }, //code nome
     categ1: { code: "", _id: "" }, //code nome
     sort: 0,
-    price_regular: 0,
+    price_regular: "",
+    price_sale: "",
     unit: "",
     desp: "",
   });
@@ -58,7 +59,7 @@ export default function PdPostModal({ show, handleClose, timeout = 500 }) {
   }, [handleClose, justSubmitted, status]);
 
   const handleSubmit = () => {
-    console.log(111);
+    // console.log(111);
     const formData = new FormData();
     for (let i = 0; i < imgsUpdate?.length; i++) {
       formData.append("img" + i, imgsUpdate[i]);
@@ -72,9 +73,10 @@ export default function PdPostModal({ show, handleClose, timeout = 500 }) {
       sort: pdInfo.sort,
       unit: pdInfo.unit,
       desp: pdInfo.desp,
-      price_regular: pdInfo.price_regular,
+      price_regular: parseFloat(pdInfo.price_regular.replace(",", ".")),
+      price_sale: parseFloat(pdInfo.price_sale.replace(",", ".")),
     };
-
+    // console.log(obj);
     formData.append("obj", JSON.stringify(obj));
 
     dispatch(postObject({ flagSlice, api, data: formData }));
@@ -261,21 +263,6 @@ export default function PdPostModal({ show, handleClose, timeout = 500 }) {
               }
             />
           </Grid>
-          {/* offSet */}
-          <Grid item xs={6}></Grid>
-          {/* price regular */}
-          <Grid item xs={6}>
-            <CusInput
-              label='Price'
-              value={pdInfo.price_regular}
-              handleChange={(e) =>
-                setPdInfo((prev) => ({
-                  ...prev,
-                  price_regular: e.target.value,
-                }))
-              }
-            />
-          </Grid>
           {/* unit */}
           <Grid item xs={6}>
             <CusInput
@@ -286,6 +273,33 @@ export default function PdPostModal({ show, handleClose, timeout = 500 }) {
               }
             />
           </Grid>
+          {/* price regular */}
+          <Grid item xs={6}>
+            <CusInput
+              label='Price Regular'
+              value={pdInfo.price_regular}
+              handleChange={(e) =>
+                setPdInfo((prev) => ({
+                  ...prev,
+                  price_regular: e.target.value,
+                }))
+              }
+            />
+          </Grid>
+          {/* price sale */}
+          <Grid item xs={6}>
+            <CusInput
+              label='Price Sale'
+              value={pdInfo.price_sale}
+              handleChange={(e) =>
+                setPdInfo((prev) => ({
+                  ...prev,
+                  price_sale: e.target.value,
+                }))
+              }
+            />
+          </Grid>
+
           {/* desp */}
           <Grid item xs={12}>
             <CusInput

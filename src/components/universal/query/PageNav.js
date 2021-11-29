@@ -15,6 +15,7 @@ export default function PageNav(props) {
   const pageNum = useSelector(selectPageNum(flagSlice));
   const [init, setInit] = useState(true);
   const pageClick = (val) => (event) => {
+      console.log(val)
     dispatch(
       setQuery({ flagSlice, query: { key: "page", val }, isReload: false })
     );
