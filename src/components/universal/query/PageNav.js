@@ -13,24 +13,30 @@ export default function PageNav(props) {
   const dispatch = useDispatch();
   const page = useSelector(selectQuery(flagSlice))?.page || 1;
   const pageNum = useSelector(selectPageNum(flagSlice));
-  const [init, setInit] = useState(true);
+  const [init, setInit] = useState(Boolean(page === 1));
+
   const pageClick = (val) => (event) => {
-      console.log(val)
+    // console.log(val);
     dispatch(
       setQuery({ flagSlice, query: { key: "page", val }, isReload: false })
     );
   };
+
   // 根据本身 filter 的变化, 更新 reducer 中对应查找的数据 (如果加载此组件， 则不用在父组件中加载)
   useEffect(() => {
+    // console.log("page effect");
+    // console.log("init", init);
     if (init === true) {
-      page === 1 && setInit(false);
+      setInit(false);
     } else {
+    //   console.log("get new objs");
       dispatch(getObjects({ flagSlice, api, isReload: true }));
     }
 
     // page !== 1 && dispatch(getObjects({ flagSlice, api, isReload: true }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
+
   useEffect(() => {
     if (pagesize !== 30) {
       dispatch(

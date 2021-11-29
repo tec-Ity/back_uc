@@ -59,6 +59,7 @@ export default function Pds(props) {
       })
     );
   }, [dispatch]);
+
   useEffect(() => {
     queryFixed &&
       dispatch(
@@ -69,6 +70,7 @@ export default function Pds(props) {
         })
       );
   }, [dispatch, queryFixed]);
+
   return (
     <>
       <ListPageHeader
