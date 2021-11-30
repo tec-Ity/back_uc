@@ -102,7 +102,7 @@ function RowField({ object }) {
       </div>
       <div className={classes.textNormal}>{object.desp}</div>
       <img alt={"country"} src={image} className={classes.countryStyle} />
-      <div className={classes.textNormal}>€{object.price.toFixed(2)}</div>
+      <div className={classes.textNormal}>€{object.price?.toFixed(2)}</div>
       <div className={classes.textNormal}>count</div>
       <div className={classes.textLight}>件</div>
     </div>
