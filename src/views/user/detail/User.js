@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 // import { Link } from "react-router-dom";
 import { useParams, useHistory } from "react-router";
-// import { FormattedMessage } from "react-intl";
 import { useSelector, useDispatch } from "react-redux";
 
 import { getRolePath } from "../../../js/conf/confUser";
@@ -21,8 +20,6 @@ import {
 } from "../../../features/objectsSlice";
 
 import { Box, Grid, Typography, Button, IconButton } from "@mui/material";
-import { ReactComponent as EditIcon } from "../../../components/icon/editBlack.svg";
-import { ReactComponent as CancelIcon } from "../../../components/icon/cancelBlack.svg";
 import { ReactComponent as DoneIcon } from "../../../components/icon/doneBlack.svg";
 import { ReactComponent as UserProfileLightGrey } from "../../../components/icon/userProfileLightGrey.svg";
 import ListPageHeader from "../../../components/basic/ListPageHeader.js";
@@ -94,7 +91,7 @@ export default function User() {
   }
   useEffect(() => {
     initForm(object, setForm);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [object]);
 
   const status = useSelector((state) => state.objects.status);
@@ -137,21 +134,13 @@ export default function User() {
     let arr = roles
       .filter((role) => curRole < role.code)
       .map((role) => {
-        return { label: role.nome, id: role.code };
+        return {
+          // label: <FormattedMessage id={`role-${role.code}`} />,
+          // label: role.nome,
+          id: role.code,
+        };
       });
     return arr;
-  }
-
-  function roleName(roleId) {
-    const roleMap = {
-      1: "拥有者",
-      3: "管理者",
-      5: "超级员工",
-      101: "店铺老板",
-      105: "店铺员工",
-    };
-
-    return roleMap[roleId];
   }
 
   function FooterBox({ label, content }) {
@@ -159,11 +148,12 @@ export default function User() {
       <>
         <Grid item xs={12} sm={3}>
           <Typography
-            sx={{ fontSize: "16px", color: "#0000004D", fontWeight: "700" }}>
+            sx={{ fontSize: "16px", color: "#0000004D", fontWeight: "700" }}
+          >
             {label}
           </Typography>
         </Grid>
-        <Grid item xs='auto' sm='auto'>
+        <Grid item xs="auto" sm="auto">
           <Typography sx={{ fontSize: "16px", fontWeight: "700" }}>
             {content}
           </Typography>
@@ -176,13 +166,13 @@ export default function User() {
 
   let fields = [
     {
-      label: <FormattedMessage id='inputLabel-name' />,
+      label: <FormattedMessage id="inputLabel-name" />,
       content: object.nome,
       type: "nome",
       permissions: ["hierachy", "self"],
     },
     {
-      label: <FormattedMessage id='inputLabel-code' />,
+      label: <FormattedMessage id="inputLabel-code" />,
       content: object.code,
       type: "code",
       permissions: ["hierachy"],
@@ -204,7 +194,7 @@ export default function User() {
         variantObj: {
           fields: [
             {
-              label: <FormattedMessage id='inputLabel-phone' />,
+              label: <FormattedMessage id="inputLabel-phone" />,
               content: object.phonePre,
               type: "phonePre",
               permissions: ["hierachy", "self"],
@@ -228,8 +218,8 @@ export default function User() {
       },
     },
     {
-      label: <FormattedMessage id='inputLabel-role' />,
-      content: roleName(object.role),
+      label: <FormattedMessage id="inputLabel-role" />,
+      content: <FormattedMessage id={`role-${object.role}`} />,
       type: "role",
       permissions: ["hierachy"],
       variant: {
@@ -243,12 +233,12 @@ export default function User() {
 
   if (object.role > 100) {
     fields.push({
-      label: <FormattedMessage id='inputLabel-shop' />,
+      label: <FormattedMessage id="inputLabel-shop" />,
       content: object.Shop?.nome,
       type: "Shop",
       permissions: ["hierachy", "shop"],
       variant: {
-        name: "select",
+        name: "autocomplete",
         variantObj: {
           options: populateShops(objShops),
         },
@@ -299,92 +289,63 @@ export default function User() {
         // 数据正确
         object._id && String(object._id) === String(id) && (
           <Box
-            height='180px'
-            width='100%'
-            sx={{ display: "flex", justifyContent: "space-between" }}>
+            height="180px"
+            width="100%"
+            sx={{ display: "flex", justifyContent: "space-between" }}
+          >
             <UserProfileLightGrey />
-            <CusBtnGroup
-              modifying={editing}
-              handleEdit={handleEdit}
-              handleCancel={() => {
-                initForm(object, setForm);
-                setEditing(false);
-              }}
-              handleDelete={() => {
-                deleteDB();
-                setJustSubmitted("DELETE");
-              }}
-              handleSubmit={handleSave}
-            />
-            <Box>
-              <div className='text-right'>
-                {/* {
-              // 如果比自己等级低 可删除
-            } */}
-                <button
-                  className='btn btn-info'
-                  onClick={() => setModalPut(true)}>
-                  {" "}
-                  <i className='bx bx-edit-alt'></i>{" "}
-                </button>
-                <UserPutModal
-                  show={modalPut}
-                  onHide={() => setModalPut(false)}
-                  object={object}
-                  flagSlice={flagSlice}
-                />
+            <div>
+              <IconButton onClick={handleLog}>
+                <DoneIcon />
+              </IconButton>
+              <button
+                className="btn btn-info"
+                onClick={() => setModalPut(true)}
+              >
+                {" "}
+                <i className="bx bx-edit-alt"></i>{" "}
+              </button>
+              <UserPutModal
+                show={modalPut}
+                onHide={() => setModalPut(false)}
+                object={object}
+                flagSlice={flagSlice}
+              />
+              {editing && (
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={() => setModalPwd(true)}
+                >
+                  修改密码
+                </Button>
+              )}
 
-                <IconButton onClick={handleLog}>
-                  <DoneIcon />
-                </IconButton>
-
-                {editing && curRole < object.role && (
-                  <Button variant='contained' color='error' onClick={deleteDB}>
-                    删除此用户
-                  </Button>
-                )}
-                {editing && (
-                  <Button
-                    variant='contained'
-                    color='secondary'
-                    onClick={() => setModalPwd(true)}>
-                    修改密码
-                  </Button>
-                )}
-                <UserPwdModal
-                  show={modalPwd}
-                  onHide={() => setModalPwd(false)}
-                  object={object}
-                  flagSlice={flagSlice}
-                />
-                {editing && (
-                  <IconButton onClick={handleSave}>
-                    <DoneIcon />
-                  </IconButton>
-                )}
-                {!editing ? (
-                  <Button
-                    variant='contained'
-                    color='primary'
-                    startIcon={!editing ? <EditIcon /> : <CancelIcon />}
-                    onClick={handleEdit}>
-                    编辑
-                  </Button>
-                ) : (
-                  <IconButton
-                    onClick={() => {
-                      setEditing(!editing);
-                    }}>
-                    <CancelIcon />
-                  </IconButton>
-                )}
-              </div>
-            </Box>
+              <UserPwdModal
+                show={modalPwd}
+                onHide={() => setModalPwd(false)}
+                object={object}
+                flagSlice={flagSlice}
+              />
+              <CusBtnGroup
+                modifying={editing}
+                handleEdit={handleEdit}
+                handleCancel={() => {
+                  initForm(object, setForm);
+                  setEditing(false);
+                }}
+                handleDelete={() => {
+                  deleteDB();
+                  setJustSubmitted("DELETE");
+                }}
+                handleSubmit={handleSave}
+              />
+            </div>
           </Box>
         )
       }
 
-      <Box mt='46px' sx={{ maxWidth: "100%" }}>
+      <Box mt="46px" sx={{ maxWidth: "100%" }}>
         {/* main details */}
         <FormBox
           data={{ fields: fields, object: object }}
@@ -392,7 +353,6 @@ export default function User() {
           stateHandler={[form, setForm]}
           editing={editing}
         />
-
         {/* footer details */}
         {/* <Box mt="25px" ml="25px">
           <ToggleBox checked={object.is_usable} label="Usable" />
@@ -404,8 +364,9 @@ export default function User() {
               color: "#0000004D",
               fontWeight: "700",
               bgcolor: "white",
-            }}>
-            <FormattedMessage id='inputLabel-isUsable' />
+            }}
+          >
+            <FormattedMessage id="inputLabel-isUsable" />
           </Typography>
           {editing ? (
             <CusSwitch
@@ -423,9 +384,9 @@ export default function User() {
             </Typography>
           )}
         </Box>
-        <Grid container mt='25px' ml={3}>
+        <Grid container mt="25px" ml={3}>
           <FooterBox
-            label={<FormattedMessage id='inputLabel-lastLogin' />}
+            label={<FormattedMessage id="inputLabel-lastLogin" />}
             content={object.at_last_login}
           />
         </Grid>
