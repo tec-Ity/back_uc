@@ -15,24 +15,13 @@ const useStyle = makeStyles({
     width: "255px",
     "& > div": {
       height: "30px",
-      maxWidth: "30px",
-      minWidth: "30px",
-      paddingRight: "5px",
+      width: "74px",
       display: "flex",
       fontSize: "16px",
-      // justifyContent: "center",
+      justifyContent: "center",
       alignItems: "center",
       borderRadius: "4px",
       margin: "5px",
-      transition: "max-width 0.5s",
-      overflow: "hidden",
-      "&:hover": {
-        maxWidth: "100%",
-      },
-      "& :nth-child(1)": {
-        height: "30px",
-        width: "30px",
-      },
     },
   },
   deleteRed: {
@@ -63,8 +52,6 @@ export default function CusBtnGroup(props) {
     handleEdit,
     disableDelete = false,
     disabled = false,
-    other_buttons,
-    //other_button:[{label,style,icon,handler,}]
   } = props;
   const classes = useStyle();
   return (
@@ -74,63 +61,36 @@ export default function CusBtnGroup(props) {
           {!disableDelete && (
             <div
               onClick={handleDelete}
-              className={clsx(classes.redMain, disabled && classes.disableBg)}
-            >
-              <div>
-                <Delete className={classes.deleteRed} />
-              </div>
-              <div>
-                <FormattedMessage id="btnLabel-delete" />
-              </div>
+              className={clsx(classes.redMain, disabled && classes.disableBg)}>
+              <Delete className={classes.deleteRed} />
+              <FormattedMessage id='btnLabel-delete' />
+              <div></div>
             </div>
           )}
           <div
             onClick={handleSubmit}
-            className={clsx(classes.blackMain, disabled && classes.disableBg)}
-          >
+            className={clsx(classes.blackMain, disabled && classes.disableBg)}>
+            <Confirm />
             <div>
-              <Confirm />
-            </div>
-
-            <div>
-              <FormattedMessage id="btnLabel-submit" />
+              <FormattedMessage id='btnLabel-submit' />
             </div>
           </div>
           <div
             onClick={handleCancel}
-            className={clsx(classes.blackMain, disabled && classes.disableBg)}
-          >
+            className={clsx(classes.blackMain, disabled && classes.disableBg)}>
+            <Cancel />
             <div>
-              <Cancel />
-            </div>
-
-            <div>
-              <FormattedMessage id="btnLabel-cancel" />
+              <FormattedMessage id='btnLabel-cancel' />
             </div>
           </div>
-          {other_buttons &&
-            other_buttons.map((button) => {
-              return (
-                <div onClick={button.handler} style={button.style}>
-                  <div>{button.icon}</div>
-                  <div>
-                    <FormattedMessage id={button.label} />
-                  </div>
-                </div>
-              );
-            })}
         </>
       ) : (
         <div
           onClick={disabled === false ? handleEdit : () => {}}
-          className={clsx(classes.blackMain, disabled && classes.disableBg)}
-        >
+          className={clsx(classes.blackMain, disabled && classes.disableBg)}>
+          <Edit />
           <div>
-            <Edit />
-          </div>
-
-          <div>
-            <FormattedMessage id="btnLabel-edit" />
+            <FormattedMessage id='btnLabel-edit' />
           </div>
         </div>
       )}
