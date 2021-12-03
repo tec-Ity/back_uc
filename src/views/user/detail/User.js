@@ -209,8 +209,8 @@ export default function User() {
               },
             },
             {
-              content: object.phone,
-              type: "phone",
+              content: object.phoneNum,
+              type: "phoneNum",
               permissions: ["hierachy", "self"],
             },
           ],
