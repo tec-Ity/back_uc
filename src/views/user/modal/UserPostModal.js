@@ -31,7 +31,7 @@ export default function UserPostModal(props) {
     role: "",
     pwd: "",
     phonePre: "0039",
-    phone: "",
+    phoneNum: "",
   }); // 创建的数据
 
   const [farQuery_Shops, setfarQuery_Shops] = useState({}); // 是否有店铺选项
@@ -90,12 +90,13 @@ export default function UserPostModal(props) {
         <>
           <RowIpt rowClass={`my-3 ${text_flow}`}>
             <select
-              className='form-control'
-              id='role-ipt'
-              data-style='btn-info'
+              className="form-control"
+              id="role-ipt"
+              data-style="btn-info"
               onChange={chgRole()}
-              label='Role'
-              defaultValue={formdata.role}>
+              label="Role"
+              defaultValue={formdata.role}
+            >
               <option>please select</option>
               {role_Arrs.map((item) => {
                 return (
@@ -115,11 +116,12 @@ export default function UserPostModal(props) {
                 <label
                   className={`col-md-2 col-form-label ${
                     formdata.Shop && "text-success"
-                  }`}>
+                  }`}
+                >
                   {" "}
                   Shop
                 </label>
-                <div className='col-md-10'>
+                <div className="col-md-10">
                   <SearchInput
                     flagSlice={flagSlice_Shops}
                     api={api_Shops}
@@ -129,11 +131,11 @@ export default function UserPostModal(props) {
                 </div>
               </div>
 
-              <div className='row'>
-                <div className='col-md-2'></div>
-                <div className='col-md-10'>
+              <div className="row">
+                <div className="col-md-2"></div>
+                <div className="col-md-10">
                   <UiCards
-                    cols='col-6 col-md-4 col-xl-3 mt-2'
+                    cols="col-6 col-md-4 col-xl-3 mt-2"
                     propsCard={ShopCard}
                     objects={Shops}
                     matchId={formdata.Shop}
@@ -151,12 +153,13 @@ export default function UserPostModal(props) {
     <Modal
       onHide={onHide}
       show={show}
-      size='lg'
-      aria-labelledby='contained-modal-title-vcenter'
-      centered>
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
       <Modal.Header closeButton>
-        <Modal.Title id='contained-modal-title-vcenter'>
-          <FormattedMessage id='create' defaultMessage='Create' />
+        <Modal.Title id="contained-modal-title-vcenter">
+          <FormattedMessage id="create" defaultMessage="Create" />
         </Modal.Title>
       </Modal.Header>
 
@@ -164,50 +167,50 @@ export default function UserPostModal(props) {
         <form>
           <RowIpt rowClass={`my-3 ${text_flow}`}>
             <input
-              type='text'
-              className='form-control'
-              id='code-ipt'
+              type="text"
+              className="form-control"
+              id="code-ipt"
               onChange={iptFormdata("code")}
-              label='Codice'
+              label="Codice"
               value={formdata.code}
             />
             <input
-              type='text'
-              className='form-control'
-              id='nome-ipt'
+              type="text"
+              className="form-control"
+              id="nome-ipt"
               onChange={iptFormdata("nome")}
-              label='Name'
+              label="Name"
               value={formdata.nome}
             />
           </RowIpt>
 
           <RowIpt rowClass={`my-3 ${text_flow}`}>
             <input
-              type='password'
-              className='form-control'
-              id='pwd-ipt'
+              type="password"
+              className="form-control"
+              id="pwd-ipt"
               onChange={iptFormdata("pwd")}
-              label='Password'
+              label="Password"
               value={formdata.pwd}
             />
           </RowIpt>
 
           <RowIpt rowClass={`my-3 ${text_flow}`}>
             <input
-              type='text'
-              className='form-control'
-              id='phonePre-ipt'
+              type="text"
+              className="form-control"
+              id="phonePre-ipt"
               onChange={iptFormdata("phonePre")}
-              colnum='col-4 col-md-2'
-              label='Phone'
+              colnum="col-4 col-md-2"
+              label="Phone"
               value={formdata.phonePre}
             />
             <input
-              type='text'
-              className='form-control'
-              onChange={iptFormdata("phone")}
-              colnum='col-8'
-              value={formdata.phone}
+              type="text"
+              className="form-control"
+              onChange={iptFormdata("phoneNum")}
+              colnum="col-8"
+              value={formdata.phoneNum}
             />
           </RowIpt>
 
@@ -216,11 +219,11 @@ export default function UserPostModal(props) {
       </Modal.Body>
 
       <Modal.Footer>
-        <Button variant='secondary' onClick={onHide}>
-          <FormattedMessage id='close' defaultMessage='Close' />
+        <Button variant="secondary" onClick={onHide}>
+          <FormattedMessage id="close" defaultMessage="Close" />
         </Button>
-        <Button variant='primary' onClick={postSubmit}>
-          <FormattedMessage id='confirm' defaultMessage='Confirm' />
+        <Button variant="primary" onClick={postSubmit}>
+          <FormattedMessage id="confirm" defaultMessage="Confirm" />
         </Button>
       </Modal.Footer>
     </Modal>
