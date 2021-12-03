@@ -37,11 +37,31 @@ const en_US = {
   "navLabel-citas": "Cities",
   "navLabel-cita": "City",
 
+  "navLabelAdd-user": "Add User",
+  "navLabelAdd-shop": "Add SHop",
+  "navLabelAdd-pd": "Add product",
+  "navLabelAdd-prod": "Add product",
+  "navLabelAdd-brand": "Add brand",
+  "navLabelAdd-categ": "Add category",
+
   "welcom-title": "Welcome to Union City manage System",
   "welcom-code": " Your code is ",
   "welcom-role": "Your Identity is ",
   "welcom-warning": "Connecting to server",
 
-  "LangUpdModal-title": "Change Langeuage",
+  "LangUpdModal-title": "Change Language",
+
+  "inputLabel-name": "Name",
+  "inputLabel-code": "Code",
+  "inputLabel-phone": "Phone",
+  "inputLabel-role": "Role",
+  "inputLabel-shop": "Shop",
+  "inputLabel-isUsable": "USABLE",
+  "inputLabel-lastLogin": "Last login",
+
+  "btnLabel-edit": "Edit",
+  "btnLabel-cancel": "Cancel",
+  "btnLabel-submit": "Confirm",
+  "btnLabel-delete": "Delete",
 };
 export default en_US;
