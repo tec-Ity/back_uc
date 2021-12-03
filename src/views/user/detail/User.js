@@ -27,6 +27,8 @@ import CusSwitch from "../../../components/basic/CusSwitch";
 import CusBtnGroup from "../../../components/basic/CusBtnGroup";
 import FormBox from "./FormBox";
 import { FormattedMessage } from "react-intl";
+import { ReactComponent as Edit } from "../../../components/icon/edit.svg";
+import { makeStyles } from "@mui/styles";
 
 const populateObjs = [{ path: "Shop", select: "code nome" }];
 
@@ -38,7 +40,12 @@ const roleList = [
   { nome: "店铺员工", code: 105 },
 ];
 
+const useStyle = makeStyles({
+  passButton: { "& rect": { fill: "#00ff00" } },
+});
+
 export default function User() {
+  const classes = useStyle();
   const hist = useHistory();
   const dispatch = useDispatch();
 
@@ -281,6 +288,14 @@ export default function User() {
       setEditable(field);
     }
   }
+  const otherButtons = [
+    {
+      label: "password",
+      style: { backgroundColor: "#00ff00" },
+      icon: <Edit className={classes.passButton} />,
+      handler: () => setModalPwd(true),
+    },
+  ];
 
   return (
     <>
@@ -329,6 +344,7 @@ export default function User() {
               />
               <CusBtnGroup
                 modifying={editing}
+                disableDelete={!(object.role > curRole)}
                 handleEdit={handleEdit}
                 handleCancel={() => {
                   initForm(object, setForm);
@@ -339,6 +355,7 @@ export default function User() {
                   setJustSubmitted("DELETE");
                 }}
                 handleSubmit={handleSave}
+                other_buttons={otherButtons}
               />
             </div>
           </Box>
