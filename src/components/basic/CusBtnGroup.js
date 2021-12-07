@@ -12,7 +12,7 @@ const useStyle = makeStyles({
     display: "flex",
     justifyContent: "flex-end",
     paddingRight: "5px",
-    width: "255px",
+    minWidth: "255px",
     "& > div": {
       height: "30px",
       maxWidth: "30px",
@@ -20,14 +20,16 @@ const useStyle = makeStyles({
       paddingRight: "5px",
       display: "flex",
       fontSize: "16px",
-      // justifyContent: "center",
       alignItems: "center",
       borderRadius: "4px",
       margin: "5px",
       transition: "max-width 0.5s",
       overflow: "hidden",
+      whiteSpace: "nowrap",
       "&:hover": {
         maxWidth: "100%",
+        cursor: "pointer",
+        opacity: 0.7,
       },
       "& :nth-child(1)": {
         height: "30px",
@@ -63,8 +65,7 @@ export default function CusBtnGroup(props) {
     handleEdit,
     disableDelete = false,
     disabled = false,
-    other_buttons,
-    //other_button:[{label,style,icon,handler,}]
+    other_buttons, //other_buttons:[{label,style,icon,handler,}]
   } = props;
   const classes = useStyle();
   return (
@@ -75,6 +76,7 @@ export default function CusBtnGroup(props) {
             <div
               onClick={handleDelete}
               className={clsx(classes.redMain, disabled && classes.disableBg)}
+              style={{ order: "1" }}
             >
               <div>
                 <Delete className={classes.deleteRed} />
@@ -87,6 +89,7 @@ export default function CusBtnGroup(props) {
           <div
             onClick={handleSubmit}
             className={clsx(classes.blackMain, disabled && classes.disableBg)}
+            style={{ order: "2" }}
           >
             <div>
               <Confirm />
@@ -99,6 +102,7 @@ export default function CusBtnGroup(props) {
           <div
             onClick={handleCancel}
             className={clsx(classes.blackMain, disabled && classes.disableBg)}
+            style={{ order: "3" }}
           >
             <div>
               <Cancel />

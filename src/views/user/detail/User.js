@@ -42,6 +42,7 @@ const roleList = [
 
 const useStyle = makeStyles({
   passButton: { "& rect": { fill: "#00ff00" } },
+  putButton: { "& rect": { fill: "#0000ff" } },
 });
 
 export default function User() {
@@ -290,10 +291,22 @@ export default function User() {
   }
   const otherButtons = [
     {
-      label: "password",
-      style: { backgroundColor: "#00ff00" },
+      label: "btnLabel-editPass",
+      style: { backgroundColor: "#00ff00", order: "-1" },
       icon: <Edit className={classes.passButton} />,
       handler: () => setModalPwd(true),
+    },
+    {
+      label: "put modal",
+      style: { backgroundColor: "#0000ff", order: "-2" },
+      icon: <Edit className={classes.putButton} />,
+      handler: () => setModalPut(true),
+    },
+    {
+      label: "log",
+      style: { order: "-3" },
+      icon: <DoneIcon />,
+      handler: handleLog,
     },
   ];
 
@@ -310,32 +323,12 @@ export default function User() {
           >
             <UserProfileLightGrey />
             <div>
-              <IconButton onClick={handleLog}>
-                <DoneIcon />
-              </IconButton>
-              <button
-                className="btn btn-info"
-                onClick={() => setModalPut(true)}
-              >
-                {" "}
-                <i className="bx bx-edit-alt"></i>{" "}
-              </button>
               <UserPutModal
                 show={modalPut}
                 onHide={() => setModalPut(false)}
                 object={object}
                 flagSlice={flagSlice}
               />
-              {editing && (
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  onClick={() => setModalPwd(true)}
-                >
-                  修改密码
-                </Button>
-              )}
-
               <UserPwdModal
                 show={modalPwd}
                 onHide={() => setModalPwd(false)}
@@ -371,9 +364,6 @@ export default function User() {
           editing={editing}
         />
         {/* footer details */}
-        {/* <Box mt="25px" ml="25px">
-          <ToggleBox checked={object.is_usable} label="Usable" />
-        </Box> */}
         <Box ml={3} mt={2}>
           <Typography
             sx={{
