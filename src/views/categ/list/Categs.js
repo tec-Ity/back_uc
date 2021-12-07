@@ -154,7 +154,7 @@ const flagSlice = "categs";
 const populateObjs = [
   {
     path: "Categ_sons",
-    select: "code",
+    select: "code sort",
   },
 ];
 
@@ -477,6 +477,7 @@ function CategListItemChild({
   closeAddNewChild,
   categLevel = 2,
 }) {
+  console.log("LOG:", categ);
   const classes = useStyle();
   const dispatch = useDispatch();
   //   const ref = React.useRef();
