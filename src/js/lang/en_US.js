@@ -14,9 +14,6 @@ const en_US = {
   "role-101": "Boss",
   "role-105": "Woker",
 
-  "user-code": "Code",
-  "user-pwd": "Password",
-
   "navLabel-users": "Users",
   "navLabel-user": "User",
   "navLabel-shops": "Shops",
@@ -32,11 +29,12 @@ const en_US = {
   "navLabel-brands": "Brands",
   "navLabel-brand": "Brand",
   "navLabel-clients": "Clients",
-  "navLabel-Client": "Client",
+  "navLabel-client": "Client",
   "navLabel-setting": "Setting",
+  "navLabel-areas": "Areas",
   "navLabel-citas": "Cities",
   "navLabel-cita": "City",
-
+  //nabLabelAdd
   "navLabelAdd-user": "Add User",
   "navLabelAdd-shop": "Add SHop",
   "navLabelAdd-pd": "Add product",
@@ -49,19 +47,44 @@ const en_US = {
   "welcom-role": "Your Identity is ",
   "welcom-warning": "Connecting to server",
 
-  "LangUpdModal-title": "Change Language",
+  "switchLabel-basic": "Basic",
+  "switchLabel-servCita": "City",
+  "switchLabel-prods": "Sync",
+  "switchLabel-attr&sku": "Attributes&SKU",
+  "switchLabel-history": "History",
+  "switchLabel-purchased": "Purchased",
 
-  "inputLabel-name": "Name",
+  "infoSection-shopImg": "Shop Image",
+  "infoSection-shopInfo": "Shop information",
+
+  // input
   "inputLabel-code": "Code",
+  "inputLabel-name": "Name",
+  "inputLabel-addr": "Adress",
+  "inputLabel-city": "City",
+  "inputLabel-zip": "ZIP code",
   "inputLabel-phone": "Phone",
+  "inputLabel-isUsable": "USABLE",
+  "inputLabel-pwd": "Password",
+  "inputLabel-priceShip": "Shipping cost",
   "inputLabel-role": "Role",
   "inputLabel-shop": "Shop",
-  "inputLabel-isUsable": "USABLE",
   "inputLabel-lastLogin": "Last login",
 
+  //btns
   "btnLabel-edit": "Edit",
   "btnLabel-cancel": "Cancel",
   "btnLabel-submit": "Confirm",
   "btnLabel-delete": "Delete",
+  "btnLabel-newServCita": "Add City",
+  "btnLabel-editPass": "Change password",
+
+  //settings
+  "settingCard-company": "Company",
+  "settingCard-nation": "Country",
+  "settingCard-area": "Area",
+  "settingCard-city": "City",
+
+  "LangUpdModal-title": "Change Language",
 };
 export default en_US;

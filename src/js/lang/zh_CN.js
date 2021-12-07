@@ -77,6 +77,7 @@ const zh_CN = {
   "btnLabel-cancel": "取消",
   "btnLabel-submit": "确认",
   "btnLabel-delete": "删除",
+  "btnLabel-editPass": "修改密码",
 
   //settings
   "settingCard-company": "公司",

@@ -76,14 +76,14 @@ const it = {
   "btnLabel-cancel": "Cancella",
   "btnLabel-submit": "Conferma",
   "btnLabel-delete": "Elimina",
+  "btnLabel-newServCita": "Aggiungi Città",
+  "btnLabel-editPass": "Modifica Password",
 
   //settings
   "settingCard-company": "Azienda",
   "settingCard-nation": "Paese",
   "settingCard-area": "Zona",
   "settingCard-city": "Città",
-
-  "btnLabel-newServCita": "Aggiungi Città",
 
   "LangUpdModal-title": "Cambia Lingua",
 };
