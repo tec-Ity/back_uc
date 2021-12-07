@@ -13,6 +13,7 @@ const useStyle = makeStyles({
       padding: "10px",
       display: "flex",
       justifyContent: "space-between",
+      alignItems: "center",
       backgroundColor: "#fff",
       boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.1)",
       borderRadius: "5px",
@@ -41,7 +42,7 @@ export default function HistoryRow({ object, client }) {
         <div>{object.code}</div>
         <div>{moment(object.at_crt).format("MM/DD/YYYY")}</div>
         <div>{object.total_quantity}</div>
-        <div>{"€" + object.imp.toFixed(2)}</div>
+        <div>{"€" + object.imp?.toFixed(2)}</div>
         <div>{object.status}</div>
       </div>
     </Link>
