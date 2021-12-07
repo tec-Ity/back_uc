@@ -40,7 +40,7 @@ export default function ClientHistory({ object }) {
 
   const orders = useSelector(selectObjects(flagSlice));
 
-  console.log(orders);
+  // console.log(orders);
 
   return (
     <div>

@@ -33,7 +33,7 @@ export default function HistoryRow({ object, client }) {
   const classes = useStyle();
   const rolePath = getRolePath();
 
-  console.log(object);
+  // console.log(object);
 
   return (
     <Link to={`/${rolePath}/order/${object._id}`} className={classes.cardBox}>
