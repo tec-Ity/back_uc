@@ -3,18 +3,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectObjects, getObjects } from "../../../features/objectsSlice";
 import { makeStyles } from "@mui/styles";
 import { default as image } from "./square_img.png";
-import { get_DNS } from "../../../js/api";
-import CN_flag from "../../../components/icon/CN.svg";
-import IT_flag from "../../../components/icon/IT.svg";
-import JP_flag from "../../../components/icon/JP.svg";
-import KR_flag from "../../../components/icon/KR.svg";
-
-const flags = {
-  CN: CN_flag,
-  IT: IT_flag,
-  JP: JP_flag,
-  KR: KR_flag,
-};
 
 const useStyle = makeStyles({
   box: {
@@ -82,27 +70,44 @@ const useStyle = makeStyles({
   },
 });
 
-const flagSlice = "orderSku";
-const api = "/OrderSkus";
+const flagSlice = "prods";
+const api = "/Prods";
 const populateObjs = [
+  { path: "Prods", select: "code Shop" },
+  { path: "Brand", select: "nome" },
+  { path: "Nation", select: "code" },
   {
-    path: "Sku",
-    select: "attrs",
-    populate: [{ path: "attrs", select: "nome option" }],
-  },
-  {
-    path: "Prod",
-    select: "nome img_urls Nation sort Categ",
-    populate: [
-      { path: "Nation", select: "code" },
-      {
-        path: "Categ",
-        select: "code Categ_far",
-        populate: [{ path: "Categ_far", select: "code" }],
-      },
-    ],
+    path: "Categ",
+    select: "code Categ_far",
+    populate: {
+      path: "Categ_far",
+      select: "code",
+    },
   },
 ];
+
+function RowField({ object }) {
+  const classes = useStyle();
+
+  return (
+    <div className={classes.rowBox}>
+      <div className={classes.textNormal}>{object.sort}</div>
+      <img alt={"alt"} src={image} className={classes.imgStyle} />
+      <div className={classes.textBold}>{object.nome}</div>
+      <div>
+        <div className={classes.textNormal}>{object.Categ?.code}</div>
+        <div className={classes.textNormal}>
+          {object.Categ?.Categ_far?.code}
+        </div>
+      </div>
+      <div className={classes.textNormal}>{object.desp}</div>
+      <img alt={"country"} src={image} className={classes.countryStyle} />
+      <div className={classes.textNormal}>€{object.price?.toFixed(2)}</div>
+      <div className={classes.textNormal}>count</div>
+      <div className={classes.textLight}>件</div>
+    </div>
+  );
+}
 
 export default function ClientPurchased({ object }) {
   const dispatch = useDispatch();
@@ -110,21 +115,26 @@ export default function ClientPurchased({ object }) {
   const [Sort, setSort] = useState("");
   const [Order, setOrder] = useState("1");
 
+  const objects = useSelector(selectObjects(flagSlice));
   useEffect(() => {
     dispatch(
       getObjects({
         flagSlice,
         api:
           api +
-          `?Clients=[${object._id}]&populateObjs=` +
+          "?sortKey=" +
+          Sort +
+          "&sortVal=" +
+          Order +
+          "&populateObjs=" +
           JSON.stringify(populateObjs),
         isReload: true,
       })
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch]);
+  }, [Sort, Order]);
 
-  const objects = useSelector(selectObjects(flagSlice));
+  console.log(objects);
 
   function handleSort(value) {
     if (value === Sort) return setOrder(Order * -1);
@@ -136,8 +146,6 @@ export default function ClientPurchased({ object }) {
     if (Sort !== value) return "";
     return Order > 0 ? "^" : "v";
   }
-
-  console.log(objects);
 
   return (
     <div className={classes.box}>
@@ -155,46 +163,9 @@ export default function ClientPurchased({ object }) {
         </div>
         <div className={classes.textLight}>已购数量</div>
       </div>
-      {objects.map((order) => (
-        <RowField object={order} />
+      {objects.map((object) => (
+        <RowField object={object} />
       ))}
-    </div>
-  );
-}
-
-function RowField({ object }) {
-  const classes = useStyle();
-
-  return (
-    <div className={classes.rowBox}>
-      <div className={classes.textNormal}>{object.Prod.sort}</div>
-      <img
-        alt={"alt"}
-        src={get_DNS() + object.Prod.img_urls[0] || image}
-        className={classes.imgStyle}
-      />
-      <div className={classes.textBold}>{object.Prod.nome}</div>
-      <div>
-        <div className={classes.textNormal}>
-          {object.Prod.Categ.Categ_far.code}
-        </div>
-        <div className={classes.textNormal}>{object.Prod.Categ.code}</div>
-      </div>
-      <div className={classes.textNormal}>
-        {object.Sku.attrs
-          ?.map((attr) => `${attr.nome}: ${attr.option}`)
-          .join(", ") || ""}
-      </div>
-      <img
-        alt={"country"}
-        src={flags[object.Prod.Nation.code] || image}
-        className={classes.countryStyle}
-      />
-      <div className={classes.textNormal}>
-        € {object.price_sale?.toFixed(2) || "N/A"}
-      </div>
-      <div className={classes.textNormal}>{object.quantity}</div>
-      <div className={classes.textLight}>件</div>
     </div>
   );
 }

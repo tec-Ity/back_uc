@@ -6,6 +6,8 @@ import { default as RegionIcon } from "../../components/icon/RegionIcon.svg";
 import { default as CityIcon } from "../../components/icon/cityIcon.svg";
 import { useHistory } from "react-router";
 import CusSettingCart from "../../components/basic/CusSettingCard";
+import { FormattedMessage } from "react-intl";
+
 const links = [{ label: "setting" }];
 export default function Setting() {
   const rolePath = getRolePath();
@@ -16,28 +18,28 @@ export default function Setting() {
       <Grid container rowSpacing={3}>
         <Grid container item xs={4}>
           <CusSettingCart
-            title='COMPANY'
+            title={<FormattedMessage id="settingCard-company" />}
             img={CountryIcon}
             handleClick={() => hist.push(`/${rolePath}/company`)}
           />
         </Grid>
         <Grid container item xs={4}>
           <CusSettingCart
-            title='PAESI'
+            title={<FormattedMessage id="settingCard-nation" />}
             img={CountryIcon}
             handleClick={() => hist.push(`/${rolePath}/nations`)}
           />
         </Grid>
         <Grid container item xs={4}>
           <CusSettingCart
-            title='REGIONI'
+            title={<FormattedMessage id="settingCard-area" />}
             img={RegionIcon}
             handleClick={() => hist.push(`/${rolePath}/areas`)}
           />
         </Grid>
         <Grid container item xs={4}>
           <CusSettingCart
-            title='CITTA'
+            title={<FormattedMessage id="settingCard-city" />}
             img={CityIcon}
             handleClick={() => hist.push(`/${rolePath}/citas`)}
           />

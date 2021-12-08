@@ -128,7 +128,7 @@ const useStyle = makeStyles({
   },
 });
 
-const links = [ { label: "brands" }];
+const links = [{ label: "brands" }];
 const flagSlice = "brands";
 const api = "/Brands";
 const populateObjs = [
@@ -161,7 +161,7 @@ export default function Brands() {
         flagSlice={flagSlice}
         api={api}
         showAddNew={() => setAddNew(true)}
-        addLabel='添加品牌'
+        addLabel="brand"
         showSearch={Boolean(queryFixed)}
       />
       <BrandList addNew={addNew} closeAddNew={() => setAddNew(false)} />
@@ -177,7 +177,7 @@ function BrandList(props) {
   return (
     <Grid container className={classes.listGridContainer}>
       {addNew === true && (
-        <BrandListItem key='new' addNew closeAddNew={closeAddNew} brand={{}} />
+        <BrandListItem key="new" addNew closeAddNew={closeAddNew} brand={{}} />
       )}
       {brands?.map((brand, index) => (
         <BrandListItem brand={brand} index={index} key={brand._id} />
@@ -321,7 +321,8 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
         height: "360px",
         maxWidth: "255px",
       }}
-      alignContent='flex-start'>
+      alignContent="flex-start"
+    >
       {modifying === false ? (
         <>
           {/* bg img */}
@@ -359,19 +360,20 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
             style={{ width: "100%" }}
             onClick={() => {
               modifying === true && ref.current.click();
-            }}>
+            }}
+          >
             {imgLocal.length > 0 ? (
               // show selected img
-              <img src={imgLocal[0]} alt='logo' className={classes.brandBg} />
+              <img src={imgLocal[0]} alt="logo" className={classes.brandBg} />
             ) : (
               // when no selected img
               <div className={classes.brandBg}>
                 {addNew === true || !brand.img_url ? (
-                  <img src={defaultBrand} alt='' style={{ opacity: "0.1" }} />
+                  <img src={defaultBrand} alt="" style={{ opacity: "0.1" }} />
                 ) : (
                   <img
                     src={api_DNS + brand.img_url}
-                    alt=''
+                    alt=""
                     style={{
                       width: "100%",
                       height: "100%",
@@ -388,7 +390,7 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
           <input
             ref={ref}
             style={{ display: "none" }}
-            type='file'
+            type="file"
             onChange={(e) => {
               setBrandUpdateData((prev) => ({
                 ...prev,
@@ -437,8 +439,8 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
               <div style={{ width: "70%" }}>
                 <CusSelectSearch
                   useDefault
-                  flagSlice='Nations'
-                  api='/Nations'
+                  flagSlice="Nations"
+                  api="/Nations"
                   defaultSel={brandUpdateData.nation?.code}
                   handleSelect={(val) =>
                     setBrandUpdateData((prev) => ({
