@@ -8,6 +8,7 @@ import {
   getObjects,
   setQueryFixed,
   selectQueryFixed,
+  postObject,
 } from "../../../features/objectsSlice";
 
 import { getRolePath } from "../../../js/conf/confUser";
@@ -43,11 +44,12 @@ export default function Pds(props) {
   const [addNew, setAddNew] = useState(false);
   const objects = useSelector(selectObjects(flagSlice));
   const queryFixed = useSelector(selectQueryFixed(flagSlice));
+  const status = useSelector((state) => state.objects.status);
   const links = [{ label: "pds" }];
   const clickEvent = (obj) => (e) => {
     hist.push(`/${rolePath}/pd/${obj._id}`);
   };
-
+  const [justSubmitted, setJustSubmitted] = useState(false);
   useEffect(() => {
     //shop user has at_crt sort attr for sync pords bug
     let queryFixed = "&populateObjs=" + JSON.stringify(populateObjs);
@@ -72,6 +74,13 @@ export default function Pds(props) {
       );
   }, [dispatch, queryFixed]);
 
+  useEffect(() => {
+    if (justSubmitted === true ) {
+      setJustSubmitted(false);
+      hist.push(`/${rolePath}/reload`);
+    }
+  }, [justSubmitted]);
+
   return (
     <>
       <ListPageHeader
@@ -82,7 +91,43 @@ export default function Pds(props) {
         showAddNew={() => setAddNew(true)}
         showAddIcon={Boolean(curRole < 100)}
       />
+      {localStorage.getItem("role") > 100 && (
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "flex-end",
+          }}>
+          <div
+            style={{
+              height: "60px",
+              width: "200px",
+              backgroundColor: "#000000",
+              color: "#fff",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: "5px",
+              fontWeight: 700,
+              fontSize: "18px",
+              cursor: "pointer",
+            }}
+            onClick={() => {
+              const pdIds = objects.map((object) => object._id);
 
+              dispatch(
+                postObject({
+                  flagSlice: "prods",
+                  api: "/Prod",
+                  data: { Pds: pdIds },
+                })
+              );
+              setJustSubmitted(true);
+            }}>
+            一键同步本页产品
+          </div>
+        </div>
+      )}
       <div className='mt-4'>
         <UiVariety
           propsCard={PdCard}
