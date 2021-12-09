@@ -15,6 +15,7 @@ import Pds from "../views/pd/list/Pds";
 import Pd from "../views/pd/detail/Pd";
 
 import Reload from "../views/_index/Reload"; // 重新加载页面
+import Order from "../views/order/detail/Order";
 
 export default function BserRouter() {
   return (
@@ -43,6 +44,9 @@ export default function BserRouter() {
 
         <Route path='/bser/orders'>
           <Orders />
+        </Route>
+        <Route path='/bser/order/:id'>
+          <Order />
         </Route>
 
         <Route path='/bser/pds'>
