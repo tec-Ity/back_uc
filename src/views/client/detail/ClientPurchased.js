@@ -92,7 +92,7 @@ const populateObjs = [
   },
   {
     path: "Prod",
-    select: "nome img_urls Nation sort Categ",
+    select: "nome img_urls Nation sort Categ code",
     populate: [
       { path: "Nation", select: "code" },
       {
@@ -117,7 +117,8 @@ export default function ClientPurchased({ object }) {
         api:
           api +
           `?Clients=[${object._id}]&populateObjs=` +
-          JSON.stringify(populateObjs),
+          JSON.stringify(populateObjs) +
+          "&pagesize=600",
         isReload: true,
       })
     );
@@ -126,18 +127,62 @@ export default function ClientPurchased({ object }) {
 
   const objects = useSelector(selectObjects(flagSlice));
 
+  const [list, setList] = useState([]);
+  useEffect(() => {
+    let list_ = sumSku(objects);
+    console.log(list_);
+    setList(list_);
+  }, []);
+
   function handleSort(value) {
-    if (value === Sort) return setOrder(Order * -1);
-    setSort(value);
-    setOrder(Order * -1);
+    if (value === Sort) {
+      setOrder(Order * -1);
+    } else {
+      setSort(value);
+      setOrder(1);
+    }
   }
+
+  useEffect(() => {
+    console.log("EFFECT:", Sort, Order);
+    list.sort((firstEl, secondEl) => {
+      switch (Sort) {
+        case "nome":
+          return firstEl.Prod[Sort].localeCompare(secondEl.Prod[Sort]) * Order;
+        case "price_sale":
+          return (firstEl[Sort] > secondEl[Sort]) * Order;
+        default:
+          return;
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [Sort, Order]);
 
   function checkSort(value) {
     if (Sort !== value) return "";
     return Order > 0 ? "^" : "v";
   }
 
-  console.log(objects);
+  function sumSku(input) {
+    const result = {};
+    if (input.length < 1) return;
+    for (const orderSku of input) {
+      if (result[orderSku.Prod._id]) {
+        if (result[orderSku.Prod._id][orderSku.attrs]) {
+          result[orderSku.Prod._id][orderSku.attrs].quantity +=
+            orderSku.quantity;
+        } else {
+          result[orderSku.Prod._id][orderSku.attrs] = { ...orderSku };
+        }
+      } else {
+        Object.assign(result, {
+          [orderSku.Prod._id]: { [orderSku.attrs]: { ...orderSku } },
+        });
+      }
+    }
+    const r1 = Object.values(result).map((v) => Object.values(v));
+    return [].concat.apply([], r1);
+  }
 
   return (
     <div className={classes.box}>
@@ -150,14 +195,15 @@ export default function ClientPurchased({ object }) {
         <div className={classes.textLight}>商品分类</div>
         <div className={classes.textLight}>商品属性</div>
         <div className={classes.textLight}>商品国家</div>
-        <div className={classes.textLight} onClick={() => handleSort("price")}>
-          商品单价{checkSort("price")}
+        <div
+          className={classes.textLight}
+          onClick={() => handleSort("price_sale")}
+        >
+          商品单价{checkSort("price_sale")}
         </div>
         <div className={classes.textLight}>已购数量</div>
       </div>
-      {objects.map((order) => (
-        <RowField object={order} />
-      ))}
+      {objects.length > 0 && list?.map((order) => <RowField object={order} />)}
     </div>
   );
 }
