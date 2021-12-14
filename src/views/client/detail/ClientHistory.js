@@ -44,9 +44,11 @@ export default function ClientHistory({ object }) {
 
   return (
     <div>
-      {orders.map((order) => (
-        <HistoryRow object={order} client={object} />
-      ))}
+      {orders.length > 0
+        ? orders.map((order) => (
+            <HistoryRow object={order} client={object._id} />
+          ))
+        : "Empty"}
     </div>
   );
 }

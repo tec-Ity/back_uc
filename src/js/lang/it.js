@@ -34,6 +34,7 @@ const it = {
   "navLabel-areas": "Zone",
   "navLabel-citas": "Città Listino",
   "navLabel-cita": "Città",
+  "navLabel-back": "< Indietro",
   //nabLabelAdd
   "navLabelAdd-user": "Aggiungi Utente",
   "navLabelAdd-shop": "Aggiungi Negozio",

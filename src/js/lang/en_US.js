@@ -34,6 +34,7 @@ const en_US = {
   "navLabel-areas": "Areas",
   "navLabel-citas": "Cities",
   "navLabel-cita": "City",
+  "navLabel-back": "< Return",
   //nabLabelAdd
   "navLabelAdd-user": "Add User",
   "navLabelAdd-shop": "Add SHop",

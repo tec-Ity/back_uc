@@ -22,6 +22,9 @@ const useStyle = makeStyles({
       backgroundColor: "#fff",
       boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.1)",
       borderRadius: "5px",
+      "&:hover": {
+        backgroundColor: "#0000000D",
+      },
     },
     textDecoration: "none",
     color: "#000",
@@ -120,7 +123,7 @@ export default function UserCard(props) {
           </Card> */}
         </Link>
       ) : (
-        <h3 className='text-danger'> UserCard parameter Error! </h3>
+        <h3 className="text-danger"> UserCard parameter Error! </h3>
       )}
     </>
   );
