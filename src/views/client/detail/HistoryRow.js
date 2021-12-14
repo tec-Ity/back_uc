@@ -18,14 +18,12 @@ const useStyle = makeStyles({
       boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.1)",
       borderRadius: "5px",
       "&:hover": {
-        backgroundColor: "#0000004D",
+        backgroundColor: "#0000000D",
+        color: "#000",
       },
     },
     textDecoration: "none",
     color: "#000",
-    "&:hover": {
-      color: "#000",
-    },
   },
 });
 
@@ -36,7 +34,10 @@ export default function HistoryRow({ object, client }) {
   // console.log(object);
 
   return (
-    <Link to={`/${rolePath}/order/${object._id}`} className={classes.cardBox}>
+    <Link
+      to={`/${rolePath}/order/${object._id}?fromClient=${client}`}
+      className={classes.cardBox}
+    >
       <div>
         <div>{object.Shop?.code}</div>
         <div>{object.code}</div>

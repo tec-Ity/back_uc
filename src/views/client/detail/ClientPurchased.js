@@ -4,10 +4,12 @@ import { selectObjects, getObjects } from "../../../features/objectsSlice";
 import { makeStyles } from "@mui/styles";
 import { default as image } from "./square_img.png";
 import { get_DNS } from "../../../js/api";
+import clsx from "clsx";
 import CN_flag from "../../../components/icon/CN.svg";
 import IT_flag from "../../../components/icon/IT.svg";
 import JP_flag from "../../../components/icon/JP.svg";
 import KR_flag from "../../../components/icon/KR.svg";
+import { ReactComponent as Chevron } from "../../../components/icon/chevron-down.svg";
 
 const flags = {
   CN: CN_flag,
@@ -30,12 +32,15 @@ const useStyle = makeStyles({
     width: "100%",
     margin: "9px 0px 9px 0px",
     padding: "0px 32px 0px 32px",
+    borderRadius: "10px 10px 0px 0px",
     backgroundColor: "#0000001A",
     display: "grid",
     gridTemplateColumns: "2fr 6fr 1fr 1.5fr 1fr 1fr 1fr",
     columnGap: "10px",
     "&>div": {
       alignSelf: "center",
+      overflow: "hidden",
+      userSelect: "none",
     },
   },
   rowBox: {
@@ -79,6 +84,29 @@ const useStyle = makeStyles({
     fontWeight: "400",
     color: "#00000080",
     flexGrow: "2",
+  },
+  textButton: {
+    cursor: "pointer",
+    userSelect: "none",
+  },
+  button: {
+    height: "100%",
+    backgroundColor: "transparent",
+    border: "none",
+  },
+  button_svg: {
+    height: "20px",
+    width: "auto",
+    float: "right",
+    objectFit: "scale-down",
+    "& path": {
+      fill: "#00000080",
+    },
+  },
+  button_svg_active: {
+    "& path": {
+      fill: "#000000",
+    },
   },
 });
 
@@ -132,7 +160,7 @@ export default function ClientPurchased({ object }) {
     let list_ = sumSku(objects);
     console.log(list_);
     setList(list_);
-  }, []);
+  }, [objects]);
 
   function handleSort(value) {
     if (value === Sort) {
@@ -145,12 +173,12 @@ export default function ClientPurchased({ object }) {
 
   useEffect(() => {
     console.log("EFFECT:", Sort, Order);
-    list.sort((firstEl, secondEl) => {
+    list?.sort((firstEl, secondEl) => {
       switch (Sort) {
         case "nome":
           return firstEl.Prod[Sort].localeCompare(secondEl.Prod[Sort]) * Order;
         case "price_sale":
-          return (firstEl[Sort] > secondEl[Sort]) * Order;
+          return firstEl[Sort] > secondEl[Sort] * Order * -1;
         default:
           return;
       }
@@ -159,8 +187,29 @@ export default function ClientPurchased({ object }) {
   }, [Sort, Order]);
 
   function checkSort(value) {
-    if (Sort !== value) return "";
-    return Order > 0 ? "^" : "v";
+    return (
+      <div
+        className={{ display: "flex", flexDirection: "column", height: "50px" }}
+      >
+        <div className={classes.button}>
+          <Chevron
+            className={clsx(
+              classes.button_svg,
+              Sort === value && Order === 1 && classes.button_svg_active
+            )}
+            style={{ transform: "rotate(180deg)" }}
+          />
+        </div>
+        <div className={classes.button}>
+          <Chevron
+            className={clsx(
+              classes.button_svg,
+              Sort === value && Order === -1 && classes.button_svg_active
+            )}
+          />
+        </div>
+      </div>
+    );
   }
 
   function sumSku(input) {
@@ -189,21 +238,30 @@ export default function ClientPurchased({ object }) {
       <div>filter date^</div>
       <div className={classes.topBar}>
         <div></div>
-        <div className={classes.textBold} onClick={() => handleSort("nome")}>
-          商品名称{checkSort("nome")}
+        <div
+          className={clsx(classes.textBold, classes.textButton)}
+          onClick={() => handleSort("nome")}
+          style={{ height: "50px", display: "flex", alignItems: "center" }}
+        >
+          商品名称
+          {checkSort("nome")}
         </div>
         <div className={classes.textLight}>商品分类</div>
         <div className={classes.textLight}>商品属性</div>
         <div className={classes.textLight}>商品国家</div>
         <div
-          className={classes.textLight}
+          className={clsx(classes.textLight, classes.textButton)}
           onClick={() => handleSort("price_sale")}
+          style={{ height: "100%", display: "flex", alignItems: "center" }}
         >
-          商品单价{checkSort("price_sale")}
+          商品单价
+          {checkSort("price_sale")}
         </div>
         <div className={classes.textLight}>已购数量</div>
       </div>
-      {objects.length > 0 && list?.map((order) => <RowField object={order} />)}
+      {objects.length > 0
+        ? list?.map((order) => <RowField object={order} />)
+        : "Empty"}
     </div>
   );
 }

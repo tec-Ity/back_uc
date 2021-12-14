@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Container, Grid } from "@mui/material";
 // import NavBread from "../../../components/universal/navBread/NavBread";
-// import { getRolePath } from "../../../js/conf/confUser";
-import {
-  // Link,
-  useParams,
-} from "react-router-dom";
+import { getRolePath } from "../../../js/conf/confUser";
+import { Link, useParams, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import makeStyles from "@mui/styles/makeStyles";
 import api_DNS from "../../../js/_dns";
@@ -20,6 +17,7 @@ import moment from "moment";
 import { ReactComponent as ViewMore } from "../../../components/icon/orderDetailViewMore.svg";
 import { ReactComponent as ViewLess } from "../../../components/icon/orderDetailViewLess.svg";
 import ListPageHeader from "../../../components/basic/ListPageHeader";
+import { FormattedMessage } from "react-intl";
 
 const useStyle = makeStyles({
   root: { fontFamily: "Montserrat", paddingBottom: "100px" },
@@ -136,7 +134,7 @@ const useStyle = makeStyles({
   //orderProds
 });
 
-// const rolePath = getRolePath();
+const rolePath = getRolePath();
 const flagSlice = "order";
 const flagField = "object";
 //populate objs
@@ -165,6 +163,7 @@ const links = [
   { label: "orders", to: `/orders`, prevView: true },
   { label: "order" },
 ];
+
 ////////////////////////////////////////////////////////////////
 export default function Order() {
   const classes = useStyle();
@@ -185,10 +184,24 @@ export default function Order() {
     };
   }, [api, dispatch]);
 
+  const param = new URLSearchParams(useLocation().search);
+  const client = param.get("fromClient");
   return (
     <Container className={classes.root} disableGutters>
       {/* bread */}
-      <ListPageHeader links={links} showSearch={false} />
+      {!client ? (
+        <ListPageHeader links={links} showSearch={false} />
+      ) : (
+        <Link
+          to={`/${rolePath}/client/${client}`}
+          style={{
+            color: "#000",
+            textDecoration: "none",
+          }}
+        >
+          <FormattedMessage id="navLabel-back" />
+        </Link>
+      )}
       {/* order status */}
       <div className={classes.containerItem}>
         <OrderStatusSection orderStatus={order.status} id={id} />
@@ -226,7 +239,8 @@ function OrderStatusProgressBar(props) {
       <div
         style={{
           backgroundColor: color,
-        }}></div>
+        }}
+      ></div>
     </div>
   );
 }
@@ -268,14 +282,15 @@ function OrderStatusSection(props) {
   });
 
   return (
-    <SectionHeader label='订单状态'>
+    <SectionHeader label="订单状态">
       <div
         style={{
           display: "flex",
           width: "100%",
           justifyContent: "space-between",
           alignItems: "center",
-        }}>
+        }}
+      >
         <div style={{ display: "flex", width: "80%" }}>
           {orderStatusObjs.map((oStatus) => (
             <OrderStatusProgressBar
@@ -289,19 +304,22 @@ function OrderStatusSection(props) {
           (orderStatus === 200 ? (
             <div
               className={classes.takeOrderBtnStyle}
-              onClick={handleChangeOrderStatus("CONFIRM")}>
+              onClick={handleChangeOrderStatus("CONFIRM")}
+            >
               立即接单
             </div>
           ) : orderStatus === 400 ? (
             <div
               className={classes.takeOrderBtnStyle}
-              onClick={handleChangeOrderStatus("DONE")}>
+              onClick={handleChangeOrderStatus("DONE")}
+            >
               立即发货
             </div>
           ) : orderStatus === 700 ? (
             <div
               className={classes.takeOrderBtnStyle}
-              onClick={handleChangeOrderStatus("COMPLETE")}>
+              onClick={handleChangeOrderStatus("COMPLETE")}
+            >
               确认送达
             </div>
           ) : (
@@ -390,7 +408,7 @@ function OrderInfoSection({ order }) {
     : [];
   return (
     <>
-      <SectionHeader label='订单信息'>
+      <SectionHeader label="订单信息">
         <>
           <div>{order?.code}</div>
           {showMore === true ? (
@@ -449,7 +467,8 @@ function ProdsInfoSection({ orderProds }) {
         className={clsx(
           classes.sectionHeaderStyle,
           classes.prodsInfoHeaderStyle
-        )}>
+        )}
+      >
         <Grid container item xs={2}>
           商品信息
         </Grid>
@@ -482,7 +501,8 @@ function ProdsInfoSection({ orderProds }) {
             item
             xs={12}
             className={classes.prodsListStyle}
-            key={index}>
+            key={index}
+          >
             <Grid container item xs={1}>
               {index + 1}
             </Grid>
@@ -543,7 +563,7 @@ function ShipInfoSection({ shipInfo }) {
 
   return (
     <>
-      <SectionHeader label='配送信息' />
+      <SectionHeader label="配送信息" />
       <Container>
         <Grid container>
           {shipInfoObjs.map((info) => (

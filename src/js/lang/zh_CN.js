@@ -34,6 +34,7 @@ const zh_CN = {
   "navLabel-nations": "国家列表",
   "navLabel-areas": "大区列表",
   "navLabel-citas": "城市列表",
+  "navLabel-back": "< 返回",
   //nabLabelAdd
   "navLabelAdd-user": "添加用户",
   "navLabelAdd-shop": "添加店铺",
