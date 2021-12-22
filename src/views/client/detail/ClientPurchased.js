@@ -136,7 +136,7 @@ export default function ClientPurchased({ object }) {
   const dispatch = useDispatch();
   const classes = useStyle();
   const [Sort, setSort] = useState("");
-  const [Order, setOrder] = useState("1");
+  const [Order, setOrder] = useState(1);
 
   useEffect(() => {
     dispatch(
@@ -163,28 +163,36 @@ export default function ClientPurchased({ object }) {
   }, [objects]);
 
   function handleSort(value) {
+    let tmpOrder;
     if (value === Sort) {
-      setOrder(Order * -1);
+      tmpOrder = Order * -1;
     } else {
       setSort(value);
-      setOrder(1);
+      tmpOrder = 1;
     }
+    sortList(list, value, tmpOrder);
+    tmpOrder && setOrder(tmpOrder);
   }
 
-  useEffect(() => {
-    console.log("EFFECT:", Sort, Order);
-    list?.sort((firstEl, secondEl) => {
-      switch (Sort) {
+  function sortList(l, type, order) {
+    function getfunction(t) {
+      switch (t) {
         case "nome":
-          return firstEl.Prod[Sort].localeCompare(secondEl.Prod[Sort]) * Order;
+          return (firstEl, secondEl) =>
+            firstEl.Prod[type].localeCompare(secondEl.Prod[type]) * order;
         case "price_sale":
-          return firstEl[Sort] > secondEl[Sort] * Order * -1;
+          return (firstEl, secondEl) =>
+            secondEl[type] > firstEl[type]
+              ? 1 * order
+              : secondEl[type] < firstEl[type]
+              ? -1 * order
+              : 0;
         default:
-          return;
+          return () => 0;
       }
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [Sort, Order]);
+    }
+    l?.sort(getfunction(type));
+  }
 
   function checkSort(value) {
     return (
@@ -260,7 +268,7 @@ export default function ClientPurchased({ object }) {
         <div className={classes.textLight}>已购数量</div>
       </div>
       {objects.length > 0
-        ? list?.map((order) => <RowField object={order} />)
+        ? list?.map((order) => <RowField object={order} key={order._id} />)
         : "Empty"}
     </div>
   );
