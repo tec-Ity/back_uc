@@ -1,11 +1,7 @@
 import React, { useEffect } from "react";
 import HistoryRow from "./HistoryRow";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  getObjects,
-  selectObjects,
-  cleanField,
-} from "../../../features/objectsSlice";
+import { getObjects, selectObjects, cleanField } from "../../../features/objectsSlice";
 
 const flagSlice = "orders";
 const flagField = "object";
@@ -25,12 +21,7 @@ export default function ClientHistory({ object }) {
     dispatch(
       getObjects({
         flagSlice,
-        api:
-          api +
-          `?Clients=[` +
-          object._id +
-          "]&populateObjs=" +
-          JSON.stringify(populateObjs),
+        api: api + `?Clients=[` + object._id + "]&populateObjs=" + JSON.stringify(populateObjs),
       })
     );
     return () => {
@@ -45,9 +36,7 @@ export default function ClientHistory({ object }) {
   return (
     <div>
       {orders.length > 0
-        ? orders.map((order) => (
-            <HistoryRow object={order} client={object._id} />
-          ))
+        ? orders.map((order) => <HistoryRow object={order} client={object._id} key={order._id} />)
         : "Empty"}
     </div>
   );
