@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectObjects, getObjects, setQueryFixed, selectQuery } from "../../../features/objectsSlice";
+import { selectObjects, getObjects, setQueryFixed } from "../../../features/objectsSlice";
 import { makeStyles } from "@mui/styles";
 import { get_DNS } from "../../../js/api";
 import clsx from "clsx";
@@ -138,14 +138,12 @@ const populateObjs = [
 
 export default function ClientPurchased({ object }) {
   const dispatch = useDispatch();
-  const query = useSelector(selectQuery(flagSlice));
   const classes = useStyle();
   const [Sort, setSort] = useState("");
   const [Order, setOrder] = useState(1);
   const [FilteredDate, setFilteredDate] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
 
-  console.log(query);
   useEffect(() => {
     dispatch(
       setQueryFixed({
