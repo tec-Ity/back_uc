@@ -191,20 +191,6 @@ export default function ClientPurchased({ object }) {
     setList(list_);
   }, [objects]);
 
-  useEffect(() => {
-    // console.log(SearchFilter);
-    if (SearchFilter !== "") {
-      setList((prevList) =>
-        prevList.filter((el) =>
-          el.Prod.nome.toUpperCase().includes(SearchFilter.toUpperCase())
-        )
-      );
-    } else {
-      let list_ = sumSku(objects);
-      setList(list_);
-    }
-  }, [SearchFilter]);
-
   function handleSort(value) {
     let tmpOrder;
     if (value === Sort) {
@@ -346,7 +332,15 @@ export default function ClientPurchased({ object }) {
         <div className={classes.textLight}>已购数量</div>
       </div>
       {objects.length > 0
-        ? list?.map((order) => <RowField object={order} key={order._id} />)
+        ? list
+            ?.filter((el) =>
+              SearchFilter
+                ? el.Prod.nome
+                    .toUpperCase()
+                    .includes(SearchFilter.toUpperCase())
+                : true
+            )
+            .map((order) => <RowField object={order} key={order._id} />)
         : "Empty"}
     </div>
   );
