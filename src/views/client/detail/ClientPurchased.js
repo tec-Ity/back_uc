@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectObjects, getObjects, setQueryFixed } from "../../../features/objectsSlice";
+import {
+  selectObjects,
+  getObjects,
+  setQueryFixed,
+  cleanField,
+} from "../../../features/objectsSlice";
 import { makeStyles } from "@mui/styles";
 import { get_DNS } from "../../../js/api";
 import clsx from "clsx";
@@ -10,6 +15,8 @@ import JP_flag from "../../../components/icon/JP.svg";
 import KR_flag from "../../../components/icon/KR.svg";
 import { ReactComponent as Chevron } from "../../../components/icon/chevron-down.svg";
 import DateFilter from "../../../components/universal/query/filter/DateFilter.js";
+import SearchInput from "../../../components/universal/query/SearchInputMod";
+import PurchasedSearch from "./PurchasedSearch";
 
 const flags = {
   CN: CN_flag,
@@ -42,6 +49,14 @@ const useStyle = makeStyles({
       overflow: "hidden",
       userSelect: "none",
     },
+  },
+  searchRow: {
+    width: "100%",
+    marginBottom: "40px",
+    // border: "1px solid #000000",
+    display: "flex",
+    flexDirection: "row-reverse",
+    justifyContent: "space-between",
   },
   rowBox: {
     height: "74px",
@@ -138,17 +153,22 @@ const populateObjs = [
 
 export default function ClientPurchased({ object }) {
   const dispatch = useDispatch();
+  const objects = useSelector(selectObjects(flagSlice));
   const classes = useStyle();
   const [Sort, setSort] = useState("");
   const [Order, setOrder] = useState(1);
   const [FilteredDate, setFilteredDate] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [SearchFilter, setSearchFilter] = useState("");
+  const [list, setList] = useState([]);
 
   useEffect(() => {
     dispatch(
       setQueryFixed({
         flagSlice,
-        queryFixed: `Clients=[${object._id}]&populateObjs=${JSON.stringify(populateObjs)}&pagesize=600`,
+        queryFixed: `Clients=[${object._id}]&populateObjs=${JSON.stringify(
+          populateObjs
+        )}&pagesize=600`,
       })
     );
     dispatch(
@@ -158,17 +178,32 @@ export default function ClientPurchased({ object }) {
         isReload: true,
       })
     );
+
+    return () => {
+      dispatch(cleanField({ flagSlice, flagField: "objects" }));
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const objects = useSelector(selectObjects(flagSlice));
-
-  const [list, setList] = useState([]);
   useEffect(() => {
     let list_ = sumSku(objects);
-    console.log(list_);
+    // console.log(list_);
     setList(list_);
   }, [objects]);
+
+  useEffect(() => {
+    // console.log(SearchFilter);
+    if (SearchFilter !== "") {
+      setList((prevList) =>
+        prevList.filter((el) =>
+          el.Prod.nome.toUpperCase().includes(SearchFilter.toUpperCase())
+        )
+      );
+    } else {
+      let list_ = sumSku(objects);
+      setList(list_);
+    }
+  }, [SearchFilter]);
 
   function handleSort(value) {
     let tmpOrder;
@@ -186,10 +221,15 @@ export default function ClientPurchased({ object }) {
     function getfunction(t) {
       switch (t) {
         case "nome":
-          return (firstEl, secondEl) => firstEl.Prod[type].localeCompare(secondEl.Prod[type]) * order;
+          return (firstEl, secondEl) =>
+            firstEl.Prod[type].localeCompare(secondEl.Prod[type]) * order;
         case "price_sale":
           return (firstEl, secondEl) =>
-            secondEl[type] > firstEl[type] ? 1 * order : secondEl[type] < firstEl[type] ? -1 * order : 0;
+            secondEl[type] > firstEl[type]
+              ? 1 * order
+              : secondEl[type] < firstEl[type]
+              ? -1 * order
+              : 0;
         default:
           return () => 0;
       }
@@ -199,15 +239,25 @@ export default function ClientPurchased({ object }) {
 
   function checkSort(value) {
     return (
-      <div className={{ display: "flex", flexDirection: "column", height: "50px" }}>
+      <div
+        className={{ display: "flex", flexDirection: "column", height: "50px" }}
+      >
         <div className={classes.button}>
           <Chevron
-            className={clsx(classes.button_svg, Sort === value && Order === 1 && classes.button_svg_active)}
+            className={clsx(
+              classes.button_svg,
+              Sort === value && Order === 1 && classes.button_svg_active
+            )}
             style={{ transform: "rotate(180deg)" }}
           />
         </div>
         <div className={classes.button}>
-          <Chevron className={clsx(classes.button_svg, Sort === value && Order === -1 && classes.button_svg_active)} />
+          <Chevron
+            className={clsx(
+              classes.button_svg,
+              Sort === value && Order === -1 && classes.button_svg_active
+            )}
+          />
         </div>
       </div>
     );
@@ -219,7 +269,8 @@ export default function ClientPurchased({ object }) {
     for (const orderSku of input) {
       if (result[orderSku.Prod._id]) {
         if (result[orderSku.Prod._id][orderSku.attrs]) {
-          result[orderSku.Prod._id][orderSku.attrs].quantity += orderSku.quantity;
+          result[orderSku.Prod._id][orderSku.attrs].quantity +=
+            orderSku.quantity;
         } else {
           result[orderSku.Prod._id][orderSku.attrs] = { ...orderSku };
         }
@@ -251,10 +302,16 @@ export default function ClientPurchased({ object }) {
 
   return (
     <div className={classes.box}>
-      <button className={classes.dateFilter} onClick={handleDateFilter}>
-        filter date
-        <Chevron className={classes.button_svg} />
-      </button>
+      <div className={classes.searchRow}>
+        <PurchasedSearch
+          placeholder="placeholder"
+          setFilter={setSearchFilter}
+        />
+        <button className={classes.dateFilter} onClick={handleDateFilter}>
+          filter date
+          <Chevron className={classes.button_svg} />
+        </button>
+      </div>
       {FilteredDate && (
         <DateFilter
           flagSlice={flagSlice}
@@ -288,7 +345,9 @@ export default function ClientPurchased({ object }) {
         </div>
         <div className={classes.textLight}>已购数量</div>
       </div>
-      {objects.length > 0 ? list?.map((order) => <RowField object={order} key={order._id} />) : "Empty"}
+      {objects.length > 0
+        ? list?.map((order) => <RowField object={order} key={order._id} />)
+        : "Empty"}
     </div>
   );
 }
@@ -299,17 +358,31 @@ function RowField({ object }) {
   return (
     <div className={classes.rowBox}>
       <div className={classes.textNormal}>{object.Prod.sort}</div>
-      <img alt={"Prod"} src={get_DNS() + object.Prod.img_urls[0]} className={classes.imgStyle} />
+      <img
+        alt={"Prod"}
+        src={get_DNS() + object.Prod.img_urls[0]}
+        className={classes.imgStyle}
+      />
       <div className={classes.textBold}>{object.Prod.nome}</div>
       <div>
-        <div className={classes.textNormal}>{object.Prod.Categ.Categ_far.code}</div>
+        <div className={classes.textNormal}>
+          {object.Prod.Categ.Categ_far.code}
+        </div>
         <div className={classes.textNormal}>{object.Prod.Categ.code}</div>
       </div>
       <div className={classes.textNormal}>
-        {object.Sku.attrs?.map((attr) => `${attr.nome}: ${attr.option}`).join(", ") || ""}
+        {object.Sku.attrs
+          ?.map((attr) => `${attr.nome}: ${attr.option}`)
+          .join(", ") || ""}
       </div>
-      <img alt={"country"} src={flags[object.Prod.Nation.code]} className={classes.countryStyle} />
-      <div className={classes.textNormal}>€ {object.price_sale?.toFixed(2) || "N/A"}</div>
+      <img
+        alt={"country"}
+        src={flags[object.Prod.Nation.code]}
+        className={classes.countryStyle}
+      />
+      <div className={classes.textNormal}>
+        € {object.price_sale?.toFixed(2) || "N/A"}
+      </div>
       <div className={classes.textNormal}>{object.quantity}</div>
       <div className={classes.textLight}>件</div>
     </div>
