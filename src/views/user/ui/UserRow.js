@@ -1,59 +1,11 @@
+import React from "react";
+import { Link } from "react-router-dom";
 import { get_DNS } from "../../../js/api";
-import { FormattedMessage } from "react-intl";
-import { makeStyles } from "@mui/styles";
 import { default as userProfile } from "../../../components/icon/userProfileLightGrey.svg";
+import CustCard from "../../../components/ui/CustCard";
 
-const useStyle = makeStyles({
-  cardBox: {
-    height: "84px",
-    width: "100%",
-    margin: "20px",
-    backgroundColor: "#fff",
-    boxShadow: "0px 0px 15px rgba(0, 0, 0, 0.1)",
-    borderRadius: "5px",
-    display: "flex",
-    "&:hover": {
-      backgroundColor: "rgba(0, 0, 0, 0.1)",
-      cursor: "pointer",
-    },
-  },
-  imgStyle: {
-    height: "64px",
-    width: "64px",
-    margin: "10px",
-    objectFit: "scale-down",
-  },
-  textBox: {
-    height: "100%",
-    width: "100%",
-    display: "inline",
-    margin: "10px",
-    marginRight: "20px",
-  },
-  title: {
-    float: "left",
-    fontSize: "20px",
-    fontWeight: "700",
-    overflowWrap: "break-word",
-  },
-  desc: {
-    clear: "left",
-    fontSize: "20px",
-    fontWeight: "400",
-    color: "#0000004D",
-  },
-  code: {
-    float: "right",
-    fontSize: "20px",
-    fontWeight: "400",
-    color: "#000000",
-  },
-});
-
-export default function UserRow(props) {
-  const { object, clickEvent } = props;
-  const classes = useStyle();
-
+export default function UserRow({ object }) {
+  //compile image url
   let img_url = userProfile;
   if (object?.img_url) {
     img_url = get_DNS() + object.img_url;
@@ -64,19 +16,24 @@ export default function UserRow(props) {
   return (
     <>
       {object ? (
-        <div
-          className={classes.cardBox}
-          onClick={clickEvent && clickEvent(object)}
+        <Link
+          to={`user/${object._id}`}
+          style={{ textDecoration: "none", color: "#000" }}
         >
-          <img src={img_url} className={classes.imgStyle} alt={object.code} />
-          <div className={classes.textBox}>
-            <h1 className={classes.title}>{object.code}</h1>
-            {object.Shop && (
-              <h2 className={classes.code}>{object.Shop?.code}</h2>
-            )}
-            <h2 className={classes.desc}>{object.nome}</h2>
-          </div>
-        </div>
+          <CustCard
+            row
+            img={{ url: img_url, alt: object.code }}
+            content={
+              <>
+                <div className="duo">
+                  <p className="title">{object.code}</p>
+                  {object.Shop && <p className="normal">{object.Shop?.code}</p>}
+                </div>
+                <p className="desc">{object.nome}</p>
+              </>
+            }
+          />
+        </Link>
       ) : (
         <h3 className="text-danger"> UserRow parameter Error! </h3>
       )}
