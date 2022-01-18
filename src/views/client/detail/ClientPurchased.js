@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectObjects, getObjects } from "../../../features/objectsSlice";
+import {
+  selectObjects,
+  getObjects,
+  setQueryFixed,
+  cleanField,
+} from "../../../features/objectsSlice";
 import { makeStyles } from "@mui/styles";
-import { default as image } from "./square_img.png";
 import { get_DNS } from "../../../js/api";
 import clsx from "clsx";
 import CN_flag from "../../../components/icon/CN.svg";
@@ -10,6 +14,9 @@ import IT_flag from "../../../components/icon/IT.svg";
 import JP_flag from "../../../components/icon/JP.svg";
 import KR_flag from "../../../components/icon/KR.svg";
 import { ReactComponent as Chevron } from "../../../components/icon/chevron-down.svg";
+import DateFilter from "../../../components/universal/query/filter/DateFilter.js";
+import SearchInput from "../../../components/universal/query/SearchInputMod";
+import PurchasedSearch from "./PurchasedSearch";
 
 const flags = {
   CN: CN_flag,
@@ -42,6 +49,14 @@ const useStyle = makeStyles({
       overflow: "hidden",
       userSelect: "none",
     },
+  },
+  searchRow: {
+    width: "100%",
+    marginBottom: "40px",
+    // border: "1px solid #000000",
+    display: "flex",
+    flexDirection: "row-reverse",
+    justifyContent: "space-between",
   },
   rowBox: {
     height: "74px",
@@ -108,6 +123,10 @@ const useStyle = makeStyles({
       fill: "#000000",
     },
   },
+  dateFilter: {
+    border: "none",
+    backgroundColor: "transparent",
+  },
 });
 
 const flagSlice = "orderSku";
@@ -134,31 +153,41 @@ const populateObjs = [
 
 export default function ClientPurchased({ object }) {
   const dispatch = useDispatch();
+  const objects = useSelector(selectObjects(flagSlice));
   const classes = useStyle();
   const [Sort, setSort] = useState("");
   const [Order, setOrder] = useState(1);
+  const [FilteredDate, setFilteredDate] = useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [SearchFilter, setSearchFilter] = useState("");
+  const [list, setList] = useState([]);
 
   useEffect(() => {
     dispatch(
+      setQueryFixed({
+        flagSlice,
+        queryFixed: `Clients=[${object._id}]&populateObjs=${JSON.stringify(
+          populateObjs
+        )}&pagesize=600`,
+      })
+    );
+    dispatch(
       getObjects({
         flagSlice,
-        api:
-          api +
-          `?Clients=[${object._id}]&populateObjs=` +
-          JSON.stringify(populateObjs) +
-          "&pagesize=600",
+        api,
         isReload: true,
       })
     );
+
+    return () => {
+      dispatch(cleanField({ flagSlice, flagField: "objects" }));
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch]);
+  }, []);
 
-  const objects = useSelector(selectObjects(flagSlice));
-
-  const [list, setList] = useState([]);
   useEffect(() => {
     let list_ = sumSku(objects);
-    console.log(list_);
+    // console.log(list_);
     setList(list_);
   }, [objects]);
 
@@ -241,9 +270,44 @@ export default function ClientPurchased({ object }) {
     return [].concat.apply([], r1);
   }
 
+  function handleDateFilter(e) {
+    setAnchorEl(e.currentTarget);
+    setFilteredDate(true);
+  }
+
+  function handleDateFilterClose() {
+    dispatch(
+      getObjects({
+        flagSlice,
+        api,
+        isReload: true,
+      })
+    );
+    setFilteredDate(false);
+  }
+
   return (
     <div className={classes.box}>
-      <div>filter date^</div>
+      <div className={classes.searchRow}>
+        <PurchasedSearch
+          placeholder="placeholder"
+          setFilter={setSearchFilter}
+        />
+        <button className={classes.dateFilter} onClick={handleDateFilter}>
+          filter date
+          <Chevron className={classes.button_svg} />
+        </button>
+      </div>
+      {FilteredDate && (
+        <DateFilter
+          flagSlice={flagSlice}
+          id={"dateFilter"}
+          open={Boolean(anchorEl)}
+          anchorEl={anchorEl}
+          onClose={handleDateFilterClose}
+          anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+        />
+      )}
       <div className={classes.topBar}>
         <div></div>
         <div
@@ -268,7 +332,15 @@ export default function ClientPurchased({ object }) {
         <div className={classes.textLight}>已购数量</div>
       </div>
       {objects.length > 0
-        ? list?.map((order) => <RowField object={order} key={order._id} />)
+        ? list
+            ?.filter((el) =>
+              SearchFilter
+                ? el.Prod.nome
+                    .toUpperCase()
+                    .includes(SearchFilter.toUpperCase())
+                : true
+            )
+            .map((order) => <RowField object={order} key={order._id} />)
         : "Empty"}
     </div>
   );
@@ -281,8 +353,8 @@ function RowField({ object }) {
     <div className={classes.rowBox}>
       <div className={classes.textNormal}>{object.Prod.sort}</div>
       <img
-        alt={"alt"}
-        src={get_DNS() + object.Prod.img_urls[0] || image}
+        alt={"Prod"}
+        src={get_DNS() + object.Prod.img_urls[0]}
         className={classes.imgStyle}
       />
       <div className={classes.textBold}>{object.Prod.nome}</div>
@@ -299,7 +371,7 @@ function RowField({ object }) {
       </div>
       <img
         alt={"country"}
-        src={flags[object.Prod.Nation.code] || image}
+        src={flags[object.Prod.Nation.code]}
         className={classes.countryStyle}
       />
       <div className={classes.textNormal}>
