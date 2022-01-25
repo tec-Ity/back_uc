@@ -19,7 +19,6 @@ import {
 } from "../../../features/objectsSlice";
 
 import { Box, Grid, Typography } from "@mui/material";
-import { ReactComponent as DoneIcon } from "../../../components/icon/doneBlack.svg";
 import { ReactComponent as UserProfileLightGrey } from "../../../components/icon/userProfileLightGrey.svg";
 import ListPageHeader from "../../../components/basic/ListPageHeader.js";
 import CusSwitch from "../../../components/basic/CusSwitch";

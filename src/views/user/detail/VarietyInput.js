@@ -5,7 +5,6 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import { useState } from "react";
 import { FormattedMessage } from "react-intl";
 
 export default function VarietyInput({
@@ -20,18 +19,10 @@ export default function VarietyInput({
   function handleChange(event) {
     setForm({ ...form, [type]: event.target.value });
   }
-
-  const [listValue, setListValue] = useState({
-    label: variant?.variantObj?.options?.filter(
-      (option) => option.id === form[type]
-    )[0]?.label,
-    id: form[type],
-  });
   function handleList(event, newValue) {
     // setListValue(newValue);
     setForm({ ...form, [type]: newValue.id });
   }
-
   function handleSelect(event) {
     setForm({ ...form, [type]: event.target.value });
   }

@@ -48,6 +48,7 @@ export default function ClientHistory({ object }) {
     return () => {
       dispatch(cleanField({ flagSlice, flagField: "objects" }));
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
   // console.log(orders);
