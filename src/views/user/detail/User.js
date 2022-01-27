@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-// import { Link } from "react-router-dom";
 import { useParams, useHistory } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -19,8 +18,7 @@ import {
   cleanField,
 } from "../../../features/objectsSlice";
 
-import { Box, Grid, Typography, Button, IconButton } from "@mui/material";
-import { ReactComponent as DoneIcon } from "../../../components/icon/doneBlack.svg";
+import { Box, Grid, Typography } from "@mui/material";
 import { ReactComponent as UserProfileLightGrey } from "../../../components/icon/userProfileLightGrey.svg";
 import ListPageHeader from "../../../components/basic/ListPageHeader.js";
 import CusSwitch from "../../../components/basic/CusSwitch";
@@ -58,17 +56,12 @@ export default function User() {
 
   const curUser = useSelector(selectUser);
   const curRole = parseInt(localStorage.getItem("role"));
-  const object = useSelector(selectObject(flagSlice));
-
   const rolePath = getRolePath();
+
+  const object = useSelector(selectObject(flagSlice));
 
   const [modalPut, setModalPut] = useState(false);
   const [modalPwd, setModalPwd] = useState(false);
-
-  const deleteDB = () => {
-    dispatch(deleteObject({ flagSlice, api: api_delete, id }));
-    hist.replace(`/${rolePath}/users`);
-  };
 
   useEffect(() => {
     dispatch(
@@ -83,7 +76,7 @@ export default function User() {
   }, [api, dispatch]);
 
   const [editing, setEditing] = useState(false);
-  const [justSubmitted, setJustSubmitted] = useState(false);
+  // const [justSubmitted, setJustSubmitted] = useState(false);
   const flagSlice_Shops = "user_Shops";
   const api_Shops = "/Shops";
   const objShops = useSelector(selectObjects(flagSlice_Shops));
@@ -102,11 +95,17 @@ export default function User() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [object]);
 
-  const status = useSelector((state) => state.objects.status);
-  useEffect(() => {
-    if (justSubmitted === "UPDATE" && status === "succeed") {
-    }
-  }, [status, rolePath, justSubmitted, object._id]);
+  // const status = useSelector((state) => state.objects.status);
+  // useEffect(() => {
+  //   if (justSubmitted === "UPDATE" && status === "succeed") {
+  //   }
+  // }, [status, rolePath, justSubmitted, object._id]);
+
+  function deleteDB() {
+    dispatch(deleteObject({ flagSlice, api: api_delete, id }));
+    hist.replace(`/${rolePath}/users`);
+    // setJustSubmitted("DELETE");
+  }
 
   function handleEdit() {
     //load object to form
@@ -124,11 +123,7 @@ export default function User() {
       })
     );
     setEditing(!editing);
-    setJustSubmitted("UPDATE");
-  }
-
-  function handleLog() {
-    console.log("[LOG]", object, form, fields);
+    // setJustSubmitted("UPDATE");
   }
 
   function populateShops(Shops) {
@@ -140,7 +135,11 @@ export default function User() {
 
   function populateRoles(roles) {
     let arr = roles
-      .filter((role) => curRole < role.code)
+      .filter(
+        (role) =>
+          curRole < role.code ||
+          (curRole === role.code && curUser.code === object.code)
+      )
       .map((role) => {
         return {
           // label: <FormattedMessage id={`role-${role.code}`} />,
@@ -149,25 +148,6 @@ export default function User() {
         };
       });
     return arr;
-  }
-
-  function FooterBox({ label, content }) {
-    return (
-      <>
-        <Grid item xs={12} sm={3}>
-          <Typography
-            sx={{ fontSize: "16px", color: "#0000004D", fontWeight: "700" }}
-          >
-            {label}
-          </Typography>
-        </Grid>
-        <Grid item xs="auto" sm="auto">
-          <Typography sx={{ fontSize: "16px", fontWeight: "700" }}>
-            {content}
-          </Typography>
-        </Grid>
-      </>
-    );
   }
 
   const links = [{ label: "users", to: `/users` }, { label: "user" }];
@@ -302,12 +282,6 @@ export default function User() {
       icon: <Edit className={classes.putButton} />,
       handler: () => setModalPut(true),
     },
-    {
-      label: "log",
-      style: { order: "-3" },
-      icon: <DoneIcon />,
-      handler: handleLog,
-    },
   ];
 
   return (
@@ -316,13 +290,15 @@ export default function User() {
       {
         // 数据正确
         object._id && String(object._id) === String(id) && (
-          <Box
-            height="180px"
-            width="100%"
-            sx={{ display: "flex", justifyContent: "space-between" }}
-          >
-            <UserProfileLightGrey />
-            <div>
+          <Box>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginBottom: "46px",
+              }}
+            >
+              <UserProfileLightGrey />
               <UserPutModal
                 show={modalPut}
                 onHide={() => setModalPut(false)}
@@ -343,96 +319,74 @@ export default function User() {
                   initForm(object, setForm);
                   setEditing(false);
                 }}
-                handleDelete={() => {
-                  deleteDB();
-                  setJustSubmitted("DELETE");
-                }}
+                handleDelete={deleteDB}
                 handleSubmit={handleSave}
                 other_buttons={otherButtons}
               />
             </div>
+            {/* main details */}
+            <FormBox
+              data={{ fields, object }}
+              agent={curUser}
+              stateHandler={[form, setForm]}
+              editing={editing}
+            />
+            <Box ml={3} mt={2}>
+              <Typography
+                sx={{
+                  fontSize: "16px",
+                  color: "#0000004D",
+                  fontWeight: "700",
+                  bgcolor: "white",
+                }}
+              >
+                <FormattedMessage id="inputLabel-isUsable" />
+              </Typography>
+              {editing ? (
+                <CusSwitch
+                  checked={object.is_usable}
+                  handleSwitch={(checked) =>
+                    setForm((prev) => ({
+                      ...prev,
+                      is_usable: checked,
+                    }))
+                  }
+                />
+              ) : (
+                <Typography sx={{ fontSize: "16px", fontWeight: "700" }}>
+                  {object.is_usable === true ? "YES" : "NO"}
+                </Typography>
+              )}
+            </Box>
+            {/* footer details */}
+            <Grid container mt="25px" ml={3}>
+              <FooterBox
+                label={<FormattedMessage id="inputLabel-lastLogin" />}
+                content={object.at_last_login}
+              />
+            </Grid>
           </Box>
         )
       }
+    </>
+  );
+}
 
-      <Box mt="46px" sx={{ maxWidth: "100%" }}>
-        {/* main details */}
-        <FormBox
-          data={{ fields: fields, object: object }}
-          agent={curUser}
-          stateHandler={[form, setForm]}
-          editing={editing}
-        />
-        {/* footer details */}
-        <Box ml={3} mt={2}>
-          <Typography
-            sx={{
-              fontSize: "16px",
-              color: "#0000004D",
-              fontWeight: "700",
-              bgcolor: "white",
-            }}
-          >
-            <FormattedMessage id="inputLabel-isUsable" />
-          </Typography>
-          {editing ? (
-            <CusSwitch
-              checked={object.is_usable}
-              handleSwitch={(checked) =>
-                setForm((prev) => ({
-                  ...prev,
-                  is_usable: checked,
-                }))
-              }
-            />
-          ) : (
-            <Typography sx={{ fontSize: "16px", fontWeight: "700" }}>
-              {object.is_usable === true ? "YES" : "NO"}
-            </Typography>
-          )}
-        </Box>
-        <Grid container mt="25px" ml={3}>
-          <FooterBox
-            label={<FormattedMessage id="inputLabel-lastLogin" />}
-            content={object.at_last_login}
-          />
-        </Grid>
-      </Box>
-      {/* <div className="row mt-3">
-        <div className="col-4 col-md-2"> 登录账号: </div>
-        <div className="col-8 col-md-10"> {object.code} </div>
-      </div>
-      <div className="row mt-3">
-        <div className="col-4 col-md-2"> 用户姓名: </div>
-        <div className="col-8 col-md-10"> {object.nome} </div>
-      </div>
-      <div className="row mt-3">
-        <div className="col-4 col-md-2"> 电话: </div>
-        {object.phone && (
-          <div className="col-8 col-md-10">
-            {" "}
-            {object.phonePre} {object.phone}
-          </div>
-        )}
-      </div>
-      <div className="row mt-3">
-        <div className="col-4 col-md-2"> 用户角色: </div>
-        <div className="col-8 col-md-10"> {object.role} </div>
-      </div>
-      <div className="row mt-3">
-        <div className="col-4 col-md-2"> 是否可用: </div>
-        <div className="col-8 col-md-10"> {object.is_usable} </div>
-      </div>
-      <div className="row mt-3">
-        <div className="col-4 col-md-2"> 最近登录: </div>
-        <div className="col-8 col-md-10"> {object.at_last_login} </div>
-      </div>
-      {object.Shop && (
-        <div className="row mt-3">
-          <div className="col-4 col-md-2"> 所属店铺: </div>
-          <div className="col-8 col-md-10"> {object.Shop.code} </div>
-        </div>
-      )} */}
+function FooterBox({ label, content }) {
+  return (
+    <>
+      <Grid item xs={12} sm={3}>
+        <Typography
+          sx={{ fontSize: "16px", color: "#0000004D", fontWeight: "700" }}
+        >
+          {label}
+        </Typography>
+      </Grid>
+      <Grid item xs="auto" sm="auto">
+        <Typography sx={{ fontSize: "16px", fontWeight: "700" }}>
+          {content}
+        </Typography>
+      </Grid>
     </>
   );
 }
