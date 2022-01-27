@@ -251,6 +251,8 @@ function CategListItem({
     for (let i = 0; i < categUpdateData.imgs.length; i++) {
       formData.append("image" + i, categUpdateData.imgs[i]);
     }
+    console.log(categUpdateData);
+    console.log(categ);
     if (addNew === false) {
       dispatch(
         putObject({

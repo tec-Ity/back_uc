@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Grid } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
 import CusInput from "../../../components/basic/CusInput";
@@ -42,11 +42,22 @@ export default function ProdBasic({ Prod, flagSlice, api }) {
   const status = useSelector((state) => state.objects.status);
   const [modifying, setModifying] = useState(false);
 
-
-  const initProd = {
-    isUsable: Prod.is_usable || false,
-    desp: Prod.desp || "",
-  };
+  const initProd = useMemo(
+    () => ({
+      price_regular: String(Prod.price_regular?.toFixed(2) || "0,00")?.replace(
+        ".",
+        ","
+      ),
+      price_sale: String(Prod.price_regular?.toFixed(2) || "0,00")?.replace(
+        ".",
+        ","
+      ),
+      unit: Prod.unit,
+      isUsable: Prod.is_usable || false,
+      desp: Prod.desp || "",
+    }),
+    [Prod.desp, Prod.is_usable, Prod.price_regular, Prod.unit]
+  );
 
   const [prodUpdate, setProdUpdate] = useState(initProd);
 
@@ -55,22 +66,31 @@ export default function ProdBasic({ Prod, flagSlice, api }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [Prod]);
 
+  const handleChange = (field) => (e) => {
+    if (field && e.target.value) {
+      setProdUpdate((prev) => ({ ...prev, [field]: e.target.value }));
+    }
+  };
+
   const handleDelete = () => {
     dispatch(deleteObject({ flagSlice, api, id: Prod._id }));
     setjustSubmitted(true);
   };
 
   const handleSubmit = () => {
+    const general = {
+      price_regular: parseFloat(prodUpdate.price_regular?.replace(",", ".")),
+      price_sale: parseFloat(prodUpdate.price_sale?.replace(",", ".")),
+      unit: prodUpdate.unit,
+      is_usable: prodUpdate.isUsable,
+      desp: prodUpdate.desp,
+    };
+    console.log(general);
     dispatch(
       putObject({
         flagSlice,
         api,
-        data: {
-          general: {
-            is_usable: prodUpdate.isUsable,
-            desp: prodUpdate.desp,
-          },
-        },
+        data: { general },
       })
     );
   };
@@ -87,8 +107,9 @@ export default function ProdBasic({ Prod, flagSlice, api }) {
         item
         container
         xs={12}
-        justifyContent='flex-end'
-        alignItems='center'>
+        justifyContent="flex-end"
+        alignItems="center"
+      >
         {modifying && (
           <div className={classes.delBtn} onClick={handleDelete}>
             <Delete />
@@ -113,7 +134,8 @@ export default function ProdBasic({ Prod, flagSlice, api }) {
               flexDirection: "column",
               alignItems: "center",
               paddingRight: "20px",
-            }}>
+            }}
+          >
             <img
               src={api_DNS + img}
               alt={Prod?.nome}
@@ -128,35 +150,35 @@ export default function ProdBasic({ Prod, flagSlice, api }) {
       </Grid>
       {/* code */}
       <Grid item xs={6}>
-        <CusInput disabled label='Code' value={Prod.code || " "} />
+        <CusInput disabled label="Code" value={Prod.code || " "} />
       </Grid>
       {/* name */}
       <Grid item xs={6}>
-        <CusInput disabled label='Name' value={Prod.nome} />
+        <CusInput disabled label="Name" value={Prod.nome} />
       </Grid>
       {/* brand */}
       <Grid item xs={6}>
-        <CusInput disabled label='Brand' value={Prod.Brand?.code} />
+        <CusInput disabled label="Brand" value={Prod.Brand?.code} />
       </Grid>
       {/* country */}
       <Grid item xs={6}>
-        <CusInput disabled label='Nation' value={Prod.Nation?.code} />
+        <CusInput disabled label="Nation" value={Prod.Nation?.code} />
       </Grid>
       {/* categ 1 */}
       <Grid item xs={6}>
         <CusInput
           disabled
-          label='First Categ'
+          label="First Categ"
           value={Prod.Categ?.Categ_far?.code}
         />
       </Grid>
       {/* categ 2 */}
       <Grid item xs={6}>
-        <CusInput disabled label='First Categ' value={Prod.Categ?.code} />
+        <CusInput disabled label="First Categ" value={Prod.Categ?.code} />
       </Grid>
       {/* sort */}
       <Grid item xs={6}>
-        <CusInput disabled label='Sort' value={Prod.sort} />
+        <CusInput disabled label="Sort" value={Prod.sort} />
       </Grid>
       {/* offSet */}
       <Grid item xs={6}>
@@ -173,30 +195,49 @@ export default function ProdBasic({ Prod, flagSlice, api }) {
       {/* price regular */}
       <Grid item xs={6}>
         <CusInput
-          disabled
-          label='Price'
+          disabled={!modifying && Prod.is_simple}
+          label="Price unit"
           value={
             Prod?.price_max === Prod?.price_min
-              ? String(Prod?.price_unit?.toFixed(2))?.replace(".", ",")
+              ? prodUpdate?.price_regular
               : String(Prod?.price_min?.toFixed(2))?.replace(".", ",") +
                 "~" +
                 String(Prod?.price_max?.toFixed(2))?.replace(".", ",")
           }
+          handleChange={handleChange("price_regular")}
+        />
+      </Grid>
+      {/* price sale */}
+      <Grid item xs={6}>
+        <CusInput
+          disabled={!modifying && Prod.is_simple}
+          label="Price sale"
+          value={
+            Prod?.price_max === Prod?.price_min
+              ? prodUpdate?.price_sale
+              : String(Prod?.price_min?.toFixed(2))?.replace(".", ",") +
+                "~" +
+                String(Prod?.price_max?.toFixed(2))?.replace(".", ",")
+          }
+          handleChange={handleChange("price_sale")}
         />
       </Grid>
       {/* unit */}
       <Grid item xs={6}>
-        <CusInput disabled label='Unit' value={prodUpdate.unit} />
+        <CusInput
+          disabled={!modifying}
+          label="Unit"
+          value={prodUpdate.unit}
+          handleChange={handleChange("unit")}
+        />
       </Grid>
       {/* desp */}
       <Grid item xs={12}>
         <CusInput
           disabled={!modifying}
-          label='Description'
+          label="Description"
           value={prodUpdate.desp}
-          handleChange={(e) =>
-            setProdUpdate((prev) => ({ ...prev, desp: e.target.value }))
-          }
+          handleChange={handleChange("desp")}
         />
       </Grid>
     </Grid>
