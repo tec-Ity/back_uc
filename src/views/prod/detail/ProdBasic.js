@@ -48,7 +48,7 @@ export default function ProdBasic({ Prod, flagSlice, api }) {
         ".",
         ","
       ),
-      price_sale: String(Prod.price_regular?.toFixed(2) || "0,00")?.replace(
+      price_sale: String(Prod.price_sale?.toFixed(2) || "0,00")?.replace(
         ".",
         ","
       ),
@@ -56,7 +56,7 @@ export default function ProdBasic({ Prod, flagSlice, api }) {
       isUsable: Prod.is_usable || false,
       desp: Prod.desp || "",
     }),
-    [Prod.desp, Prod.is_usable, Prod.price_regular, Prod.unit]
+    [Prod.desp, Prod.is_usable, Prod.price_regular, Prod.price_sale, Prod.unit]
   );
 
   const [prodUpdate, setProdUpdate] = useState(initProd);
