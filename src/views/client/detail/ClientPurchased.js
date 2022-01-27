@@ -15,7 +15,7 @@ import JP_flag from "../../../components/icon/JP.svg";
 import KR_flag from "../../../components/icon/KR.svg";
 import { ReactComponent as Chevron } from "../../../components/icon/chevron-down.svg";
 import DateFilter from "../../../components/universal/query/filter/DateFilter.js";
-import SearchInput from "../../../components/universal/query/SearchInputMod";
+// import SearchInput from "../../../components/universal/query/SearchInputMod";
 import PurchasedSearch from "./PurchasedSearch";
 
 const flags = {

@@ -1,6 +1,42 @@
 import React from "react";
-import { Typography, Box } from "@mui/material";
+import { makeStyles } from "@mui/styles";
 import VarietyInput from "./VarietyInput";
+
+const useStyle = makeStyles({
+  inputBox: {
+    height: "45px",
+    margin: "32px 10px 22px 10px",
+    border: (props) => (props.editing ? "1px solid #0000004D" : "none"),
+    borderRadius: "5px",
+    position: "relative",
+    "& p": {
+      fontSize: "16px",
+      lineHeight: "80%",
+      color: "#0000004D",
+      fontWeight: "700",
+      margin: 0,
+      position: "absolute",
+      top: "-5px",
+      left: "7px",
+      backgroundColor: "#fff",
+      padding: "0px 2px 0px 2px",
+    },
+    "& .MuiInputBase-input": {
+      height: "100%",
+      fontSize: "16px",
+      fontWeight: "700",
+      color: "#000",
+      WebkitTextFillColor: "#000",
+    },
+    "& .MuiInputBase-input.Mui-disabled": {
+      height: "100%",
+      fontSize: "16px",
+      fontWeight: "700",
+      color: "#000",
+      WebkitTextFillColor: "#000",
+    },
+  },
+});
 
 export default function InfoBox({
   field,
@@ -19,49 +55,24 @@ export default function InfoBox({
   const flag0 = editable == null ? true : editable;
 
   let flag = flag0 && editing;
+  const props = { editing: flag };
+  const classes = useStyle(props);
 
   return (
-    <Box
-      sx={{
-        border: noBox || !flag ? 0 : 1,
-        p: "10px",
-        m: "17px",
-        mt: "27px",
-        position: "relative",
-        borderRadius: "5px",
-        height: "50px",
-        width: "90%",
-      }}
-    >
-      <Typography
-        sx={{
-          fontSize: "16px",
-          color: "#0000004D",
-          fontWeight: "700",
-          position: "absolute",
-          top: "-10px",
-          bgcolor: "white",
-        }}
-      >
-        {label}
-      </Typography>
-      {flag && editing ? (
-        <VarietyInput
-          content={content}
-          variant={variant}
-          check={check}
-          object={object}
-          type={type}
-          form={form}
-          setForm={setForm}
-          curUser={curUser}
-          curRole={curRole}
-        />
-      ) : (
-        <Typography sx={{ fontSize: "16px", fontWeight: "700" }}>
-          {content ? content : null}
-        </Typography>
-      )}
-    </Box>
+    <div className={classes.inputBox}>
+      <VarietyInput
+        editing={flag}
+        content={content}
+        variant={variant}
+        check={check}
+        object={object}
+        type={type}
+        form={form}
+        setForm={setForm}
+        curUser={curUser}
+        curRole={curRole}
+      />
+      <p style={{ margin: 0 }}>{label}</p>
+    </div>
   );
 }
