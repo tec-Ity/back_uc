@@ -195,7 +195,7 @@ export default function ProdBasic({ Prod, flagSlice, api }) {
       {/* price regular */}
       <Grid item xs={6}>
         <CusInput
-          disabled={!modifying && Prod.is_simple}
+          disabled={!modifying || !Prod.is_simple}
           label="Price unit"
           value={
             Prod?.price_max === Prod?.price_min
@@ -210,7 +210,7 @@ export default function ProdBasic({ Prod, flagSlice, api }) {
       {/* price sale */}
       <Grid item xs={6}>
         <CusInput
-          disabled={!modifying && Prod.is_simple}
+          disabled={!modifying || !Prod.is_simple}
           label="Price sale"
           value={
             Prod?.price_max === Prod?.price_min
