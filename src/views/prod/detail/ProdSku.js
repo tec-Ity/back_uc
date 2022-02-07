@@ -39,7 +39,8 @@ export default function ProdSku({ Skus, Attrs }) {
           margin: "50px 0 20px 0",
           paddingTop: "30px",
           borderTop: "1px solid #0000004d",
-        }}>
+        }}
+      >
         <h3>商品SKU</h3>
         <div
           onClick={() => setExpanded("new")}
@@ -54,12 +55,14 @@ export default function ProdSku({ Skus, Attrs }) {
             alignItems: "center",
             marginBottom: "30px",
             cursor: "pointer",
-          }}>
+          }}
+        >
           添加商品SKU
         </div>
       </div>
       {expanded === "new" && (
         <SkuRow
+          prodId={Skus[0].Prod}
           isNew
           handleChangeExpand={handleChangeExpand}
           expanded={expanded}
@@ -68,6 +71,7 @@ export default function ProdSku({ Skus, Attrs }) {
       )}
       {Skus?.map((sku, index) => (
         <SkuRow
+          prodId={Skus[0].Prod}
           key={index}
           sku={sku}
           index={index}
@@ -83,6 +87,7 @@ export default function ProdSku({ Skus, Attrs }) {
 const rolePath = getRolePath();
 
 const SkuRow = ({
+  prodId,
   sku,
   index,
   attrs,
@@ -90,6 +95,7 @@ const SkuRow = ({
   handleChangeExpand,
   isNew = false,
 }) => {
+  console.log(sku, attrs);
   const isDefault = index === 0;
   const flagSlice = "prodSku";
   const hist = useHistory();
@@ -148,7 +154,7 @@ const SkuRow = ({
   const handleSubmit = (e) => {
     e.stopPropagation();
     const obj = {};
-    obj.Prod = attrs[0].Prod;
+    obj.Prod = prodId;
     obj.attrs = attrsUpdate;
     obj.price_regular = parseFloat(skuUpdate.price_regular?.replace(",", "."));
     obj.price_sale = parseFloat(skuUpdate.price_sale?.replace(",", "."));
@@ -232,18 +238,21 @@ const SkuRow = ({
     <Accordion
       key={sku?._id}
       expanded={isNew === true ? true : expanded === sku?._id}
-      onChange={handleChangeExpand(isNew === true ? "new" : sku?._id)}>
+      onChange={handleChangeExpand(isNew === true ? "new" : sku?._id)}
+    >
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
         aria-controls={sku?._id}
-        id={sku?._id}>
+        id={sku?._id}
+      >
         <div
           style={{
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
             width: "100%",
-          }}>
+          }}
+        >
           <div>
             <span style={{ marginRight: "30px" }}>
               {isNew === true
@@ -281,7 +290,8 @@ const SkuRow = ({
             margin: "0 0 20px 0",
             padding: "0 16px",
             backgroundColor: "#0000004d",
-          }}></div>
+          }}
+        ></div>
       </Container>
       <AccordionDetails>
         <Container>
@@ -312,7 +322,7 @@ const SkuRow = ({
                           }))}
                           handleSelect={handleSelectAttr(attr.nome)}
                           value={value}
-                          placeholder='请选择属性'
+                          placeholder="请选择属性"
                         />
                       </Grid>
                       <Grid item xs={1} />
@@ -329,7 +339,7 @@ const SkuRow = ({
               <Grid item xs={2}>
                 <CusInput
                   disabled={!modifying && !isNew}
-                  label='商品标价'
+                  label="商品标价"
                   value={skuUpdate.price_regular}
                   handleChange={handleSkuUpdate("price_regular")}
                 />
@@ -338,7 +348,7 @@ const SkuRow = ({
               <Grid item xs={2}>
                 <CusInput
                   disabled={!modifying && !isNew}
-                  label='商品卖价'
+                  label="商品卖价"
                   value={skuUpdate.price_sale}
                   handleChange={handleSkuUpdate("price_sale")}
                 />
@@ -347,7 +357,7 @@ const SkuRow = ({
               <Grid item xs={2}>
                 <CusInput
                   disabled={!modifying && !isNew}
-                  label='限购数量'
+                  label="限购数量"
                   value={skuUpdate.limit_quantity}
                   handleChange={handleSkuUpdate("limit_quantity")}
                 />
@@ -355,7 +365,7 @@ const SkuRow = ({
               <Grid item xs={12}>
                 <CusInput
                   disabled={!modifying && !isNew}
-                  label='采购通知'
+                  label="采购通知"
                   value={skuUpdate.purchase_note}
                   handleChange={handleSkuUpdate("purchase_note")}
                 />
@@ -369,7 +379,7 @@ const SkuRow = ({
               <Grid item xs={2}>
                 <CusInput
                   disabled={!modifying && !isNew}
-                  label='库存数量'
+                  label="库存数量"
                   value={skuUpdate.quantity}
                   handleChange={handleSkuUpdate("quantity")}
                 />
@@ -378,29 +388,29 @@ const SkuRow = ({
               <Grid item xs={2}>
                 <CusInput
                   disabled={!modifying && !isNew}
-                  label='库存警戒值'
+                  label="库存警戒值"
                   value={skuUpdate.quantity_alert}
                   handleChange={handleSkuUpdate("quantity_alert")}
                 />
               </Grid>
               <Grid item xs={1} />
-              <Grid container item xs={2} alignItems='center'>
+              <Grid container item xs={2} alignItems="center">
                 库存管理
                 <Switch
                   checked={skuUpdate.is_controlStock}
-                  size='small'
-                  color='default'
+                  size="small"
+                  color="default"
                   style={{ color: "#000" }}
                   disabled={!modifying && !isNew}
                   onChange={handleSkuUpdate("is_controlStock")}
                 />
               </Grid>
-              <Grid container item xs={2} alignItems='center'>
+              <Grid container item xs={2} alignItems="center">
                 缺货下单
                 <Switch
                   checked={skuUpdate.allow_backorder}
-                  size='small'
-                  color='default'
+                  size="small"
+                  color="default"
                   style={{ color: "#000" }}
                   disabled={!modifying && !isNew}
                   onChange={handleSkuUpdate("allow_backorder")}

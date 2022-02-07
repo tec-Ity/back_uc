@@ -79,8 +79,8 @@ export default function ProdBasic({ Prod, flagSlice, api }) {
 
   const handleSubmit = () => {
     const general = {
-      price_regular: parseFloat(prodUpdate.price_regular?.replace(",", ".")),
-      price_sale: parseFloat(prodUpdate.price_sale?.replace(",", ".")),
+      // price_regular: parseFloat(prodUpdate.price_regular?.replace(",", ".")),
+      // price_sale: parseFloat(prodUpdate.price_sale?.replace(",", ".")),
       unit: prodUpdate.unit,
       is_usable: prodUpdate.isUsable,
       desp: prodUpdate.desp,
@@ -195,7 +195,7 @@ export default function ProdBasic({ Prod, flagSlice, api }) {
       {/* price regular */}
       <Grid item xs={6}>
         <CusInput
-          disabled={!modifying || !Prod.is_simple}
+          disabled
           label="Price unit"
           value={
             Prod?.price_max === Prod?.price_min
@@ -210,7 +210,7 @@ export default function ProdBasic({ Prod, flagSlice, api }) {
       {/* price sale */}
       <Grid item xs={6}>
         <CusInput
-          disabled={!modifying || !Prod.is_simple}
+          disabled
           label="Price sale"
           value={
             Prod?.price_max === Prod?.price_min
