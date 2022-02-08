@@ -6,15 +6,52 @@ import {
   MenuItem,
 } from "@mui/material";
 import { FormattedMessage } from "react-intl";
+import { makeStyles } from "@mui/styles";
+
+const useStyle = makeStyles({
+  inputBox: {
+    height: "45px",
+    margin: "32px 10px 22px 10px",
+    border: (props) => (props.editing ? "1px solid #0000004D" : "none"),
+    borderRadius: "5px",
+    position: "relative",
+    "& p": {
+      fontSize: "16px",
+      lineHeight: "80%",
+      color: "#0000004D",
+      fontWeight: "700",
+      margin: 0,
+      position: "absolute",
+      top: "-5px",
+      left: "7px",
+      backgroundColor: "#fff",
+      padding: "0px 2px 0px 2px",
+    },
+    "& .MuiInputBase-input": {
+      height: "100%",
+      fontSize: "16px",
+      fontWeight: "700",
+      color: "#000",
+      WebkitTextFillColor: "#000",
+    },
+    "& .MuiInputBase-input.Mui-disabled": {
+      height: "100%",
+      fontSize: "16px",
+      fontWeight: "700",
+      color: "#000",
+      WebkitTextFillColor: "#000",
+    },
+  },
+});
 
 export default function VarietyInput({
+  field: { label, type, check, inputType },
+  stateHandler: [form, setForm],
   editing,
-  variant,
-  check,
-  setForm,
-  form,
-  type,
 }) {
+  const props = { editing };
+  const classes = useStyle(props);
+
   function handleChange(event) {
     setForm({ ...form, [type]: event.target.value });
   }
@@ -37,9 +74,10 @@ export default function VarietyInput({
   //   error = { state: true, message: check?.errMsg.trimMsg + check?.trim };
   // }
 
-  switch (variant?.name) {
+  let fieldTag;
+  switch (inputType?.[0]) {
     case "select":
-      return (
+      fieldTag = (
         <Select
           id={type}
           value={form[type] || ""}
@@ -52,15 +90,17 @@ export default function VarietyInput({
           disabled={!editing}
           onChange={handleSelect}
         >
-          {variant.variantObj.options.map((option) => (
+          {inputType[1].map((option) => (
             <MenuItem value={option.id}>
               <FormattedMessage id={`${type}-${option.id}`} />
             </MenuItem>
           ))}
         </Select>
       );
+
+      break;
     case "autocomplete":
-      return (
+      fieldTag = (
         <Autocomplete
           disablePortal
           id={type}
@@ -69,13 +109,11 @@ export default function VarietyInput({
           }}
           fullWidth
           disabled={!editing}
-          options={variant.variantObj.options}
+          options={inputType[1]}
           isOptionEqualToValue={(option, value) => option.id === value.id}
           getOptionLabel={(option) => option.label || option}
           value={
-            variant.variantObj.options.filter(
-              (option) => option.id === form[type]
-            )[0] || ""
+            inputType[1].filter((option) => option.id === form[type])[0] || ""
           }
           onChange={handleList}
           renderInput={(params) => {
@@ -89,8 +127,9 @@ export default function VarietyInput({
           }}
         />
       );
+      break;
     default:
-      return (
+      fieldTag = (
         <Input
           id={type}
           fullWidth
@@ -105,5 +144,13 @@ export default function VarietyInput({
           }}
         />
       );
+      break;
   }
+
+  return (
+    <div className={classes.inputBox}>
+      {fieldTag}
+      <p>{label}</p>
+    </div>
+  );
 }
