@@ -9,7 +9,6 @@ import { FormattedMessage } from "react-intl";
 
 export default function VarietyInput({
   editing,
-  content,
   variant,
   check,
   setForm,
@@ -20,7 +19,6 @@ export default function VarietyInput({
     setForm({ ...form, [type]: event.target.value });
   }
   function handleList(event, newValue) {
-    // setListValue(newValue);
     setForm({ ...form, [type]: newValue.id });
   }
   function handleSelect(event) {
