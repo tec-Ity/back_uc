@@ -1,73 +1,52 @@
 import React from "react";
 import { Grid, Box } from "@mui/material";
-import InfoBox from "./InfoBox";
+import VarietyInput from "./VarietyInput";
 
-export default function FormBox({
-  data: { fields, object },
-  agent: curUser,
-  stateHandler: [form, setForm],
-  editing,
-}) {
-  const curRole = curUser.role;
-
+export default function FormBox({ fields, stateHandler, editing }) {
   return (
     <div>
-      {object?._id && (
+      {fields && (
         <Grid container columns={{ xs: 1, sm: 3 }} spacing="0">
           {fields.map((field) => {
-            if (field.variant?.name === "phone") {
-              return (
-                <Grid
-                  container
-                  columns={{ xs: 3, sm: 3 }}
-                  spacing={0}
-                  item
-                  borderTop={1}
-                  xs={1}
-                  sm={1}
-                >
-                  {field.variant.variantObj.fields.map((variantField) => {
-                    return (
-                      <Grid
-                        item
-                        xs={1}
-                        sm={variantField.type === "phonePre" ? 1 : 2}
-                      >
-                        <InfoBox
-                          field={variantField}
-                          check={field.check}
-                          object={object}
-                          editing={editing}
-                          form={form}
-                          setForm={setForm}
-                          noBox={variantField.noBox}
-                          variant={field.variant}
-                          curUser={curUser}
-                          curRole={curRole}
+            let cellTag;
+            switch (field.layout?.[0]) {
+              case "duo":
+                cellTag = (
+                  <Grid
+                    container
+                    columns={{ xs: 1, sm: 3 }}
+                    spacing={0}
+                    item
+                    borderTop={1}
+                    xs={1}
+                    sm={1}
+                  >
+                    {field.layout[1].map((_field, index) => (
+                      <Grid item xs={1} sm={index ? 2 : 1}>
+                        <VarietyInput
+                          field={_field}
+                          stateHandler={stateHandler}
+                          editing={editing && _field.editable}
                         />
                       </Grid>
-                    );
-                  })}
-                </Grid>
-              );
-            }
+                    ))}
+                  </Grid>
+                );
 
-            return (
-              <Grid item xs={1} sm={1} width="100%" borderTop={1}>
-                <InfoBox
-                  field={field}
-                  check={field.check}
-                  object={object}
-                  editing={editing}
-                  form={form}
-                  setForm={setForm}
-                  noBox={field.noBox}
-                  variant={field.variant}
-                  curUser={curUser}
-                  curRole={curRole}
-                />
-              </Grid>
-            );
+                break;
+              default:
+                cellTag = (
+                  <Grid item xs={1} sm={1} width="100%" borderTop={1}>
+                    <VarietyInput
+                      field={field}
+                      stateHandler={stateHandler}
+                      editing={editing && field.editable}
+                    />
+                  </Grid>
+                );
+                break;
+            }
+            return <>{cellTag}</>;
           })}
 
           {/* fill rows */}
