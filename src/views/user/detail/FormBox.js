@@ -26,7 +26,7 @@ export default function FormBox({ fields, stateHandler, editing }) {
                         <VarietyInput
                           field={_field}
                           stateHandler={stateHandler}
-                          editing={editing && _field.editable}
+                          editing={editing && (_field.editable ?? true)}
                         />
                       </Grid>
                     ))}
@@ -40,7 +40,7 @@ export default function FormBox({ fields, stateHandler, editing }) {
                     <VarietyInput
                       field={field}
                       stateHandler={stateHandler}
-                      editing={editing && field.editable}
+                      editing={editing && (field.editable ?? true)}
                     />
                   </Grid>
                 );
