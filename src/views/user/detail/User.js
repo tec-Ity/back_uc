@@ -111,12 +111,17 @@ export default function User() {
   }
 
   function handleSave() {
-    console.log("[SAVE]", form);
+    const filter = {};
+    if (form["role"] < 100) {
+      filter.Shop = null;
+    }
+
+    console.log("[SAVE]", { ...form, ...filter });
     dispatch(
       putObject({
         flagSlice,
         api: api + "?populateObjs=" + JSON.stringify(populateObjs),
-        data: { general: form },
+        data: { general: { ...form, ...filter } },
       })
     );
     setIsEditing(!isEditing);
@@ -209,40 +214,51 @@ export default function User() {
     },
   ];
 
-  if (object.role > 100) {
+  //add shop field
+  if (form["role"] > 100) {
     fields.push({
       label: <FormattedMessage id="inputLabel-shop" />,
       content: object.Shop?.nome,
-      type: "Shop",
-      permissions: ["hierachy", "shop"],
-      inputType: ["autocomplete", populateShops(objShops)],
+      ...(curRole > 100
+        ? {
+            inputType: ["static"],
+            editable: false,
+          }
+        : {
+            inputType: ["autocomplete", populateShops(objShops)],
+            permissions: ["hierachy", "shop"],
+            type: "Shop",
+          }),
     });
   }
 
   //set permissions
   function checkEditable(field) {
-    let flag = null;
-    for (const permission of field.permissions) {
+    if (field.inputType?.[0] === "static") return (field.editable = false);
+    if (curRole === 1) return (field.editable = true);
+
+    let isPermitted = null;
+    field.permissions?.forEach((permission) => {
       let tmp_flag = null;
       switch (permission) {
         case "hierachy":
-          tmp_flag = curRole < object.role;
+          isPermitted = isPermitted || curRole < object.role;
           break;
         case "self":
-          tmp_flag = curUser.code === object.code;
+          isPermitted = isPermitted || curUser.code === object.code;
           break;
         case "shop":
-          tmp_flag = curRole < object.role;
+          isPermitted = curRole < object.role;
           if (curRole > 100) tmp_flag = false;
           break;
         default:
           // console.log("[PERMISSION]default");
           break;
       }
-      flag = flag || tmp_flag;
-    }
-    if (flag == null) return;
-    field.editable = curRole === 1 ? true : flag;
+      isPermitted = isPermitted || tmp_flag;
+    });
+    if (isPermitted == null) return;
+    field.editable = isPermitted;
   }
 
   for (const field of fields) {
