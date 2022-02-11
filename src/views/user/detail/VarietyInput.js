@@ -15,7 +15,7 @@ const useStyle = makeStyles({
     border: (props) => (props.editing ? "1px solid #0000004D" : "none"),
     borderRadius: "5px",
     position: "relative",
-    "& p": {
+    "& label": {
       fontSize: "16px",
       lineHeight: "80%",
       color: "#0000004D",
@@ -41,11 +41,19 @@ const useStyle = makeStyles({
       color: "#000",
       WebkitTextFillColor: "#000",
     },
+    "& p": {
+      paddingTop: "10px",
+      paddingLeft: "10px",
+      fontSize: "16px",
+      fontWeight: "700",
+      color: "#000",
+      WebkitTextFillColor: "#000",
+    },
   },
 });
 
 export default function VarietyInput({
-  field: { label, type, check, inputType },
+  field: { label, content, type, check, inputType },
   stateHandler: [form, setForm],
   editing,
 }) {
@@ -76,6 +84,9 @@ export default function VarietyInput({
 
   let fieldTag;
   switch (inputType?.[0]) {
+    case "static":
+      fieldTag = <p>{content}</p>;
+      break;
     case "select":
       fieldTag = (
         <Select
@@ -150,7 +161,7 @@ export default function VarietyInput({
   return (
     <div className={classes.inputBox}>
       {fieldTag}
-      <p>{label}</p>
+      <label>{label}</label>
     </div>
   );
 }
