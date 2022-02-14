@@ -70,7 +70,7 @@ const useStyle = makeStyles({
 
 const flagSlice = "orders";
 const api = "/Orders";
-const links = [ { label: "orders" }];
+const links = [{ label: "orders" }];
 export default function Orders() {
   const dispatch = useDispatch();
   const hist = useHistory();
@@ -130,47 +130,50 @@ export default function Orders() {
               item
               xs={12}
               key={order._id}
-              className={classes.orderListItemContainer}>
+              className={classes.orderListItemContainer}
+            >
               <Card
                 elevation={0}
                 style={{
                   width: "100%",
                   boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.1)",
-                }}>
+                }}
+              >
                 <CardActionArea>
                   <Grid
                     container
                     item
                     xs={12}
                     className={classes.orderListItemStyle}
-                    onClick={() =>
-                      hist.push(`/${rolePath}/order/${order._id}`)
-                    }>
+                    onClick={() => hist.push(`/${rolePath}/order/${order._id}`)}
+                  >
                     <Grid item xs={1}>
                       {order.Shop?.code}
                     </Grid>
-                    <Grid item xs={2}>
+                    <Grid item xs={6} md={2}>
                       {order.code}
                     </Grid>
-                    <Grid item xs={2}>
+                    <Grid item xs={5} md={2}>
                       {moment(order.at_crt).format("DD/MM/YYYY HH:mm")}
                     </Grid>
                     <Grid item xs={2}>
                       {order.Client?.code}
                     </Grid>
                     <Grid item xs={1}>
-                      €{order.imp?.toFixed(2)}
+                      €{order.total_sale?.toFixed(2)}
                     </Grid>
                     <Grid
                       item
-                      xs={3}
+                      xs={4}
+                      md={3}
                       style={{
                         fontWeight:
                           (order.status === 200 ||
                             order.status === 400 ||
                             order.status === 700) &&
                           "700",
-                      }}>
+                      }}
+                    >
                       {statusName[statusCode[order.status]]}
                     </Grid>
                   </Grid>

@@ -19,7 +19,7 @@ import { ReactComponent as ViewLess } from "../../../components/icon/orderDetail
 import ListPageHeader from "../../../components/basic/ListPageHeader";
 import { FormattedMessage } from "react-intl";
 
-const useStyle = makeStyles({
+const useStyle = makeStyles((theme) => ({
   root: { fontFamily: "Montserrat", paddingBottom: "100px" },
   containerItem: {
     marginBottom: "20px",
@@ -94,13 +94,16 @@ const useStyle = makeStyles({
       justifyContent: "center",
     },
     //num
-    "& > :nth-child(1)": { justifyContent: "flex-start" },
+    "& > :nth-child(1)": {
+      justifyContent: "flex-start",
+      "& img": { height: "50px", width: "50px", border: "1px solid" },
+    },
     //img
-    "& > :nth-child(2)": { "& img": { height: "50px", width: "50px" } },
+
     //name
-    "& > :nth-child(3)": { fontWeight: "700" },
+    "& > :nth-child(2)": { fontWeight: "700" },
     //categs
-    "& > :nth-child(4)": {
+    "& > :nth-child(3)": {
       fontSize: "12px",
       display: "flex",
       flexDirection: "column",
@@ -132,7 +135,7 @@ const useStyle = makeStyles({
   },
 
   //orderProds
-});
+}));
 
 const rolePath = getRolePath();
 const flagSlice = "order";
@@ -469,29 +472,29 @@ function ProdsInfoSection({ orderProds }) {
           classes.prodsInfoHeaderStyle
         )}
       >
-        <Grid container item xs={2}>
+        <Grid container item xs={3} md={2}>
           商品信息
         </Grid>
-        <Grid contaienr item xs={2}>
-          商品名称
+        <Grid contaienr item xs={9} md={2}>
+          名称
         </Grid>
-        <Grid contaienr item xs={2}>
-          商品分类
+        <Grid contaienr item xs={3} md={2}>
+          分类
         </Grid>
-        <Grid contaienr item xs={2}>
-          商品属性
+        <Grid contaienr item xs={3} md={2}>
+          属性
         </Grid>
         {/* <Grid contaienr item xs={1}>
           商品国家
         </Grid> */}
-        <Grid contaienr item xs={1}>
-          商品单价
+        <Grid contaienr item xs={2} md={1}>
+          单价
         </Grid>
         <Grid contaienr item xs={2}>
-          商品数量/单位
+          单位
         </Grid>
-        <Grid contaienr item xs={1}>
-          商品价格
+        <Grid contaienr item xs={2} md={1}>
+          价格
         </Grid>
       </Grid>
       <Grid>
@@ -503,32 +506,30 @@ function ProdsInfoSection({ orderProds }) {
             className={classes.prodsListStyle}
             key={index}
           >
-            <Grid container item xs={1}>
+            <Grid container item xs={3} md={1}>
               {index + 1}
+              <img src={api_DNS + op?.Pd?.img_urls[0]} alt={""} />
             </Grid>
-            <Grid container item xs={1}>
-              <img src={api_DNS + op?.Pd?.img_urls[0]} alt={op.nome} />
-            </Grid>
-            <Grid container item xs={2}>
+            <Grid container item xs={9} md={2}>
               {op.nome}
             </Grid>
-            <Grid container item xs={2}>
+            <Grid container item xs={3} md={2}>
               <div>{op.Pd?.Categ?.Categ_far?.code}</div>
               <div>{op.Pd?.Categ?.code}</div>
             </Grid>
-            <Grid container item xs={2}>
+            <Grid container item xs={2} md={2}>
               {op.OrderProds?.OrderSkus[0]?.attrs || "-"}
             </Grid>
             {/* <Grid container item xs={1}>
           国家
         </Grid> */}
-            <Grid container item xs={1}>
+            <Grid container item xs={2} md={1}>
               €{op.prod_regular?.toFixed(2)}
             </Grid>
-            <Grid container item xs={2}>
+            <Grid container item xs={3}>
               {op.prod_quantity}&nbsp;{op.unit || "件"}
             </Grid>
-            <Grid container item xs={1}>
+            <Grid container item xs={2} md={1}>
               €{op.prod_sale?.toFixed(2)}
             </Grid>
           </Grid>
