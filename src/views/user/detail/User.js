@@ -53,15 +53,11 @@ export default function User() {
   const { id } = useParams();
   const api = `/user/${id}`;
   const api_delete = "/User/" + id;
-
-  const curUser = useSelector(selectUser);
-  const curRole = parseInt(localStorage.getItem("role"));
-  const rolePath = getRolePath();
+  const flagSlice_Shops = "user_Shops";
+  const api_Shops = "/Shops";
 
   const object = useSelector(selectObject(flagSlice));
-
-  const [modalPut, setModalPut] = useState(false);
-  const [modalPwd, setModalPwd] = useState(false);
+  const objShops = useSelector(selectObjects(flagSlice_Shops));
 
   useEffect(() => {
     dispatch(
@@ -70,28 +66,29 @@ export default function User() {
         api: api + "?populateObjs=" + JSON.stringify(populateObjs),
       })
     );
+    dispatch(getObjects({ flagSlice: flagSlice_Shops, api: api_Shops }));
     return () => {
       dispatch(cleanField({ flagSlice, flagField }));
     };
   }, [api, dispatch]);
 
-  const [editing, setEditing] = useState(false);
-  // const [justSubmitted, setJustSubmitted] = useState(false);
-  const flagSlice_Shops = "user_Shops";
-  const api_Shops = "/Shops";
-  const objShops = useSelector(selectObjects(flagSlice_Shops));
+  const curUser = useSelector(selectUser);
+  const curRole = parseInt(localStorage.getItem("role"));
+  const rolePath = getRolePath();
 
-  useEffect(() => {
-    dispatch(getObjects({ flagSlice: flagSlice_Shops, api: api_Shops }));
-  }, [dispatch]);
-
+  const [modalPut, setModalPut] = useState(false);
+  const [modalPwd, setModalPwd] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [form, setForm] = useState({});
+
   function initForm(obj, setter) {
     const { nome, code, phonePre, phone, role } = obj;
     setter({ nome, code, phonePre, phone, role, Shop: object.Shop?._id });
   }
   useEffect(() => {
-    initForm(object, setForm);
+    if (object._id) {
+      initForm(object, setForm);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [object]);
 
@@ -110,7 +107,7 @@ export default function User() {
   function handleEdit() {
     //load object to form
     initForm(object, setForm);
-    setEditing(true);
+    setIsEditing(true);
   }
 
   function handleSave() {
@@ -122,7 +119,7 @@ export default function User() {
         data: { general: form },
       })
     );
-    setEditing(!editing);
+    setIsEditing(!isEditing);
     // setJustSubmitted("UPDATE");
   }
 
@@ -177,45 +174,38 @@ export default function User() {
       },
     },
     {
-      variant: {
-        name: "phone",
-        variantObj: {
-          fields: [
-            {
-              label: <FormattedMessage id="inputLabel-phone" />,
-              content: object.phonePre,
-              type: "phonePre",
-              permissions: ["hierachy", "self"],
-              check: {
-                regexp: "^[0-9]*$",
-                trim: 4,
-                errMsg: {
-                  nullMsg: "电话号码前缀不能为空",
-                  regexpMsg: "电话号码前缀只能由数字组成",
-                  trimMsg: "电话号码前缀长度只能为: ",
-                },
+      layout: [
+        "duo",
+        [
+          {
+            label: <FormattedMessage id="inputLabel-phone" />,
+            content: object.phonePre,
+            type: "phonePre",
+            permissions: ["hierachy", "self"],
+            check: {
+              regexp: "^[0-9]*$",
+              trim: 4,
+              errMsg: {
+                nullMsg: "电话号码前缀不能为空",
+                regexpMsg: "电话号码前缀只能由数字组成",
+                trimMsg: "电话号码前缀长度只能为: ",
               },
             },
-            {
-              content: object.phoneNum,
-              type: "phoneNum",
-              permissions: ["hierachy", "self"],
-            },
-          ],
-        },
-      },
+          },
+          {
+            content: object.phoneNum,
+            type: "phoneNum",
+            permissions: ["hierachy", "self"],
+          },
+        ],
+      ],
     },
     {
       label: <FormattedMessage id="inputLabel-role" />,
       content: <FormattedMessage id={`role-${object.role}`} />,
       type: "role",
       permissions: ["hierachy"],
-      variant: {
-        name: "select",
-        variantObj: {
-          options: populateRoles(roleList),
-        },
-      },
+      inputType: ["select", populateRoles(roleList)],
     },
   ];
 
@@ -225,16 +215,12 @@ export default function User() {
       content: object.Shop?.nome,
       type: "Shop",
       permissions: ["hierachy", "shop"],
-      variant: {
-        name: "autocomplete",
-        variantObj: {
-          options: populateShops(objShops),
-        },
-      },
+      inputType: ["autocomplete", populateShops(objShops)],
     });
   }
 
-  function setEditable(field) {
+  //set permissions
+  function checkEditable(field) {
     let flag = null;
     for (const permission of field.permissions) {
       let tmp_flag = null;
@@ -250,7 +236,7 @@ export default function User() {
           if (curRole > 100) tmp_flag = false;
           break;
         default:
-          console.log("[PERMISSION]default");
+          // console.log("[PERMISSION]default");
           break;
       }
       flag = flag || tmp_flag;
@@ -259,16 +245,17 @@ export default function User() {
     field.editable = curRole === 1 ? true : flag;
   }
 
-  //set permissions
   for (const field of fields) {
-    if (field.variant?.variantObj.fields != null) {
-      for (const v_field of field.variant?.variantObj.fields) {
-        setEditable(v_field);
+    if (field.layout?.[0] === "duo") {
+      for (const _field of field.layout[1]) {
+        checkEditable(_field);
       }
     } else {
-      setEditable(field);
+      checkEditable(field);
     }
   }
+
+  //add buttons
   const otherButtons = [
     {
       label: "btnLabel-editPass",
@@ -312,12 +299,12 @@ export default function User() {
                 flagSlice={flagSlice}
               />
               <CusBtnGroup
-                modifying={editing}
+                modifying={isEditing}
                 disableDelete={!(object.role > curRole)}
                 handleEdit={handleEdit}
                 handleCancel={() => {
                   initForm(object, setForm);
-                  setEditing(false);
+                  setIsEditing(false);
                 }}
                 handleDelete={deleteDB}
                 handleSubmit={handleSave}
@@ -326,10 +313,9 @@ export default function User() {
             </div>
             {/* main details */}
             <FormBox
-              data={{ fields, object }}
-              agent={curUser}
+              fields={fields}
               stateHandler={[form, setForm]}
-              editing={editing}
+              editing={isEditing}
             />
             <Box ml={3} mt={2}>
               <Typography
@@ -342,7 +328,7 @@ export default function User() {
               >
                 <FormattedMessage id="inputLabel-isUsable" />
               </Typography>
-              {editing ? (
+              {isEditing ? (
                 <CusSwitch
                   checked={object.is_usable}
                   handleSwitch={(checked) =>
