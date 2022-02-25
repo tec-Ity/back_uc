@@ -1,51 +1,58 @@
 import {
-  Input,
   TextField,
   Autocomplete,
   Select,
   MenuItem,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import { FormattedMessage } from "react-intl";
 import { makeStyles } from "@mui/styles";
 
 const useStyle = makeStyles({
   inputBox: {
-    height: "45px",
+    minHeight: "45px",
     margin: "32px 10px 22px 10px",
-    border: (props) => (props.editing ? "1px solid #0000004D" : "none"),
-    borderRadius: "5px",
-    position: "relative",
-    "& p": {
-      fontSize: "16px",
-      lineHeight: "80%",
-      color: "#0000004D",
-      fontWeight: "700",
-      margin: 0,
-      position: "absolute",
-      top: "-5px",
-      left: "7px",
-      backgroundColor: "#fff",
-      padding: "0px 2px 0px 2px",
+    "& legend": {
+      float: "none",
+      width: "auto",
     },
-    "& .MuiInputBase-input": {
-      height: "100%",
-      fontSize: "16px",
-      fontWeight: "700",
-      color: "#000",
-      WebkitTextFillColor: "#000",
+    "& .select": {
+      "& legend": {
+        maxWidth: "100%",
+      },
     },
-    "& .MuiInputBase-input.Mui-disabled": {
-      height: "100%",
-      fontSize: "16px",
-      fontWeight: "700",
-      color: "#000",
-      WebkitTextFillColor: "#000",
+    "& .input, .select": {
+      "& .MuiInputLabel-root, legend": {
+        fontSize: "16px",
+        fontWeight: "700",
+        color: "#0000004D",
+        transform: "translate(14px, -9px)",
+        "& .MuiInputLabel-root.Mui-focused": {
+          color: "#1976d2",
+        },
+      },
+      "& .MuiOutlinedInput-root, .MuiOutlinedInput": {
+        height: "40px",
+      },
+      "& 	.MuiAutocomplete-inputRoot": {
+        padding: "0px 8px",
+      },
+      "& .MuiInputBase-input, .select": {
+        fontSize: "16px",
+        fontWeight: "700",
+        color: "#000",
+        WebkitTextFillColor: "#000",
+      },
+      "& .MuiOutlinedInput-notchedOutline": {
+        borderStyle: (props) => (props.editing ? "solid" : "none"),
+      },
     },
   },
 });
 
 export default function VarietyInput({
-  field: { label, type, check, inputType },
+  field: { label, content, type, check, inputType },
   stateHandler: [form, setForm],
   editing,
 }) {
@@ -56,7 +63,7 @@ export default function VarietyInput({
     setForm({ ...form, [type]: event.target.value });
   }
   function handleList(event, newValue) {
-    setForm({ ...form, [type]: newValue.id });
+    setForm({ ...form, [type]: newValue?.id });
   }
   function handleSelect(event) {
     setForm({ ...form, [type]: event.target.value });
@@ -64,38 +71,47 @@ export default function VarietyInput({
 
   //calculate error
   let error = null;
-  // if (check?.min && form[type].length < check?.min) {
-  //   error = { state: true, message: check?.errMsg.minMsg + check?.min };
-  // }
-  // if (check?.max && form[type].length > check?.max) {
-  //   error = { state: true, message: check?.errMsg.maxMsg + check?.max };
-  // }
-  // if (check?.trim && form[type].length === check?.trim) {
-  //   error = { state: true, message: check?.errMsg.trimMsg + check?.trim };
-  // }
+  if (check && form[type]) {
+    if (check.min && form[type].length < check.min) {
+      error = { state: true, message: check.errMsg.minMsg + check.min };
+    }
+    if (check.max && form[type].length > check.max) {
+      error = { state: true, message: check.errMsg.maxMsg + check.max };
+    }
+    if (check.trim && form[type].length !== check.trim) {
+      error = { state: true, message: check.errMsg.trimMsg + check.trim };
+    }
+    if (check.regexp && !form[type].match("^[a-zA-Z0-9]*$")) {
+      error = { state: true, message: check.errMsg.regexpMsg };
+    }
+  }
 
   let fieldTag;
-  switch (inputType?.[0]) {
+  switch (inputType?.type) {
+    case "static":
+      fieldTag = <p>{content}</p>;
+      break;
     case "select":
       fieldTag = (
-        <Select
-          id={type}
-          value={form[type] || ""}
-          variant="standard"
-          sx={{
-            padding: "10px",
-          }}
-          fullWidth
-          disableUnderline
-          disabled={!editing}
-          onChange={handleSelect}
-        >
-          {inputType[1].map((option) => (
-            <MenuItem value={option.id}>
-              <FormattedMessage id={`${type}-${option.id}`} />
-            </MenuItem>
-          ))}
-        </Select>
+        <>
+          <FormControl className="select" fullWidth disabled={!editing}>
+            <InputLabel id={`${type}-label`} shrink>
+              {label}
+            </InputLabel>
+            <Select
+              label={label}
+              labelId={`${type}-label`}
+              value={form[type] || ""}
+              onChange={handleSelect}
+            >
+              {inputType.options.map((option) => (
+                <MenuItem value={option.id}>
+                  <FormattedMessage id={`${type}-${option.id}`} />
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </>
       );
 
       break;
@@ -103,26 +119,29 @@ export default function VarietyInput({
       fieldTag = (
         <Autocomplete
           disablePortal
-          id={type}
-          sx={{
-            padding: "10px",
-          }}
           fullWidth
           disabled={!editing}
-          options={inputType[1]}
+          options={inputType.options}
           isOptionEqualToValue={(option, value) => option.id === value.id}
           getOptionLabel={(option) => option.label || option}
           value={
-            inputType[1].filter((option) => option.id === form[type])[0] || ""
+            inputType.options.filter((option) => option.id === form[type])[0] ||
+            ""
           }
           onChange={handleList}
           renderInput={(params) => {
             return (
-              <TextField
-                variant="standard"
-                {...params}
-                InputProps={{ ...params.InputProps, disableUnderline: true }}
-              />
+              <>
+                <TextField
+                  {...params}
+                  className="input"
+                  // className={classes.test}
+                  label={label}
+                  InputProps={{
+                    ...params.InputProps,
+                  }}
+                />
+              </>
             );
           }}
         />
@@ -130,27 +149,24 @@ export default function VarietyInput({
       break;
     default:
       fieldTag = (
-        <Input
-          id={type}
+        <TextField
+          label={label}
+          className="input"
           fullWidth
-          disableUnderline
+          // size="small"
           disabled={!editing}
           error={error?.state}
-          helperText={error?.state ? error?.message : null}
-          value={form[type]}
+          helperText={error?.state && editing ? error?.message : null}
+          value={form[type] || ""}
           onChange={handleChange}
-          sx={{
-            padding: "10px",
-          }}
         />
       );
       break;
   }
 
   return (
-    <div className={classes.inputBox}>
+    <div key={type} className={classes.inputBox}>
       {fieldTag}
-      <p>{label}</p>
     </div>
   );
 }

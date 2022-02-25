@@ -21,6 +21,9 @@ const useStyle = makeStyles({
         backgroundColor: "#0000000D",
         color: "#000",
       },
+      "&>div": {
+        flex: "1",
+      },
     },
     textDecoration: "none",
     color: "#000",

@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useParams, useHistory } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
 
 import { getRolePath } from "../../../js/conf/confUser";
 
@@ -48,6 +49,10 @@ export default function User() {
   const hist = useHistory();
   const dispatch = useDispatch();
 
+  const curUser = useSelector(selectUser);
+  const curRole = parseInt(localStorage.getItem("role"));
+  const rolePath = getRolePath();
+
   const flagSlice = "user";
   const flagField = "object";
   const { id } = useParams();
@@ -59,6 +64,8 @@ export default function User() {
   const object = useSelector(selectObject(flagSlice));
   const objShops = useSelector(selectObjects(flagSlice_Shops));
 
+  const checksRef = useRef();
+
   useEffect(() => {
     dispatch(
       getObject({
@@ -67,14 +74,20 @@ export default function User() {
       })
     );
     dispatch(getObjects({ flagSlice: flagSlice_Shops, api: api_Shops }));
+
+    //GET error checks
+    axios
+      .get("http://dev.unioncityitaly.com/api/b1/Stint")
+      .then(({ data: { data: checksData } }) => {
+        // console.log("axios", res.data.data);
+        checksRef.current = checksData;
+      })
+      .catch((err) => console.error(err));
     return () => {
       dispatch(cleanField({ flagSlice, flagField }));
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [api, dispatch]);
-
-  const curUser = useSelector(selectUser);
-  const curRole = parseInt(localStorage.getItem("role"));
-  const rolePath = getRolePath();
 
   const [modalPut, setModalPut] = useState(false);
   const [modalPwd, setModalPwd] = useState(false);
@@ -109,19 +122,38 @@ export default function User() {
     initForm(object, setForm);
     setIsEditing(true);
   }
-
   function handleSave() {
-    console.log("[SAVE]", form);
+    const filter = {};
+    if (form["role"] < 100) {
+      filter.Shop = null;
+    }
+
+    console.log("[SAVE]", { ...form, ...filter });
     dispatch(
       putObject({
         flagSlice,
         api: api + "?populateObjs=" + JSON.stringify(populateObjs),
-        data: { general: form },
+        data: { general: { ...form, ...filter } },
       })
     );
     setIsEditing(!isEditing);
     // setJustSubmitted("UPDATE");
   }
+  //add buttons
+  const otherButtons = [
+    {
+      label: "btnLabel-editPass",
+      style: { backgroundColor: "#00ff00", order: "-1" },
+      icon: <Edit className={classes.passButton} />,
+      handler: () => setModalPwd(true),
+    },
+    {
+      label: "put modal",
+      style: { backgroundColor: "#0000ff", order: "-2" },
+      icon: <Edit className={classes.putButton} />,
+      handler: () => setModalPut(true),
+    },
+  ];
 
   function populateShops(Shops) {
     let arr = Shops.map((shop) => {
@@ -129,7 +161,6 @@ export default function User() {
     });
     return arr;
   }
-
   function populateRoles(roles) {
     let arr = roles
       .filter(
@@ -149,7 +180,7 @@ export default function User() {
 
   const links = [{ label: "users", to: `/users` }, { label: "user" }];
 
-  let fields = [
+  const fields = [
     {
       label: <FormattedMessage id="inputLabel-name" />,
       content: object.nome,
@@ -161,115 +192,106 @@ export default function User() {
       content: object.code,
       type: "code",
       permissions: ["hierachy"],
-      check: {
-        regexp: "^[a-zA-Z0-9]*$",
-        min: 4,
-        max: 20,
-        errMsg: {
-          nullMsg: "成员账号不能为空",
-          regexpMsg: "成员账号只能由数字和字母组成",
-          minMsg: "成员账号的位数不能小于: ",
-          maxMsg: "成员账号的位数不能大于: ",
-        },
-      },
     },
     {
-      layout: [
-        "duo",
-        [
-          {
-            label: <FormattedMessage id="inputLabel-phone" />,
-            content: object.phonePre,
-            type: "phonePre",
-            permissions: ["hierachy", "self"],
-            check: {
-              regexp: "^[0-9]*$",
-              trim: 4,
-              errMsg: {
-                nullMsg: "电话号码前缀不能为空",
-                regexpMsg: "电话号码前缀只能由数字组成",
-                trimMsg: "电话号码前缀长度只能为: ",
-              },
-            },
-          },
-          {
-            content: object.phoneNum,
-            type: "phoneNum",
-            permissions: ["hierachy", "self"],
-          },
-        ],
-      ],
+      label: <FormattedMessage id="inputLabel-phone" />,
+      content: object.phonePre,
+      type: "phonePre",
+      permissions: ["hierachy", "self"],
+      ratio: 1 / 3,
+    },
+    {
+      content: object.phoneNum,
+      type: "phoneNum",
+      permissions: ["hierachy", "self"],
+      ratio: 2 / 3,
     },
     {
       label: <FormattedMessage id="inputLabel-role" />,
       content: <FormattedMessage id={`role-${object.role}`} />,
       type: "role",
       permissions: ["hierachy"],
-      inputType: ["select", populateRoles(roleList)],
+      inputType: {
+        type: "select",
+        options: populateRoles(roleList),
+      },
     },
   ];
 
-  if (object.role > 100) {
+  //add shop field
+  if (form["role"] > 100) {
     fields.push({
       label: <FormattedMessage id="inputLabel-shop" />,
       content: object.Shop?.nome,
       type: "Shop",
-      permissions: ["hierachy", "shop"],
-      inputType: ["autocomplete", populateShops(objShops)],
+      ...(curRole > 100
+        ? {
+            inputType: { type: "static" },
+            editable: false,
+          }
+        : {
+            inputType: {
+              type: "autocomplete",
+              options: populateShops(objShops),
+            },
+            permissions: ["hierachy", "shop"],
+          }),
     });
   }
 
-  //set permissions
+  //add permissions function
   function checkEditable(field) {
-    let flag = null;
-    for (const permission of field.permissions) {
-      let tmp_flag = null;
-      switch (permission) {
-        case "hierachy":
-          tmp_flag = curRole < object.role;
+    if (field.inputType?.[0] === "static") return (field.editable = false);
+    // if (curRole === 1) return (field.editable = true);
+
+    if (field.permissions) {
+      let isPermitted = false;
+
+      field.permissions.forEach((permission) => {
+        let tmp_flag;
+        switch (permission) {
+          // case "hierachy":
+          //   isPermitted = isPermitted || curRole < object.role;
+          //   break;
+          case "self":
+            isPermitted = isPermitted || curUser.code === object.code;
+            break;
+          case "shop":
+            isPermitted = curRole < object.role;
+            if (curRole > 100) tmp_flag = false;
+            break;
+          default:
+            // console.log("[PERMISSION]default");
+            break;
+        }
+        isPermitted = isPermitted || tmp_flag;
+      });
+      return (field.editable = isPermitted);
+    } else {
+      return null;
+    }
+  }
+  for (const field of fields) {
+    //add perms
+    checkEditable(field);
+
+    //add checks
+    if (checksRef.current) {
+      switch (field.type) {
+        case "code":
+          field.check = checksRef.current.User.code;
           break;
-        case "self":
-          tmp_flag = curUser.code === object.code;
+        case "phonePre":
+          field.check = checksRef.current.User.phonePre;
           break;
-        case "shop":
-          tmp_flag = curRole < object.role;
-          if (curRole > 100) tmp_flag = false;
+        case "phoneNum":
+          field.check = checksRef.current.User.phoneNum;
           break;
         default:
-          // console.log("[PERMISSION]default");
           break;
       }
-      flag = flag || tmp_flag;
-    }
-    if (flag == null) return;
-    field.editable = curRole === 1 ? true : flag;
-  }
-
-  for (const field of fields) {
-    if (field.layout?.[0] === "duo") {
-      for (const _field of field.layout[1]) {
-        checkEditable(_field);
-      }
-    } else {
-      checkEditable(field);
     }
   }
-
-  //add buttons
-  const otherButtons = [
-    {
-      label: "btnLabel-editPass",
-      style: { backgroundColor: "#00ff00", order: "-1" },
-      icon: <Edit className={classes.passButton} />,
-      handler: () => setModalPwd(true),
-    },
-    {
-      label: "put modal",
-      style: { backgroundColor: "#0000ff", order: "-2" },
-      icon: <Edit className={classes.putButton} />,
-      handler: () => setModalPut(true),
-    },
-  ];
 
   return (
     <>
