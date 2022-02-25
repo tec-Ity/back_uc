@@ -6,7 +6,7 @@ export default function FormBox({ fields, stateHandler, editing }) {
   return (
     <div>
       {fields && (
-        <Grid container columns={{ xs: 1, sm: 3 }} spacing="0">
+        <Grid container spacing="0">
           {fields.map((field) => {
             let cellTag;
             switch (field.layout?.[0]) {
@@ -36,7 +36,13 @@ export default function FormBox({ fields, stateHandler, editing }) {
                 break;
               default:
                 cellTag = (
-                  <Grid item xs={1} sm={1} width="100%" borderTop={1}>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={field.ratio ? (12 / 3) * field.ratio : 12 / 3}
+                    width="100%"
+                    borderTop={1}
+                  >
                     <VarietyInput
                       field={field}
                       stateHandler={stateHandler}
