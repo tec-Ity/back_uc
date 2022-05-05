@@ -124,10 +124,7 @@ const useStyle = makeStyles({
   },
 });
 // const rolePath = getRolePath();
-const links = [
-  { label: "setting", to: `/setting` },
-  { label: "areas" },
-];
+const links = [{ label: "setting", to: `/setting` }, { label: "areas" }];
 const flagSlice = "areas";
 const api = "/Areas";
 const populateObjs = [{ path: "Nation", select: "nome" }];
@@ -157,7 +154,7 @@ function CityList(props) {
     <Grid container className={classes.listGridContainer}>
       {addNew === true && (
         <CityListItem
-          key='new'
+          key="new"
           addNew={addNew}
           closeAddNew={closeAddNew}
           area={{}}
@@ -181,7 +178,7 @@ function CityListItem({ area, index, addNew = false, closeAddNew }) {
   const [initCityInfo] = useState({
     sort: area?.sort || 0,
     name: area?.code || "",
-    isUsable: area?.is_usable || true,
+    is_usable: area?.is_usable || true,
     imgs: [],
   });
   const [areaUpdateData, setCityUpdateData] = useState(initCityInfo);
@@ -196,7 +193,7 @@ function CityListItem({ area, index, addNew = false, closeAddNew }) {
         // code: areaUpdateData.name,
         // nome: areaUpdateData.name,
         sort: areaUpdateData.sort,
-        is_usable: areaUpdateData.isUsable,
+        is_usable: areaUpdateData.is_usable,
       })
     );
     for (let i = 0; i < areaUpdateData.imgs.length; i++) {
@@ -276,15 +273,16 @@ function CityListItem({ area, index, addNew = false, closeAddNew }) {
         xs={12}
         className={classes.listGridItem}
         style={{ marginBottom: "20px" }}
-        justifyContent='center'
-        alignItems='center'
+        justifyContent="center"
+        alignItems="center"
         onClick={() => {
           modifying === true
             ? ref.current.click()
             : showChild === true
             ? setShowChild(false)
             : setShowChild(true);
-        }}>
+        }}
+      >
         {modifying === false ? (
           <>
             {/* bg img */}
@@ -305,7 +303,7 @@ function CityListItem({ area, index, addNew = false, closeAddNew }) {
           <>
             {imgLocal.length > 0 ? (
               // show selected img
-              <img src={imgLocal[0]} alt='logo' className={classes.areaBg} />
+              <img src={imgLocal[0]} alt="logo" className={classes.areaBg} />
             ) : (
               // when no selected img
               <div>Upload image{" (16:9)"}</div>
@@ -314,7 +312,7 @@ function CityListItem({ area, index, addNew = false, closeAddNew }) {
             <input
               ref={ref}
               style={{ display: "none" }}
-              type='file'
+              type="file"
               onChange={(e) => {
                 // console.log(e.target.files);
                 setCityUpdateData((prev) => ({
@@ -385,7 +383,7 @@ function CityListItem({ area, index, addNew = false, closeAddNew }) {
           <Grid item xs={1} />
 
           <Grid item xs={4}>
-            <CusInput label='Nation' value={area?.Nation?.nome} disabled />
+            <CusInput label="Nation" value={area?.Nation?.nome} disabled />
           </Grid>
           <Grid item xs={1} />
           <Grid item xs={3}>
@@ -409,19 +407,20 @@ function CityListItem({ area, index, addNew = false, closeAddNew }) {
             container
             item
             xs={2}
-            alignItems='center'
-            justifyContent='flex-end'>
+            alignItems="center"
+            justifyContent="flex-end"
+          >
             usable
             <Switch
               disabled
-              checked={areaUpdateData.isUsable}
-              size='small'
-              color='default'
+              checked={areaUpdateData.is_usable}
+              size="small"
+              color="default"
               style={{ color: "#000" }}
               onChange={(e) =>
                 setCityUpdateData((prev) => ({
                   ...prev,
-                  isUsable: e.target.checked,
+                  is_usable: e.target.checked,
                 }))
               }
             />

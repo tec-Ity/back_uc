@@ -65,7 +65,7 @@ const it = {
   "inputLabel-city": "Città",
   "inputLabel-zip": "codice ZIP",
   "inputLabel-phone": "Cellulare",
-  "inputLabel-isUsable": "USABILE",
+  "inputLabel-is_usable": "USABILE",
   "inputLabel-pwd": "Password",
   "inputLabel-priceShip": "Costo di consegna",
   "inputLabel-role": "Ruolo",

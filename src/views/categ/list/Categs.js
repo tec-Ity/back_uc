@@ -231,7 +231,7 @@ function CategListItem({
   const [initCategInfo] = useState({
     sort: categ?.sort || 0,
     name: categ?.code || "",
-    isUsable: categ?.is_usable,
+    is_usable: categ?.is_usable,
     imgs: [],
   });
   const [categUpdateData, setCategUpdateData] = useState(initCategInfo);
@@ -244,7 +244,7 @@ function CategListItem({
       JSON.stringify({
         code: categUpdateData.name,
         sort: categUpdateData.sort,
-        is_usable: categUpdateData.isUsable,
+        is_usable: categUpdateData.is_usable,
         level: categLevel,
       })
     );
@@ -454,14 +454,14 @@ function CategListItem({
           >
             usable
             <Switch
-              checked={categUpdateData.isUsable}
+              checked={categUpdateData.is_usable}
               size="small"
               color="default"
               style={{ color: "#000" }}
               onChange={(e) =>
                 setCategUpdateData((prev) => ({
                   ...prev,
-                  isUsable: e.target.checked,
+                  is_usable: e.target.checked,
                 }))
               }
             />
@@ -489,7 +489,7 @@ function CategListItemChild({
   const [initCategInfo] = useState({
     sort: categ?.sort || 0,
     name: categ?.code || "",
-    isUsable: categ?.is_usable || true,
+    is_usable: categ?.is_usable || true,
     // imgs: [],
   });
   const [categUpdateData, setCategUpdateData] = useState(initCategInfo);
@@ -511,7 +511,7 @@ function CategListItemChild({
       JSON.stringify({
         code: categUpdateData.name,
         sort: categUpdateData.sort,
-        is_usable: categUpdateData.isUsable,
+        is_usable: categUpdateData.is_usable,
         level: categLevel,
         Categ_far: farId,
       })
@@ -654,14 +654,14 @@ function CategListItemChild({
           usable
           <Switch
             disabled={modifying === false}
-            checked={categUpdateData.isUsable}
+            checked={categUpdateData.is_usable}
             size="small"
             color="default"
             style={{ color: "#000" }}
             onChange={(e) =>
               setCategUpdateData((prev) => ({
                 ...prev,
-                isUsable: e.target.checked,
+                is_usable: e.target.checked,
               }))
             }
           />

@@ -66,7 +66,7 @@ const zh_CN = {
   "inputLabel-zip": "邮编",
   "inputLabel-email": "邮箱",
   "inputLabel-phone": "电话",
-  "inputLabel-isUsable": "是否可用",
+  "inputLabel-is_usable": "是否可用",
   "inputLabel-pwd": "密码",
   "inputLabel-priceShip": "运费",
   "inputLabel-role": "职位",

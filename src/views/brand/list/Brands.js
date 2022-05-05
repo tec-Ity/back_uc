@@ -198,7 +198,7 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
   const [brandUpdateData, setBrandUpdateData] = useState({
     sort: brand?.sort || 0,
     name: brand?.code || "",
-    isUsable: brand?.is_usable,
+    is_usable: brand?.is_usable,
     nation: { id: brand?.Nation?._id || "", code: brand?.Nation?.code || "" },
     imgs: [],
   });
@@ -209,7 +209,7 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
     setBrandUpdateData({
       sort: brand?.sort || 0,
       name: brand?.code || "",
-      isUsable: brand?.is_usable,
+      is_usable: brand?.is_usable,
       nation: { id: brand?.Nation?._id || "", code: brand?.Nation?.code || "" },
       imgs: [],
     });
@@ -224,7 +224,7 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
         code: brandUpdateData.name,
         nome: brandUpdateData.name,
         sort: brandUpdateData.sort,
-        is_usable: brandUpdateData.isUsable,
+        is_usable: brandUpdateData.is_usable,
         Nation: brandUpdateData?.nation?.id,
       })
     );
@@ -265,7 +265,7 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
       setBrandUpdateData({
         sort: brand?.sort || 0,
         name: brand?.code || "",
-        isUsable: brand?.is_usable,
+        is_usable: brand?.is_usable,
         nation: {
           id: brand?.Nation?._id || "",
           code: brand?.Nation?.code || "",
@@ -331,7 +331,7 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
             alt={brandUpdateData.name}
             className={classes.brandBg}
             style={{
-              filter: brandUpdateData.isUsable === false && "grayscale(100%)",
+              filter: brandUpdateData.is_usable === false && "grayscale(100%)",
             }}
           />
           <div className={classes.infoContainer}>
@@ -349,7 +349,7 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
             </div>
             <div>
               <div>可用</div>
-              <div>{brandUpdateData.isUsable === true ? "YES" : "NO"}</div>
+              <div>{brandUpdateData.is_usable === true ? "YES" : "NO"}</div>
             </div>
           </div>
         </>
@@ -455,11 +455,11 @@ function BrandListItem({ brand, index, addNew = false, closeAddNew }) {
               <div>可用</div>
               <div>
                 <CusSwitch
-                  checked={brandUpdateData.isUsable}
+                  checked={brandUpdateData.is_usable}
                   handleSwitch={(checked) =>
                     setBrandUpdateData((prev) => ({
                       ...prev,
-                      isUsable: checked,
+                      is_usable: checked,
                     }))
                   }
                 />

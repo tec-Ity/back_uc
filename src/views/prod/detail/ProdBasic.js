@@ -53,7 +53,7 @@ export default function ProdBasic({ Prod, flagSlice, api }) {
         ","
       ),
       unit: Prod.unit,
-      isUsable: Prod.is_usable || false,
+      is_usable: Prod.is_usable || false,
       desp: Prod.desp || "",
     }),
     [Prod.desp, Prod.is_usable, Prod.price_regular, Prod.price_sale, Prod.unit]
@@ -82,7 +82,7 @@ export default function ProdBasic({ Prod, flagSlice, api }) {
       // price_regular: parseFloat(prodUpdate.price_regular?.replace(",", ".")),
       // price_sale: parseFloat(prodUpdate.price_sale?.replace(",", ".")),
       unit: prodUpdate.unit,
-      is_usable: prodUpdate.isUsable,
+      is_usable: prodUpdate.is_usable,
       desp: prodUpdate.desp,
     };
     console.log(general);
@@ -188,7 +188,7 @@ export default function ProdBasic({ Prod, flagSlice, api }) {
         <CusSwitch
           disabled={!modifying}
           handleSwitch={(val) =>
-            setProdUpdate((prev) => ({ ...prev, isUsable: val }))
+            setProdUpdate((prev) => ({ ...prev, is_usable: val }))
           }
         />
       </Grid>

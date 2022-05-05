@@ -78,7 +78,7 @@ export default function ShopBasic(props) {
     addr: "",
     zip: "",
     img: "",
-    isUsable: Shop?.isUsable || true,
+    is_usable: Shop?.is_usable || true,
   });
   const [modifying, setModifying] = useState(false);
   const [modifyingImg, setModifyingImg] = useState(false);
@@ -90,14 +90,14 @@ export default function ShopBasic(props) {
       addr: Shop?.addr || "",
       zip: Shop?.zip || "",
       img: Shop?.img_url || "",
-      isUsable: Shop?.isUsable || true,
+      is_usable: Shop?.is_usable || true,
     });
   }, [
     Shop?.Cita,
     Shop?.addr,
     Shop?.code,
     Shop?.img_url,
-    Shop?.isUsable,
+    Shop?.is_usable,
     Shop?.nome,
     Shop?.zip,
     reset,
@@ -157,7 +157,7 @@ export default function ShopBasic(props) {
     <Container className={classes.root} disableGutters>
       <div className={clsx(classes.formItem, classes.flexStyle)}>
         <div style={{ fontSize: "20px" }}>
-          <FormattedMessage id='infoSection-shopImg' />
+          <FormattedMessage id="infoSection-shopImg" />
         </div>
         <CusBtnGroup
           disableDelete
@@ -180,7 +180,8 @@ export default function ShopBasic(props) {
         {/* img component */}
         <div
           onClick={() => modifyingImg === true && ref.current.click()}
-          className={modifyingImg === true ? classes.withBg : ""}>
+          className={modifyingImg === true ? classes.withBg : ""}
+        >
           <img
             alt={infoUpdate.code}
             src={
@@ -195,7 +196,7 @@ export default function ShopBasic(props) {
               cursor: modifyingImg === true ? "pointer" : "default",
               opacity: modifyingImg === true ? "0.6" : "1",
             }}
-            title='更换图片'
+            title="更换图片"
           />
           {modifyingImg === true && (
             <div className={classes.bgText}>点击更换</div>
@@ -203,7 +204,7 @@ export default function ShopBasic(props) {
           {/* hidden img input */}
           <input
             ref={ref}
-            type='file'
+            type="file"
             multiple={false} //ctrl on need
             style={{ display: "none" }}
             onChange={(e) => {
@@ -222,9 +223,10 @@ export default function ShopBasic(props) {
           display: "flex",
           justifyContent: "space-between",
           paddingTop: "30px",
-        }}>
+        }}
+      >
         <div style={{ fontSize: "20px" }}>
-          <FormattedMessage id='infoSection-shopInfo' />
+          <FormattedMessage id="infoSection-shopInfo" />
         </div>
         <CusBtnGroup
           modifying={modifying}
@@ -245,7 +247,7 @@ export default function ShopBasic(props) {
       </div>
       <div className={classes.formItem}>
         <CusInput
-          label={<FormattedMessage id='inputLabel-code' />}
+          label={<FormattedMessage id="inputLabel-code" />}
           disabled={!modifying}
           value={infoUpdate.code}
           handleChange={(e) =>
@@ -255,7 +257,7 @@ export default function ShopBasic(props) {
       </div>
       <div className={classes.formItem}>
         <CusInput
-          label={<FormattedMessage id='inputLabel-name' />}
+          label={<FormattedMessage id="inputLabel-name" />}
           disabled={!modifying}
           value={infoUpdate.name}
           handleChange={(e) =>
@@ -266,9 +268,9 @@ export default function ShopBasic(props) {
       <div className={classes.formItem}>
         <CusSelectSearch
           disabled={!modifying}
-          label={<FormattedMessage id='inputLabel-city' />}
-          flagSlice='Citas'
-          api='/Citas'
+          label={<FormattedMessage id="inputLabel-city" />}
+          flagSlice="Citas"
+          api="/Citas"
           defaultSel={infoUpdate.city?.code}
           handleSelect={(val) => {
             val &&
@@ -281,7 +283,7 @@ export default function ShopBasic(props) {
       </div>
       <div className={classes.formItem}>
         <CusInput
-          label={<FormattedMessage id='inputLabel-addr' />}
+          label={<FormattedMessage id="inputLabel-addr" />}
           disabled={!modifying}
           value={infoUpdate.addr}
           handleChange={(e) =>
@@ -291,7 +293,7 @@ export default function ShopBasic(props) {
       </div>
       <div className={classes.formItem}>
         <CusInput
-          label={<FormattedMessage id='inputLabel-zip' />}
+          label={<FormattedMessage id="inputLabel-zip" />}
           disabled={!modifying}
           value={infoUpdate.zip}
           handleChange={(e) =>
@@ -302,13 +304,14 @@ export default function ShopBasic(props) {
       </div>
       <div className={classes.formItem}>
         <div
-          style={{ fontSize: "14px", fontWeight: "700", color: "#0000004d" }}>
-          <FormattedMessage id='inputLabel-isUsable' />
+          style={{ fontSize: "14px", fontWeight: "700", color: "#0000004d" }}
+        >
+          <FormattedMessage id="inputLabel-is_usable" />
         </div>
         <CusSwitch
           disabled={!modifying}
           handleSwitch={(val) =>
-            setInfoUpdate((prev) => ({ ...prev, isUsable: val }))
+            setInfoUpdate((prev) => ({ ...prev, is_usable: val }))
           }
         />
       </div>

@@ -348,7 +348,7 @@ export default function User() {
                   bgcolor: "white",
                 }}
               >
-                <FormattedMessage id="inputLabel-isUsable" />
+                <FormattedMessage id="inputLabel-is_usable" />
               </Typography>
               {isEditing ? (
                 <CusSwitch

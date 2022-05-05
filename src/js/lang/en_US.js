@@ -65,7 +65,7 @@ const en_US = {
   "inputLabel-city": "City",
   "inputLabel-zip": "ZIP code",
   "inputLabel-phone": "Phone",
-  "inputLabel-isUsable": "USABLE",
+  "inputLabel-is_usable": "USABLE",
   "inputLabel-pwd": "Password",
   "inputLabel-priceShip": "Shipping cost",
   "inputLabel-role": "Role",

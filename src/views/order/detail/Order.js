@@ -153,7 +153,7 @@ const pdPopObj = {
 };
 const orderSkuPopObj = { path: "OrderSkus", select: "attrs" };
 const populateObjs = [
-  { path: "Shop", select: "code" },
+  { path: "Shop", select: "nome" },
   { path: "Client", select: "code" },
   {
     path: "OrderProds",
@@ -213,12 +213,12 @@ export default function Order() {
       <div className={classes.containerItem}>
         <OrderInfoSection order={order} />
       </div>
+      {/* ship info */}
+      <ShipInfoSection shipInfo={order.ship_info} />
       {/* prods info */}
       <div className={classes.containerItem}>
         <ProdsInfoSection orderProds={order.OrderProds} />
       </div>
-      {/* ship info */}
-      <ShipInfoSection shipInfo={order.ship_info} />
       {/* control btns */}
     </Container>
   );
@@ -339,7 +339,7 @@ function OrderInfoSection({ order }) {
   const [showMore, setShowMore] = useState(false);
   const orderInfoObjsLess = order
     ? [
-        { key: "商铺", value: order.Shop?.code },
+        { key: "商铺", value: order.Shop?.nome },
         { key: "客户应付", value: order.total },
         {
           key: "预计收货时间",
@@ -349,7 +349,7 @@ function OrderInfoSection({ order }) {
     : [];
   const orderInfoObjsFull = order
     ? [
-        { key: "商铺", value: order.Shop?.code }, //pop
+        { key: "商铺", value: order.Shop?.nome }, //pop
         { key: "付款方式", value: order.type_paid },
         {
           key: "创建时间",
@@ -405,7 +405,10 @@ function OrderInfoSection({ order }) {
         { key: "第三方物流信息", value: order.log_info },
         { key: "配送费", value: "€" + order.price_ship?.toFixed(2) },
         { key: "", value: " " }, //empty offsets
-        { key: "商品总数", value: order.OrderProds?.length },
+        {
+          key: "商品总数",
+          value: `${order.goods_quantity}件/${order.OrderProds?.length}种`,
+        },
         { key: "配送状态", value: order.is_ship },
       ]
     : [];
